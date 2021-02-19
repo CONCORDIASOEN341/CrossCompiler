@@ -3,14 +3,16 @@ package com.github.ConcordiaSOEN341.Lexer;
 public class Token {
 
     private int line;
-    private int column;
+    private int startColumn;
+    private int endColumn;
     private String tokenString;
     private TokenType tokenType;
 
-    public Token(String tokenString, int line, int column, TokenType tokenType) {
+    public Token(String tokenString, int line, int startColumn, int endColumn, TokenType tokenType) {
         this.tokenString = tokenString;
         this.line = line;
-        this.column = column;
+        this.startColumn = startColumn;
+        this.endColumn = endColumn;
         this.tokenType = tokenType;
     }
 
