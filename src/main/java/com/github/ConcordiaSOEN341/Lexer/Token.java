@@ -47,7 +47,7 @@ public class Token {
         return endColumn;
     }
 
-    public void setEndColumn(int startColumn) {
+    public void setEndColumn(int endColumn) {
         this.endColumn = endColumn;
     }
 }
