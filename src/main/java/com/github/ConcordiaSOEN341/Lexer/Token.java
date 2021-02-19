@@ -7,10 +7,11 @@ public class Token {
     private String tokenString;
     private TokenType tokenType;
 
-    public Token(String tokenString, int line, int column) {
+    public Token(String tokenString, int line, int column, TokenType tokenType) {
         this.tokenString = tokenString;
         this.line = line;
         this.column = column;
+        this.tokenType = tokenType;
     }
 
     public enum TokenType {
