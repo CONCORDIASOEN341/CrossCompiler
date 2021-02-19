@@ -4,12 +4,22 @@ public class Token {
 
     private int line;
     private int column;
+    private String tokenString;
+
+    public Token(String tokenString, int line, int column) {
+        this.tokenString = tokenString;
+        this.line = line;
+        this.column = column;
+    }
 
     public enum TokenType {
         MNEMONIC,
         LABEL,
         OFFSET,
-        COMMENT
+        CSTRING,
+        COMMENT,
+        EOF,
+        EOL
     }
 
 
