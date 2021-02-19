@@ -35,11 +35,19 @@ public class Token {
         this.line = startLine;
     }
 
-    public int getColumn() {
-        return column;
+    public int getStartColumn() {
+        return startColumn;
     }
 
     public void setColumn(int startColumn) {
-        this.column = startColumn;
+        this.startColumn = startColumn;
+    }
+
+    public int getEndColumn() {
+        return endColumn;
+    }
+
+    public void setEndColumn(int startColumn) {
+        this.endColumn = endColumn;
     }
 }
