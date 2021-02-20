@@ -27,9 +27,8 @@ public class Parser {
     }
 
     //for the sprint 2 the lineStatement only consists of an instruction, so this isnt't doing anything yet
+    // TODO: Implement method
     public Token parseInstruction(LineStatement lineStatement) {
         return null;
     }
-
-
 }
