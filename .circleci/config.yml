@@ -2,60 +2,13 @@ version: 2.1
 
 jobs:
   test:
-    parallelism: 2
     docker:
-      - image: circleci/openjdk:stretch
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+      - image: maven:3-openjdk-15
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
-      - attach_workspace:
-          at: ./target
-      - run: |
-            ./mvnw \
-            -Dtest=$(for file in $(circleci tests glob "src/test/**/**.java" \
-            | circleci tests split --split-by=timings); \
-            do basename $file \
-            | sed -e "s/.java/,/"; \
-            done | tr -d '\r\n') \
-            -e test verify
-      - store_test_results:
-          path: target/tests/
-      - store_artifacts:
-          path: target/builds/
-
-  build:
-    docker:
-      - image: circleci/openjdk:stretch
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - persist_to_workspace:
-         root: ./
-         paths:
-           - target/
+      - run: mvn test
 
 workflows:
-  version: 2.1
-
-  build-then-test:
+  build_and_test:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
