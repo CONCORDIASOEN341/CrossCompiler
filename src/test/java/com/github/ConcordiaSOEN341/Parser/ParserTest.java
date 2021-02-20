@@ -51,7 +51,7 @@ public class ParserTest {
     @Test
     public void setTokenList_whenListOneElement_expectListSet() {
         tokenList = new ArrayList<>();
-        //tokenList.add(new Token());
+        tokenList.add(new Token(null, 0, 0, 0, null));
 
         Parser parser = new Parser(new ArrayList<>());
 
