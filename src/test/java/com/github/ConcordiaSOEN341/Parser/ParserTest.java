@@ -2,7 +2,6 @@ package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +11,6 @@ import static org.junit.Assert.assertNull;
 
 public class ParserTest {
     private List<Token> tokenList;
-    @Mock
-    private Token token;
 
     @Test
     public void createParser_whenListNull_expectListSetNull() {
@@ -54,7 +51,7 @@ public class ParserTest {
     @Test
     public void setTokenList_whenListOneElement_expectListSet() {
         tokenList = new ArrayList<>();
-        tokenList.add(token);
+        tokenList.add(new Token(null, 0, 0, 0, null));
 
         Parser parser = new Parser(new ArrayList<>());
 
