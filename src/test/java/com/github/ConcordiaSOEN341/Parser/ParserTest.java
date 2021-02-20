@@ -2,6 +2,8 @@ package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ParserTest {
     private List<Token> tokenList;
 

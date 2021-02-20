@@ -5,11 +5,11 @@ import java.util.HashMap;
 public class CodeGen {
     private HashMap<String, String> instructions;
 
-    public CodeGen(){
+    public CodeGen() {
         initializeInstructions();
     }
 
-    private void initializeInstructions(){
+    private void initializeInstructions() {
         instructions = new HashMap<>();
         instructions.put("00", "halt");
         instructions.put("01", "pop");
@@ -36,5 +36,9 @@ public class CodeGen {
         instructions.put("1D", "tgt");
         instructions.put("1E", "tle");
         instructions.put("1F", "tge");
+    }
+
+    public String getInstruction(String code) {
+        return instructions.get(code);
     }
 }
