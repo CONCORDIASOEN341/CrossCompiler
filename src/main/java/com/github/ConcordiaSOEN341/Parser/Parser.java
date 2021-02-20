@@ -10,4 +10,12 @@ public class Parser {
     public Parser(List<Token> tokenList) {
         this.tokenList = tokenList;
     }
+
+    public List<Token> getTokenList() {
+        return tokenList;
+    }
+
+    public void setTokenList(List<Token> tokenList) {
+        this.tokenList = tokenList;
+    }
 }
