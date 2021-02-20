@@ -7,131 +7,131 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CodeGenTest extends TestCase {
-    private CodeGen codeGen = new CodeGen();
+    final private CodeGen codeGen = new CodeGen();
 
     @Test
-    public void checkCode00_expectHaltInstruction() {
-        assertEquals("halt", codeGen.getInstruction("00"));
+    public void checkHaltInstruction_expectCode00() {
+        assertEquals("00", codeGen.getHexCode("halt"));
     }
 
     @Test
-    public void checkCode01_expectPopInstruction() {
-        assertEquals("pop", codeGen.getInstruction("01"));
+    public void checkPopInstruction_expectCode01() {
+        assertEquals("01", codeGen.getHexCode("pop"));
     }
 
     @Test
-    public void checkCode02_expectDupInstruction() {
-        assertEquals("dup", codeGen.getInstruction("02"));
+    public void checkDupInstruction_expectCode02() {
+        assertEquals("02", codeGen.getHexCode("dup"));
     }
 
     @Test
-    public void checkCode03_expectExitInstruction() {
-        assertEquals("exit", codeGen.getInstruction("03"));
+    public void checkExitInstruction_expectCode03() {
+        assertEquals("03", codeGen.getHexCode("exit"));
     }
 
     @Test
-    public void checkCode04_expectRetInstruction() {
-        assertEquals("ret", codeGen.getInstruction("04"));
+    public void checkRetInstruction_expectCode04() {
+        assertEquals("04", codeGen.getHexCode("ret"));
     }
 
     @Test
-    public void checkCode0C_expectNotInstruction() {
-        assertEquals("not", codeGen.getInstruction("0C"));
+    public void checkNotInstruction_expectCode0C() {
+        assertEquals("0C", codeGen.getHexCode("not"));
     }
 
     @Test
-    public void checkCode0D_expectAndInstruction() {
-        assertEquals("and", codeGen.getInstruction("0D"));
+    public void checkAndInstruction_expectCode0D() {
+        assertEquals("0D", codeGen.getHexCode("and"));
     }
 
     @Test
-    public void checkCode0E_expectOrInstruction() {
-        assertEquals("or", codeGen.getInstruction("0E"));
+    public void checkOrInstruction_expectCode0E() {
+        assertEquals("0E", codeGen.getHexCode("or"));
     }
 
     @Test
-    public void checkCode0F_expectXorInstruction() {
-        assertEquals("xor", codeGen.getInstruction("0F"));
+    public void checkXorInstruction_expectCode0F() {
+        assertEquals("0F", codeGen.getHexCode("xor"));
     }
 
     @Test
-    public void checkCode10_expectNegInstruction() {
-        assertEquals("neg", codeGen.getInstruction("10"));
+    public void checkNegInstruction_expectCode10() {
+        assertEquals("10", codeGen.getHexCode("neg"));
     }
 
     @Test
-    public void checkCode11_expectIncInstruction() {
-        assertEquals("inc", codeGen.getInstruction("11"));
+    public void checkIncInstruction_expectCode11() {
+        assertEquals("11", codeGen.getHexCode("inc"));
     }
 
     @Test
-    public void checkCode12_expectDecInstruction() {
-        assertEquals("dec", codeGen.getInstruction("12"));
+    public void checkDecInstruction_expectCode12() {
+        assertEquals("12", codeGen.getHexCode("dec"));
     }
 
     @Test
-    public void checkCode13_expectAddInstruction() {
-        assertEquals("add", codeGen.getInstruction("13"));
+    public void checkAddInstruction_expectCode13() {
+        assertEquals("13", codeGen.getHexCode("add"));
     }
 
     @Test
-    public void checkCode14_expectSubInstruction() {
-        assertEquals("sub", codeGen.getInstruction("14"));
+    public void checkSubInstruction_expectCode14() {
+        assertEquals("14", codeGen.getHexCode("sub"));
     }
 
     @Test
-    public void checkCode15_expectMulInstruction() {
-        assertEquals("mul", codeGen.getInstruction("15"));
+    public void checkMulInstruction_expectCode15() {
+        assertEquals("15", codeGen.getHexCode("mul"));
     }
 
     @Test
-    public void checkCode16_expectDivInstruction() {
-        assertEquals("div", codeGen.getInstruction("16"));
+    public void checkDivInstruction_expectCode16() {
+        assertEquals("16", codeGen.getHexCode("div"));
     }
 
     @Test
-    public void checkCode17_expectRemInstruction() {
-        assertEquals("rem", codeGen.getInstruction("17"));
+    public void checkRemInstruction_expectCode17() {
+        assertEquals("17", codeGen.getHexCode("rem"));
     }
 
     @Test
-    public void checkCode18_expectShlInstruction() {
-        assertEquals("shl", codeGen.getInstruction("18"));
+    public void checkShlInstruction_expectCode18() {
+        assertEquals("18", codeGen.getHexCode("shl"));
     }
 
     @Test
-    public void checkCode19_expectShrInstruction() {
-        assertEquals("shr", codeGen.getInstruction("19"));
+    public void checkShrInstruction_expectCode19() {
+        assertEquals("19", codeGen.getHexCode("shr"));
     }
 
     @Test
-    public void checkCode1A_expectTeqInstruction() {
-        assertEquals("teq", codeGen.getInstruction("1A"));
+    public void checkTeqInstruction_expectCode1A() {
+        assertEquals("1A", codeGen.getHexCode("teq"));
     }
 
     @Test
-    public void checkCode1B_expectTneInstruction() {
-        assertEquals("tne", codeGen.getInstruction("1B"));
+    public void checkTneInstruction_expectCode1B() {
+        assertEquals("1B", codeGen.getHexCode("tne"));
     }
 
     @Test
-    public void checkCode1C_expectTltInstruction() {
-        assertEquals("tlt", codeGen.getInstruction("1C"));
+    public void checkTltInstruction_expectCode1C() {
+        assertEquals("1C", codeGen.getHexCode("tlt"));
     }
 
     @Test
-    public void checkCode1D_expectTgtInstruction() {
-        assertEquals("tgt", codeGen.getInstruction("1D"));
+    public void checkTgtInstruction_expectCode1D() {
+        assertEquals("1D", codeGen.getHexCode("tgt"));
     }
 
     @Test
-    public void checkCode1E_expectTleInstruction() {
-        assertEquals("tle", codeGen.getInstruction("1E"));
+    public void checkTleInstruction_expectCode1E() {
+        assertEquals("1E", codeGen.getHexCode("tle"));
     }
 
     @Test
-    public void checkCode1F_expectTgeInstruction() {
-        assertEquals("tge", codeGen.getInstruction("1F"));
+    public void checkTgeInstruction_expectCode1F() {
+        assertEquals("1F", codeGen.getHexCode("tge"));
     }
 
 }

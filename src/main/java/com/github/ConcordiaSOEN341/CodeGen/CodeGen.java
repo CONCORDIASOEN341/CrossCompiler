@@ -38,7 +38,7 @@ public class CodeGen {
         instructions.put("tge", "1F");
     }
 
-    public String getInstruction(String code) {
-        return instructions.get(code);
+    public String getHexCode(String mnemonic) {
+        return instructions.get(mnemonic);
     }
 }
