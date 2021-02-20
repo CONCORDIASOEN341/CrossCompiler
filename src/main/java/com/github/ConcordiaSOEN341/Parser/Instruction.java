@@ -1,4 +1,5 @@
 package com.github.ConcordiaSOEN341.Parser;
+import com.github.ConcordiaSOEN341.Lexer.Token;
 
 public class Instruction {
     private Token mnemonic = null;

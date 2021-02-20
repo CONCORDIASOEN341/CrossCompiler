@@ -13,7 +13,7 @@ public class Parser {
         this.IR = IR;               //Also IR??
     }
 
-    public AddToIR(LineStatement lineStatement) {
+    public addToIR(LineStatement lineStatement) {
 
         IR.add(lineStatement);
 
