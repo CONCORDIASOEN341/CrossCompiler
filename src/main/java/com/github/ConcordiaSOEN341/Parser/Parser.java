@@ -26,9 +26,14 @@ public class Parser {
         IR.add(lineStatement);
     }
 
-    //for the sprint 2 the lineStatement only consists of an instruction, so this isnt't doing anything yet
-    // TODO: Implement method
-    public Token parseInstruction(LineStatement lineStatement) {
-        return null;
+    //for the sprint 2 the lineStatement only consists of an instruction, so this isn't doing anything yet
+    // TODO: Implement method -- Should be done now, change if needed
+    public Instruction parseInstruction(LineStatement lineStatement) {
+        Instruction instructionToReturn;
+        instructionToReturn = lineStatement.getInstruction();
+
+        return instructionToReturn;
     }
+
+
 }

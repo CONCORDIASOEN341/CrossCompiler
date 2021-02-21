@@ -10,4 +10,20 @@ public class Instruction {
         this.mnemonic = mnemonic;
         this.operand = operand;
     }
+
+    public Token getMnemonic() {
+        return mnemonic;
+    }
+
+    public void setMnemonic(Token mnemonic) {
+        this.mnemonic = mnemonic;
+    }
+
+    public Token getOperand() {
+        return operand;
+    }
+
+    public void setOperand() {
+        this.operand = operand;
+    }
 }
