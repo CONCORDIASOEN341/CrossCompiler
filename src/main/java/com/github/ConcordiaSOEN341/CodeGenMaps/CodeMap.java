@@ -1,15 +1,15 @@
-package com.github.ConcordiaSOEN341.CodeGen;
+package com.github.ConcordiaSOEN341.CodeGenMaps;
 
 import java.util.HashMap;
 
-public class CodeGen {
+public class CodeMap implements ICompilerMap<String,String>{
     private HashMap<String, String> instructions;
 
-    public CodeGen() {
-        initializeInstructions();
+    public CodeMap() {
+        initializeMap();
     }
 
-    private void initializeInstructions() {
+    public void initializeMap() {
         instructions = new HashMap<>();
         instructions.put("halt", "00");
         instructions.put("pop", "01");
@@ -38,7 +38,7 @@ public class CodeGen {
         instructions.put("tge", "1F");
     }
 
-    public String getHexCode(String mnemonic) {
+    public String getValue(String mnemonic) {
         return instructions.get(mnemonic);
     }
 }
