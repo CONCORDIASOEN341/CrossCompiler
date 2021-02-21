@@ -11,34 +11,34 @@ public class CodeGen {
 
     private void initializeInstructions() {
         instructions = new HashMap<>();
-        instructions.put("00", "halt");
-        instructions.put("01", "pop");
-        instructions.put("02", "dup");
-        instructions.put("03", "exit");
-        instructions.put("04", "ret");
-        instructions.put("0C", "not");
-        instructions.put("0D", "and");
-        instructions.put("0E", "or");
-        instructions.put("0F", "xor");
-        instructions.put("10", "neg");
-        instructions.put("11", "inc");
-        instructions.put("12", "dec");
-        instructions.put("13", "add");
-        instructions.put("14", "sub");
-        instructions.put("15", "mul");
-        instructions.put("16", "div");
-        instructions.put("17", "rem");
-        instructions.put("18", "shl");
-        instructions.put("19", "shr");
-        instructions.put("1A", "teq");
-        instructions.put("1B", "tne");
-        instructions.put("1C", "tlt");
-        instructions.put("1D", "tgt");
-        instructions.put("1E", "tle");
-        instructions.put("1F", "tge");
+        instructions.put("halt", "00");
+        instructions.put("pop", "01");
+        instructions.put("dup", "02");
+        instructions.put("exit", "03");
+        instructions.put("ret", "04");
+        instructions.put("not", "0C");
+        instructions.put("and", "0D");
+        instructions.put("or", "0E");
+        instructions.put("xor", "0F");
+        instructions.put("neg", "10");
+        instructions.put("inc", "11");
+        instructions.put("dec", "12");
+        instructions.put("add", "13");
+        instructions.put("sub", "14");
+        instructions.put("mul", "15");
+        instructions.put("div", "16");
+        instructions.put("rem", "17");
+        instructions.put("shl", "18");
+        instructions.put("shr", "19");
+        instructions.put("teq", "1A");
+        instructions.put("tne", "1B");
+        instructions.put("tlt", "1C");
+        instructions.put("tgt", "1D");
+        instructions.put("tle", "1E");
+        instructions.put("tge", "1F");
     }
 
-    public String getInstruction(String code) {
-        return instructions.get(code);
+    public String getHexCode(String mnemonic) {
+        return instructions.get(mnemonic);
     }
 }
