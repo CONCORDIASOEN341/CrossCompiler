@@ -2,9 +2,14 @@ package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Lexer.Token;
 
-public class Instruction {
+public class Instruction extends LineStatement{
     private Token mnemonic;
     private Token operand;
+
+    public Instruction(Token mnemonic) {
+        this.mnemonic = mnemonic;
+        this.operand = null;
+    }
 
     public Instruction(Token mnemonic, Token operand) {
         this.mnemonic = mnemonic;
@@ -26,4 +31,9 @@ public class Instruction {
     public void setOperand() {
         this.operand = operand;
     }
+
+    public String toString(){
+        return mnemonic.getTokenString();
+    }
+
 }
