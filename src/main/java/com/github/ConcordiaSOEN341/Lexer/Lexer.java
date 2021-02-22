@@ -4,8 +4,6 @@ import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
 import com.github.ConcordiaSOEN341.CodeGenMaps.StateMap;
 import com.github.ConcordiaSOEN341.Reader.Reader;
 
-import java.io.File;
-
 public class Lexer {
     private int currentLine = 1;
     private int currentCol = 0;
@@ -16,17 +14,17 @@ public class Lexer {
     private int temp = 0;
 
     public Lexer(String filename){
-        reader = new Reader(new File(filename));
+        reader = new Reader(filename);
         sm = new StateMap();
         cg = new CodeMap();
     }
 
     // Bad but working attempt at DFA
-    private String getState(int character){
+    private TokenType getState(char character){
 
-        if(stateID == 1 && !(character == ' ' || character == '\r' || character == '\n')){
+        if(stateID == 1 && !Character.isWhitespace(character)){
             stateID = 2;
-        } else if(stateID == 2 && (character == ' ' || character == '\r' || character == '\n')) {
+        } else if(stateID == 2 && Character.isWhitespace(character)) {
             stateID = 3;
         }
 
@@ -34,15 +32,17 @@ public class Lexer {
 
     }
 
+
+
     public Token getNextToken(){
 
         Token token = new Token(currentLine, currentCol, currentCol);
         StringBuilder tokenString = new StringBuilder();
-        String stateName;
+        TokenType type;
 
 
         // if we encountered an EOL EOF right after letters
-        if (temp == -1){
+        if (temp == reader.getEof()){
             token.setTokenType(TokenType.EOF);
             temp = 0;
             return token;
@@ -57,10 +57,11 @@ public class Lexer {
         }
 
         stateID = 1;
-        stateName = "Start";
+        type = TokenType.START;
         boolean tokenStarted = false;
 
-        while(stateName.equals("Start")) {
+        // loop till we have read a token
+        while(type == TokenType.START) {
             int currentChar;
             currentChar = reader.read();
 
@@ -73,11 +74,11 @@ public class Lexer {
 
             if (currentChar == '\n') {
                 if(stateID == 1){
-                    token.setTokenType(TokenType.EOL);
-                    stateName = "EOL";
+                    type = TokenType.EOL;
+                    token.setTokenType(type);
                 } else {
                     temp = 10;
-                    stateName = "Identifier";
+                    type = TokenType.IDENTIFIER;
                 }
                 currentCol = 0;
                 currentLine++;
@@ -86,18 +87,18 @@ public class Lexer {
                 currentCol++;
             }
 
-            if (currentChar == -1) {
+            if (currentChar == reader.getEof()) {
                 if(stateID == 1){
-                    token.setTokenType(TokenType.EOF);
-                    stateName = "EOF";
+                    type = TokenType.EOF;
+                    token.setTokenType(type);
                 } else {
-                    temp = -1;
-                    stateName = "Identifier";
+                    temp = reader.getEof();
+                    type = TokenType.IDENTIFIER;
                 }
                 continue;
             }
 
-            stateName = getState(currentChar);
+            type = getState((char) currentChar);
             tokenString.append((char) currentChar);
         }
 
@@ -105,8 +106,7 @@ public class Lexer {
         token.setTokenString(tokenString.toString().trim());
         token.setEndColumn(token.getStartColumn()+token.getTokenString().length());
 
-        if(stateName.equals("Identifier")){
-            TokenType type = TokenType.IDENTIFIER;
+        if(type == TokenType.IDENTIFIER){
             if(cg.getValue(token.getTokenString()) != null){
                 type = TokenType.MNEMONIC;
             }

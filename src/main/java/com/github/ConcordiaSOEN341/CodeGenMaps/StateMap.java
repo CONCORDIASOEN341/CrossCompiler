@@ -1,9 +1,11 @@
 package com.github.ConcordiaSOEN341.CodeGenMaps;
 
+import com.github.ConcordiaSOEN341.Lexer.TokenType;
+
 import java.util.HashMap;
 
-public class StateMap implements ICompilerMap<Integer,String>{
-    private HashMap<Integer, String> stateMap;
+public class StateMap implements ICompilerMap<Integer, TokenType>{
+    private HashMap<Integer, TokenType> stateMap;
 
     public StateMap() {
         initializeMap();
@@ -11,13 +13,13 @@ public class StateMap implements ICompilerMap<Integer,String>{
 
     public void initializeMap() {
         stateMap = new HashMap<>();
-        stateMap.put(0, "Error");
-        stateMap.put(1, "Start");
-        stateMap.put(2, "Start");
-        stateMap.put(3, "Identifier");
+        stateMap.put(0, TokenType.ERROR);
+        stateMap.put(1, TokenType.START);
+        stateMap.put(2, TokenType.START);
+        stateMap.put(3, TokenType.IDENTIFIER);
     }
 
-    public String getValue(Integer id) {
+    public TokenType getValue(Integer id) {
         return stateMap.get(id);
     }
 }
