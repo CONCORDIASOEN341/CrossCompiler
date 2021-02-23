@@ -11,14 +11,25 @@ import java.util.ArrayList;
 @RunWith(MockitoJUnitRunner.class)
 public class LexerTest extends TestCase {
 
-//    word <space> <eol><eof>
-//    word <space> <word><eof>
-//    word <eol><eof>
-//    word <eof>
-//
-//    space <word><eof>
-//    space <eol><eof>
-//    space <eof>
+    /**
+     *     PETER
+     *     word <eof>
+     *     NotMne <eof>
+     *
+     *     word <space> <eol><eof>
+     *     word <space> <word><eof>
+     *     word <eol><eof>
+     *     word <eof>
+     *
+     *     ANDREI
+     *     space <word><eof>
+     *     space <eol><eof>
+     *     space <eof>
+     *
+     *     DIMITRI
+     *     <eof>
+     *     <eol> <eof>
+     */
 
     @Test
     public void checkHaltInstruction_expectCode00() {
@@ -32,7 +43,7 @@ public class LexerTest extends TestCase {
 
         IReader rTest = new ReaderTest(file);
         //Act
-
+        ArrayList<Token> tokenTestList =  runLexer(rTest);
 
 
         //Assert
@@ -46,7 +57,6 @@ public class LexerTest extends TestCase {
 
         do{
             t = lexer.getNextToken();
-            System.out.println(t);
 
             tokenList.add(t);
 
