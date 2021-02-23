@@ -2,19 +2,20 @@ package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
 import com.github.ConcordiaSOEN341.CodeGenMaps.StateMap;
+import com.github.ConcordiaSOEN341.Reader.IReader;
 import com.github.ConcordiaSOEN341.Reader.Reader;
 
 public class Lexer {
     private int currentLine = 1;
     private int currentCol = 0;
-    private final Reader reader;
+    private final IReader reader;
     private final StateMap sm;
     private final CodeMap cg;
     private int stateID = 0;
     private int temp = 0;
 
-    public Lexer(String filename){
-        reader = new Reader(filename);
+    public Lexer(IReader r){
+        reader = r;
         sm = new StateMap();
         cg = new CodeMap();
     }
