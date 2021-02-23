@@ -3,6 +3,8 @@ package com.github.ConcordiaSOEN341.Driver;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
 import com.github.ConcordiaSOEN341.Lexer.Lexer;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
@@ -27,52 +29,38 @@ public class Driver {
 
         }while(t.getTokenType() != TokenType.EOF);
 
-        System.out.println(test.generateIR(tokenList).toString());
 
+        test.generateIR(tokenList);
 
+        CodeMap codeGen = new CodeMap();
         try{
             File listingFile = new File ("testInherentMnemonics.lst");
+
+            //Not sure if prof would want these implemented or not...
             //if (listingFile.createNewFile()){
-                //System.out.println("File created");
+            //  System.out.println("File created");
             //}else{
-                //System.out.println("File alreadyExists.");
+            //  System.out.println("File alreadyExists.");
             //}
+
             FileWriter listingWriter = new FileWriter("testInherentMnemonics.lst");
             listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
 
-            String[] tokenInLine = {"","",""};
-            for(int i = 0; i < tokenList.size(); i ++) {
-                int lineNumber = tokenList.get(i).getLine();
-
-                if (tokenList.get(i).getTokenType() == TokenType.MNEMONIC){
-                    tokenInLine[0] = tokenList.get(i).getTokenString();
-                }if (tokenList.get(i).getTokenType() == TokenType.LABEL){
-                    tokenInLine[1] = tokenList.get(i).getTokenString();
-                }if (tokenList.get(i).getTokenType() == TokenType.COMMENT){
-                    tokenInLine[2] = tokenList.get(i).getTokenString();
-                }
-                if(tokenList.get(i).getTokenType()== TokenType.EOF||tokenList.get(i).getTokenType() == TokenType.EOL){
-                    String hexAddress = String.format("%04X", lineNumber-1);
-                    listingWriter.write(lineNumber +"\t "+hexAddress+" Code \t\t\t"+tokenInLine[1]+" \t\t\t  "+tokenInLine[0]+" \t\t \t\t\t "+tokenInLine[2]+"\n");
-                    tokenInLine[0]="";
-                    tokenInLine[1]="";
-                    tokenInLine[2]="";
-                }
+            for(int i = 0; i < test.getIntermediateRep().size(); i ++) {
+                String hexAddress = String.format("%04X", i);
+                String codeMnemonic = codeGen.getValue(test.getIntermediateRep().get(i).getInstruction().toString());
+                listingWriter.write((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + test.getIntermediateRep().get(i).getInstruction() + " \t\t \t\t\t \t\n");
             }
             listingWriter.close();
+
         }catch(IOException e){
             System.out.println("An error occurred");
             e.printStackTrace();
         }
+
+
     }
 
-    public String extraWords(){
-
-
-
-        return "jajaja";
-
-    }
 }
 
 
