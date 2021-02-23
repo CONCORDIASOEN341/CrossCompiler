@@ -5,21 +5,21 @@ import com.github.ConcordiaSOEN341.Lexer.Token;
 public class LineStatement {
     //only an instruction & EOL for sprint 2
     private Instruction instruction;
-    private Token EOL;
+    private Token eol;
 
     public LineStatement() {
-        this.instruction = instruction;
-        this.EOL = EOL;
+        this.instruction = null;
+        this.eol = null;
     }
 
     public LineStatement(Instruction instruction) {
         this.instruction = instruction;
-        this.EOL = EOL;
+        this.eol = null;
     }
 
     public LineStatement(Instruction instruction, Token EOL) {
         this.instruction = instruction;
-        this.EOL = EOL;
+        this.eol = EOL;
     }
 
     public Instruction getInstruction() {
@@ -31,15 +31,15 @@ public class LineStatement {
     }
 
     public Token getEOL() {
-        return EOL;
+        return eol;
     }
 
     public void setEOL(Token EOL) {
-        this.EOL = EOL;
+        this.eol = EOL;
     }
 
     public String toString(){
-        return "["+ instruction.toString() + "][" + EOL.getTokenType()+"]\n";
+        return "["+ instruction.toString() + "][" + eol.getTokenType()+"]\n";
     }
 
 }

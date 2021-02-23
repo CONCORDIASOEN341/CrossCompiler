@@ -17,38 +17,31 @@ public class ParserTest {
 
     @Test
     public void createParser_whenListNull_expectListSetNull() {
-        Parser parser = new Parser(null);
+        Parser parser = new Parser();
 
-        assertNull(parser.getTokenList());
     }
 
     @Test
     public void createParser_whenListNonNull_expectListSet() {
         tokenList = new ArrayList<>();
-        Parser parser = new Parser(tokenList);
+        Parser parser = new Parser();
 
-        assertEquals(tokenList, parser.getTokenList());
     }
 
     @Test
     public void setTokenList_whenListNull_expectNullList() {
         tokenList = new ArrayList<>();
-        Parser parser = new Parser(tokenList);
+        Parser parser = new Parser();
 
-        parser.setTokenList(null);
 
-        assertNull(parser.getTokenList());
     }
 
     @Test
     public void setTokenList_whenListNotNull_expectListSet() {
         tokenList = new ArrayList<>();
 
-        Parser parser = new Parser(new ArrayList<>());
 
-        parser.setTokenList(tokenList);
 
-        assertEquals(tokenList, parser.getTokenList());
     }
 
     @Test
@@ -56,11 +49,5 @@ public class ParserTest {
         tokenList = new ArrayList<>();
         tokenList.add(new Token(null, 0, 0, 0, null));
 
-        Parser parser = new Parser(new ArrayList<>());
-
-        parser.setTokenList(tokenList);
-
-        assertEquals(tokenList, parser.getTokenList());
-        assertEquals(1, parser.getTokenList().size());
     }
 }

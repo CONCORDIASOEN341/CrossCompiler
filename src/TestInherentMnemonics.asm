@@ -5,11 +5,11 @@
  ret
  not 
  and 
- or  
- xor 
+ or
+ xor
  neg
  inc 
- dec 
+ dec
  add
  sub
  mul 
@@ -23,4 +23,4 @@
  tgt 
  tle 
  tge 
- halt       
+ halt

@@ -2,18 +2,16 @@ package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Lexer.Token;
 
-public class Instruction extends LineStatement{
+//For Sprint 2, instruction is only a mnemonic token
+public class Instruction {
     private Token mnemonic;
-    private Token operand;
+
+    public Instruction() {
+        this.mnemonic = null;
+    }
 
     public Instruction(Token mnemonic) {
         this.mnemonic = mnemonic;
-        this.operand = null;
-    }
-
-    public Instruction(Token mnemonic, Token operand) {
-        this.mnemonic = mnemonic;
-        this.operand = operand;
     }
 
     public Token getMnemonic() {
@@ -22,14 +20,6 @@ public class Instruction extends LineStatement{
 
     public void setMnemonic(Token mnemonic) {
         this.mnemonic = mnemonic;
-    }
-
-    public Token getOperand() {
-        return operand;
-    }
-
-    public void setOperand() {
-        this.operand = operand;
     }
 
     public String toString(){
