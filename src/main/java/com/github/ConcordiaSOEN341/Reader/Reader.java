@@ -17,6 +17,7 @@ public class Reader implements IReader{
             inputStream = new FileInputStream(file);
         } catch(FileNotFoundException e) {
             System.out.println("File not found");
+            System.exit(0);
         }
     }
     public int getEof() { return EOF; }

@@ -1,7 +1,7 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
-import com.github.ConcordiaSOEN341.CodeGenMaps.StateMap;
+import com.github.ConcordiaSOEN341.Maps.CodeMap;
+import com.github.ConcordiaSOEN341.Maps.StateMap;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 
 public class Lexer {

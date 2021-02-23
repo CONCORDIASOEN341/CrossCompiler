@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.CodeGenMaps;
+package com.github.ConcordiaSOEN341.Maps;
 
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
