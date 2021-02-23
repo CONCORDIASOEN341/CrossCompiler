@@ -1,26 +1,27 @@
-Line Addr Code 			Label 		  Mne 	Operand 	 Comments
-1	 1 Code 			Label 		  Mne 	Operand 	 Comments
-2	 2 Code 			Label 		  Mne 	Operand 	 Comments
-3	 3 Code 			Label 		  Mne 	Operand 	 Comments
-4	 4 Code 			Label 		  Mne 	Operand 	 Comments
-5	 5 Code 			Label 		  Mne 	Operand 	 Comments
-6	 6 Code 			Label 		  Mne 	Operand 	 Comments
-7	 7 Code 			Label 		  Mne 	Operand 	 Comments
-8	 8 Code 			Label 		  Mne 	Operand 	 Comments
-9	 9 Code 			Label 		  Mne 	Operand 	 Comments
-10	 a Code 			Label 		  Mne 	Operand 	 Comments
-11	 b Code 			Label 		  Mne 	Operand 	 Comments
-12	 c Code 			Label 		  Mne 	Operand 	 Comments
-13	 d Code 			Label 		  Mne 	Operand 	 Comments
-14	 e Code 			Label 		  Mne 	Operand 	 Comments
-15	 f Code 			Label 		  Mne 	Operand 	 Comments
-16	 10 Code 			Label 		  Mne 	Operand 	 Comments
-17	 11 Code 			Label 		  Mne 	Operand 	 Comments
-18	 12 Code 			Label 		  Mne 	Operand 	 Comments
-19	 13 Code 			Label 		  Mne 	Operand 	 Comments
-20	 14 Code 			Label 		  Mne 	Operand 	 Comments
-21	 15 Code 			Label 		  Mne 	Operand 	 Comments
-22	 16 Code 			Label 		  Mne 	Operand 	 Comments
-23	 17 Code 			Label 		  Mne 	Operand 	 Comments
-24	 18 Code 			Label 		  Mne 	Operand 	 Comments
-25	 19 Code 			Label 		  Mne 	Operand 	 Comments
+Line Addr Code 			Label 		  Mne 	Operand 	  Comments
+1	 0000 Code 			 			  halt 		 			 
+2	 0001 Code 			 			  pop 		 			 
+3	 0002 Code 			 			  dup 		 			 
+4	 0003 Code 			 			  exit 		 			 
+5	 0004 Code 			 			  ret 		 			 
+6	 0005 Code 			 			  not 		 			 
+7	 0006 Code 			 			  and 		 			 
+8	 0007 Code 			 			  or 		 			 
+9	 0008 Code 			 			  xor 		 			 
+10	 0009 Code 			 			  neg 		 			 
+11	 000A Code 			 			  inc 		 			 
+12	 000B Code 			 			  dec 		 			 
+13	 000C Code 			 			  add 		 			 
+14	 000D Code 			 			  sub 		 			 
+15	 000E Code 			 			  mul 		 			 
+16	 000F Code 			 			  div 		 			 
+17	 0010 Code 			 			  rem 		 			 
+18	 0011 Code 			 			  shl 		 			 
+19	 0012 Code 			 			  shr 		 			 
+20	 0013 Code 			 			  teq 		 			 
+21	 0014 Code 			 			  tne 		 			 
+22	 0015 Code 			 			  tlt 		 			 
+23	 0016 Code 			 			  tgt 		 			 
+24	 0017 Code 			 			  tle 		 			 
+25	 0018 Code 			 			  tge 		 			 
+26	 0019 Code 			 			  halt 		 			 
