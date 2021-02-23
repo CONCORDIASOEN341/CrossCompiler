@@ -25,3 +25,4 @@ Line Addr Code 			Label 		  Mne 	Operand 	  Comments
 24	 0017 Code 			 			  tle 		 			 
 25	 0018 Code 			 			  tge 		 			 
 26	 0019 Code 			 			  halt 		 			 
+27	 001A Code 			 			   		 			 

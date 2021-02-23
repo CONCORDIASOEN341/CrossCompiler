@@ -3,22 +3,22 @@
  dup
  exit
  ret
- not
- and
- or  
- xor 
- neg 
+ not 
+ and 
+ or
+ xor
+ neg
  inc 
- dec 
+ dec
  add
- sub 
+ sub
  mul 
- div 
- rem 
+ div
+ rem
  shl 
  shr 
  teq 
- tne 
+ tne
  tlt 
  tgt 
  tle 
