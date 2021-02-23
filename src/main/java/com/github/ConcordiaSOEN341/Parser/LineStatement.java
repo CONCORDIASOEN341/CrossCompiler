@@ -17,9 +17,9 @@ public class LineStatement {
         this.eol = null;
     }
 
-    public LineStatement(Instruction instruction, Token EOL) {
+    public LineStatement(Instruction instruction, Token eol) {
         this.instruction = instruction;
-        this.eol = EOL;
+        this.eol = eol;
     }
 
     public Instruction getInstruction() {
