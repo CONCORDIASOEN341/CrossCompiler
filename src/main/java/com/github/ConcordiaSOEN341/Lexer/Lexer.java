@@ -3,21 +3,20 @@ package com.github.ConcordiaSOEN341.Lexer;
 import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
 import com.github.ConcordiaSOEN341.CodeGenMaps.StateMap;
 import com.github.ConcordiaSOEN341.Reader.IReader;
-import com.github.ConcordiaSOEN341.Reader.Reader;
 
 public class Lexer {
     private int currentLine = 1;
     private int currentCol = 0;
     private final IReader reader;
     private final StateMap sm;
-    private final CodeMap cg;
+    private final CodeMap cm;
     private int stateID = 0;
     private int temp = 0;
 
     public Lexer(IReader r){
         reader = r;
         sm = new StateMap();
-        cg = new CodeMap();
+        cm = new CodeMap();
     }
 
     // Bad but working attempt at DFA
@@ -73,6 +72,17 @@ public class Lexer {
                 tokenStarted = true;
             }
 
+            if (currentChar == reader.getEof()) {
+                if(stateID == 1){
+                    type = TokenType.EOF;
+                    token.setTokenType(type);
+                } else {
+                    temp = reader.getEof();
+                    type = TokenType.IDENTIFIER;
+                }
+                continue;
+            }
+
             if (currentChar == '\n') {
                 if(stateID == 1){
                     type = TokenType.EOL;
@@ -88,16 +98,7 @@ public class Lexer {
                 currentCol++;
             }
 
-            if (currentChar == reader.getEof()) {
-                if(stateID == 1){
-                    type = TokenType.EOF;
-                    token.setTokenType(type);
-                } else {
-                    temp = reader.getEof();
-                    type = TokenType.IDENTIFIER;
-                }
-                continue;
-            }
+
 
             type = getState((char) currentChar);
             tokenString.append((char) currentChar);
@@ -108,7 +109,7 @@ public class Lexer {
         token.setEndColumn(token.getStartColumn()+token.getTokenString().length());
 
         if(type == TokenType.IDENTIFIER){
-            if(cg.getValue(token.getTokenString()) != null){
+            if(cm.getValue(token.getTokenString()) != null){
                 type = TokenType.MNEMONIC;
             }
             token.setTokenType(type);
