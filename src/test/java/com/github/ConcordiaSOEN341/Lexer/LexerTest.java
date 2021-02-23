@@ -11,6 +11,15 @@ import java.util.ArrayList;
 @RunWith(MockitoJUnitRunner.class)
 public class LexerTest extends TestCase {
 
+//    word <space> <eol><eof>
+//    word <space> <word><eof>
+//    word <eol><eof>
+//    word <eof>
+//
+//    space <word><eof>
+//    space <eol><eof>
+//    space <eof>
+
     @Test
     public void checkHaltInstruction_expectCode00() {
         //Arrange
