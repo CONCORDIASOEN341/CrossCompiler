@@ -42,6 +42,8 @@ public class LexerTest extends TestCase {
             tokenList.add(t);
 
         }while(t.getTokenType() != TokenType.EOF);
+
+        return tokenList;
     }
 
 }

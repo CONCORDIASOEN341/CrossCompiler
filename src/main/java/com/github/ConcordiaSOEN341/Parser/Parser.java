@@ -1,34 +1,40 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Lexer.Token;
+import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Parser {
-    private List<Token> tokenList;
-    private List<LineStatement> IR;
+    private ArrayList<LineStatement> intermediateRep;
 
-    public Parser(List<Token> tokenList) {
-        this.tokenList = tokenList;
-        this.IR = new ArrayList<>();
+    public Parser() {
+        this.intermediateRep = new ArrayList<>();
     }
 
-    public List<Token> getTokenList() {
-        return tokenList;
+    public ArrayList<LineStatement> getIntermediateRep() {
+        return intermediateRep;
     }
 
-    public void setTokenList(List<Token> tokenList) {
-        this.tokenList = tokenList;
+    /* Create the IR here
+           1. get arraylist of tokens (from driver)
+           2. loop through tlist while building instruction object
+           3. @ EOL or EOF create line statement obj.
+           4. Add line statement to IR
+           5. @ EOF return the IR
+        */
+    public ArrayList generateIR(ArrayList<Token> tList) {
+        Instruction inst = null;
+        for(Token t : tList) {
+            if (t.getTokenType() == TokenType.MNEMONIC) {
+                inst = new Instruction(t);
+            } else if (t.getTokenType() == TokenType.EOL) {
+                LineStatement lStatement = new LineStatement(inst, t);
+                intermediateRep.add(lStatement);
+            }
+        }
+        return intermediateRep;
     }
 
-    private void addToIR(LineStatement lineStatement) {
-        IR.add(lineStatement);
-    }
 
-    //for the sprint 2 the lineStatement only consists of an instruction, so this isnt't doing anything yet
-    // TODO: Implement method
-    public Token parseInstruction(LineStatement lineStatement) {
-        return null;
-    }
 }

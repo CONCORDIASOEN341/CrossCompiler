@@ -5,6 +5,7 @@ import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 import com.github.ConcordiaSOEN341.Reader.Reader;
+import com.github.ConcordiaSOEN341.Parser.Parser;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class Driver {
         Lexer lexer = new Lexer(reader);
         ArrayList<Token> tokenList = new ArrayList<>(); // Use this for listing file/parsing
         Token t;
-
+        Parser test = new Parser();
         do{
             t = lexer.getNextToken();
             System.out.println(t);
@@ -26,5 +27,8 @@ public class Driver {
             tokenList.add(t);
 
         }while(t.getTokenType() != TokenType.EOF);
+
+        System.out.println(test.generateIR(tokenList).toString());
+
     }
 }
