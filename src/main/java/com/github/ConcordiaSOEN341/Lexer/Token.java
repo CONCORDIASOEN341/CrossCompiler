@@ -8,6 +8,14 @@ public class Token {
     private String tokenString;
     private TokenType tokenType;
 
+    public Token(int line, int startColumn, int endColumn) {
+        this.tokenString = "";
+        this.line = line;
+        this.startColumn = startColumn;
+        this.endColumn = endColumn;
+        this.tokenType = TokenType.ERROR;
+    }
+
     public Token(String tokenString, int line, int startColumn, int endColumn, TokenType tokenType) {
         this.tokenString = tokenString;
         this.line = line;
@@ -16,30 +24,24 @@ public class Token {
         this.tokenType = tokenType;
     }
 
-    public enum TokenType {
-        MNEMONIC,
-        LABEL,
-        OFFSET,
-        CSTRING,
-        COMMENT,
-        EOF,
-        EOL
+    public String toString(){
+        return tokenString + " " + line + " " + startColumn + " " + endColumn+ " " + tokenType;
     }
 
-
+    // TODO: Remove getters/setters that are not needed or not logical to have ?
     public int getLine() {
         return line;
     }
 
-    public void setLine(int startLine) {
-        this.line = startLine;
+    public void setLine(int line) {
+        this.line = line;
     }
 
     public int getStartColumn() {
         return startColumn;
     }
 
-    public void setColumn(int startColumn) {
+    public void setStartColumn(int startColumn) {
         this.startColumn = startColumn;
     }
 
@@ -49,5 +51,21 @@ public class Token {
 
     public void setEndColumn(int endColumn) {
         this.endColumn = endColumn;
+    }
+
+    public String getTokenString() {
+        return tokenString;
+    }
+
+    public void setTokenString(String tokenString) {
+        this.tokenString = tokenString;
+    }
+
+    public TokenType getTokenType() {
+        return tokenType;
+    }
+
+    public void setTokenType(TokenType tokenType) {
+        this.tokenType = tokenType;
     }
 }
