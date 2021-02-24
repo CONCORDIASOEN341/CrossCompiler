@@ -1,8 +1,9 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 
-public class LineStatement {
+public class LineStatement implements ILineStatement {
     //only an instruction & EOL for sprint 2
     private Instruction instruction;
     private Token eol;

@@ -1,10 +1,11 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Maps.StateMap;
-import com.github.ConcordiaSOEN341.Reader.IReader;
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
 
-public class Lexer {
+public class Lexer implements ILexer {
     private int currentLine = 1;
     private int currentCol = 0;
     private final IReader reader;

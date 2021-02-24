@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Reader.IReader;
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
