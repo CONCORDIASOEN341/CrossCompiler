@@ -1,11 +1,13 @@
 package com.github.ConcordiaSOEN341.Reader;
 
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Reader implements IReader{
+public class Reader implements IReader {
     private final static int EOF = -1;
     private final File file;
     private FileInputStream inputStream;

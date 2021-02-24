@@ -1,11 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Interfaces.IParser;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
 import java.util.ArrayList;
 
-public class Parser {
+public class Parser implements IParser {
     private final ArrayList<LineStatement> intermediateRep;
 
     public Parser() {

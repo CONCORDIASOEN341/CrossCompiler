@@ -1,5 +1,6 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
+import com.github.ConcordiaSOEN341.Interfaces.ICodeGen;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Parser.LineStatement;
 
@@ -8,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CodeGen {
+public class CodeGen implements ICodeGen {
 
     public void generateListingFile(String fileName, ArrayList<LineStatement> ir){
         CodeMap codeGen = new CodeMap();

@@ -1,16 +1,11 @@
 package com.github.ConcordiaSOEN341.Driver;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Lexer.Lexer;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import com.github.ConcordiaSOEN341.Parser.LineStatement;
-import com.github.ConcordiaSOEN341.Reader.IReader;
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
 import com.github.ConcordiaSOEN341.Reader.Reader;
 import com.github.ConcordiaSOEN341.Parser.Parser;
 

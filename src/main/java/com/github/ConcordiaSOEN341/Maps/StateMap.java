@@ -1,10 +1,11 @@
 package com.github.ConcordiaSOEN341.Maps;
 
+import com.github.ConcordiaSOEN341.Interfaces.ICompilerMap;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
 import java.util.HashMap;
 
-public class StateMap implements ICompilerMap<Integer, TokenType>{
+public class StateMap implements ICompilerMap<Integer, TokenType> {
     private HashMap<Integer, TokenType> stateMap;
 
     public StateMap() {

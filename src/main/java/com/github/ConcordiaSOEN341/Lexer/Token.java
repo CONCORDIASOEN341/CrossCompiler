@@ -1,6 +1,8 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-public class Token {
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
+
+public class Token implements IToken {
 
     private int line;
     private int startColumn;
