@@ -6,9 +6,14 @@ import java.io.IOException;
 
 import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
 import com.github.ConcordiaSOEN341.CommandHandle.CommandHandle;
+import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
+import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Lexer.Lexer;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Parser.LineStatement;
+import com.github.ConcordiaSOEN341.Reader.IReader;
+import com.github.ConcordiaSOEN341.Reader.Reader;
 import com.github.ConcordiaSOEN341.Parser.Parser;
 
 import java.util.ArrayList;
@@ -21,12 +26,14 @@ public class Driver {
 
         CommandHandle commandHandle = new CommandHandle(args);
         String file = commandHandle.getFile();
+        IReader reader = new Reader(fileName);
 
+        Lexer lexer = new Lexer(reader);
+        Parser parser = new Parser();
+        CodeGen cg = new CodeGen();
 
-        Lexer lexer = new Lexer(file);
         ArrayList<Token> tokenList = new ArrayList<>(); // Use this for listing file/parsing
         Token t;
-        Parser test = new Parser();
         do{
             t = lexer.getNextToken();
             System.out.println(t);
@@ -35,38 +42,10 @@ public class Driver {
 
         }while(t.getTokenType() != TokenType.EOF);
 
+        ArrayList<LineStatement> ir = parser.generateIR(tokenList);
 
-        test.generateIR(tokenList);
-
-        CodeMap codeGen = new CodeMap();
-        try{
-            File listingFile = new File ("testInherentMnemonics.lst");
-
-            //Not sure if prof would want these implemented or not...
-            //if (listingFile.createNewFile()){
-            //  System.out.println("File created");
-            //}else{
-            //  System.out.println("File alreadyExists.");
-            //}
-
-            FileWriter listingWriter = new FileWriter("testInherentMnemonics.lst");
-            listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
-
-            for(int i = 0; i < test.getIntermediateRep().size(); i ++) {
-                String hexAddress = String.format("%04X", i);
-                String codeMnemonic = codeGen.getValue(test.getIntermediateRep().get(i).getInstruction().toString());
-                listingWriter.write((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + test.getIntermediateRep().get(i).getInstruction() + " \t\t \t\t\t \t\n");
-            }
-            listingWriter.close();
-
-        }catch(IOException e){
-            System.out.println("An error occurred");
-            e.printStackTrace();
-        }
-
-
+        cg.generateListingFile(fileName,ir);
         commandHandle.delete();
-
     }
 
 }

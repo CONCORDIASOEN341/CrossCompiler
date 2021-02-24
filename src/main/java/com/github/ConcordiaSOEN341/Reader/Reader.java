@@ -5,9 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static java.lang.System.exit;
-
-public class Reader {
+public class Reader implements IReader{
     private final static int EOF = -1;
     private final File file;
     private FileInputStream inputStream;
@@ -19,7 +17,7 @@ public class Reader {
             inputStream = new FileInputStream(file);
         } catch(FileNotFoundException e) {
             System.out.println("[Error]: File not found");
-            exit(0);
+            System.exit(0);
         }
     }
     public int getEof() { return EOF; }

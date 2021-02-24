@@ -6,7 +6,7 @@ import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import java.util.ArrayList;
 
 public class Parser {
-    private ArrayList<LineStatement> intermediateRep;
+    private final ArrayList<LineStatement> intermediateRep;
 
     public Parser() {
         this.intermediateRep = new ArrayList<>();
@@ -23,7 +23,7 @@ public class Parser {
            4. Add line statement to IR
            5. @ EOF return the IR
         */
-    public ArrayList generateIR(ArrayList<Token> tList) {
+    public ArrayList<LineStatement> generateIR(ArrayList<Token> tList) {
         Instruction inst = null;
         for(Token t : tList) {
             if (t.getTokenType() == TokenType.MNEMONIC) {
@@ -35,6 +35,8 @@ public class Parser {
         }
         return intermediateRep;
     }
+
+
 
 
 }
