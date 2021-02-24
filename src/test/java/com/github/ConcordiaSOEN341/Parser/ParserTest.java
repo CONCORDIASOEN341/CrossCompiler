@@ -1,41 +1,53 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ParserTest {
-    private Parser parser;
-    private ArrayList<Token> tokenList;
+    private List<Token> tokenList;
 
     @Test
-    public void generateIR_whenTokenListSize2_expect1LineStatement() {
-        parser = new Parser();
-        tokenList = new ArrayList<>();
+    public void createParser_whenListNull_expectListSetNull() {
+        Parser parser = new Parser();
 
-        Token mnemonic = new Token("halt", 0, 1, "halt".length(), TokenType.MNEMONIC);
-        Token eol = new Token("~", 0, mnemonic.getEndColumn() + 1, mnemonic.getEndColumn() + 1, TokenType.EOL);
-
-        tokenList.add(mnemonic);
-        tokenList.add(eol);
-
-        ArrayList<LineStatement> lineStatements = parser.generateIR(tokenList);
-
-        assertEquals(1, lineStatements.size());
-        assertEquals(mnemonic.getTokenString(), lineStatements.iterator().next().getInstruction().getMnemonic().getTokenString());
     }
 
     @Test
-    public void generateIR_whenTokenListEmpty_expectEmptyLineStatementArrayList() {
-        parser = new Parser();
+    public void createParser_whenListNonNull_expectListSet() {
+        tokenList = new ArrayList<>();
+        Parser parser = new Parser();
+
+    }
+
+    @Test
+    public void setTokenList_whenListNull_expectNullList() {
+        tokenList = new ArrayList<>();
+        Parser parser = new Parser();
+
+
+    }
+
+    @Test
+    public void setTokenList_whenListNotNull_expectListSet() {
         tokenList = new ArrayList<>();
 
-        ArrayList<LineStatement> lineStatements = parser.generateIR(tokenList);
 
-        assertEquals(0, lineStatements.size());
+
+    }
+
+    @Test
+    public void setTokenList_whenListOneElement_expectListSet() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token(null, 0, 0, 0, null));
+
     }
 }

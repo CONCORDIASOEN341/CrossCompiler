@@ -1,52 +1,137 @@
 package com.github.ConcordiaSOEN341.Maps;
 
-import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
-import com.github.ConcordiaSOEN341.Parser.LineStatement;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-
 @RunWith(MockitoJUnitRunner.class)
 public class CodeGenTest extends TestCase {
-
+    final private CodeMap codeGen = new CodeMap();
 
     @Test
-    public void listingstesting(){
-        String testToken1 = "halt";
-        String testToken2 = "or";
-        String testToken3 = "EOL";
-
-        Token t1 = new Token(testToken1,1, 1, testToken1.length(), TokenType.MNEMONIC);
-        Token t2 = new Token(testToken2,1, 1, testToken2.length(), TokenType.MNEMONIC);
-        Token t3 = new Token(testToken3,1, 1, testToken3.length(), TokenType.EOL);
-
-        Instruction I1 = new Instruction(t1);
-        Instruction I2 = new Instruction(t2);
-
-        ArrayList<Token> t = new ArrayList<>();
-        t.add(t1);
-        t.add(t2);
-        t.add(t3);
-        LineStatement l1 = new LineStatement(I1,t3);
-        LineStatement l2 = new LineStatement(I2,t3);
-
-        ArrayList<LineStatement> ir = new ArrayList<>();
-        ir.add(0,l1);
-        ir.add(1,l2);
-
-        CodeGen cg = new CodeGen();
-
-        String[] test1 = cg.listing(ir);
-
-        assertEquals("1\t 0000 00 \t\t\t  \t\t\t  halt \t\t \t\t\t \t\n",test1[0].toString());
-        assertEquals("2\t 0001 0E \t\t\t  \t\t\t  or \t\t \t\t\t \t\n",test1[1].toString());
+    public void checkHaltInstruction_expectCode00() {
+        assertEquals("00", codeGen.getValue("halt"));
     }
 
+    @Test
+    public void checkPopInstruction_expectCode01() {
+        assertEquals("01", codeGen.getValue("pop"));
+    }
+
+    @Test
+    public void checkDupInstruction_expectCode02() {
+        assertEquals("02", codeGen.getValue("dup"));
+    }
+
+    @Test
+    public void checkExitInstruction_expectCode03() {
+        assertEquals("03", codeGen.getValue("exit"));
+    }
+
+    @Test
+    public void checkRetInstruction_expectCode04() {
+        assertEquals("04", codeGen.getValue("ret"));
+    }
+
+    @Test
+    public void checkNotInstruction_expectCode0C() {
+        assertEquals("0C", codeGen.getValue("not"));
+    }
+
+    @Test
+    public void checkAndInstruction_expectCode0D() {
+        assertEquals("0D", codeGen.getValue("and"));
+    }
+
+    @Test
+    public void checkOrInstruction_expectCode0E() {
+        assertEquals("0E", codeGen.getValue("or"));
+    }
+
+    @Test
+    public void checkXorInstruction_expectCode0F() {
+        assertEquals("0F", codeGen.getValue("xor"));
+    }
+
+    @Test
+    public void checkNegInstruction_expectCode10() {
+        assertEquals("10", codeGen.getValue("neg"));
+    }
+
+    @Test
+    public void checkIncInstruction_expectCode11() {
+        assertEquals("11", codeGen.getValue("inc"));
+    }
+
+    @Test
+    public void checkDecInstruction_expectCode12() {
+        assertEquals("12", codeGen.getValue("dec"));
+    }
+
+    @Test
+    public void checkAddInstruction_expectCode13() {
+        assertEquals("13", codeGen.getValue("add"));
+    }
+
+    @Test
+    public void checkSubInstruction_expectCode14() {
+        assertEquals("14", codeGen.getValue("sub"));
+    }
+
+    @Test
+    public void checkMulInstruction_expectCode15() {
+        assertEquals("15", codeGen.getValue("mul"));
+    }
+
+    @Test
+    public void checkDivInstruction_expectCode16() {
+        assertEquals("16", codeGen.getValue("div"));
+    }
+
+    @Test
+    public void checkRemInstruction_expectCode17() {
+        assertEquals("17", codeGen.getValue("rem"));
+    }
+
+    @Test
+    public void checkShlInstruction_expectCode18() {
+        assertEquals("18", codeGen.getValue("shl"));
+    }
+
+    @Test
+    public void checkShrInstruction_expectCode19() {
+        assertEquals("19", codeGen.getValue("shr"));
+    }
+
+    @Test
+    public void checkTeqInstruction_expectCode1A() {
+        assertEquals("1A", codeGen.getValue("teq"));
+    }
+
+    @Test
+    public void checkTneInstruction_expectCode1B() {
+        assertEquals("1B", codeGen.getValue("tne"));
+    }
+
+    @Test
+    public void checkTltInstruction_expectCode1C() {
+        assertEquals("1C", codeGen.getValue("tlt"));
+    }
+
+    @Test
+    public void checkTgtInstruction_expectCode1D() {
+        assertEquals("1D", codeGen.getValue("tgt"));
+    }
+
+    @Test
+    public void checkTleInstruction_expectCode1E() {
+        assertEquals("1E", codeGen.getValue("tle"));
+    }
+
+    @Test
+    public void checkTgeInstruction_expectCode1F() {
+        assertEquals("1F", codeGen.getValue("tge"));
+    }
 
 }
