@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.github.ConcordiaSOEN341.CodeGenMaps.CodeMap;
 import com.github.ConcordiaSOEN341.CommandHandle.CommandHandle;
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Lexer.Lexer;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
@@ -26,7 +24,7 @@ public class Driver {
 
         CommandHandle commandHandle = new CommandHandle(args);
         String file = commandHandle.getFile();
-        IReader reader = new Reader(fileName);
+        IReader reader = new Reader(file);
 
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser();
@@ -44,7 +42,7 @@ public class Driver {
 
         ArrayList<LineStatement> ir = parser.generateIR(tokenList);
 
-        cg.generateListingFile(fileName,ir);
+        cg.generateListingFile(file,ir);
         commandHandle.delete();
     }
 

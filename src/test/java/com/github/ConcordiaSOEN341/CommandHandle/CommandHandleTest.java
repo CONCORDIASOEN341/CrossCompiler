@@ -12,6 +12,7 @@ public class CommandHandleTest {
         Assert.assertTrue(CommandHandle.getInstance().isListing());
         Assert.assertFalse(CommandHandle.getInstance().isVerbose());
         Assert.assertNull(commandHandle.getFile());
+        commandHandle.delete();
     }
 
     @Test
@@ -21,6 +22,7 @@ public class CommandHandleTest {
         Assert.assertFalse(CommandHandle.getInstance().isListing());
         Assert.assertTrue(CommandHandle.getInstance().isVerbose());
         Assert.assertNull(commandHandle.getFile());
+        commandHandle.delete();
     }
 
     @Test
@@ -30,6 +32,7 @@ public class CommandHandleTest {
         Assert.assertTrue(CommandHandle.getInstance().isListing());
         Assert.assertTrue(CommandHandle.getInstance().isVerbose());
         Assert.assertEquals(commandHandle.getFile(), "program.asm");
+        commandHandle.delete();
     }
     @Test
     public void getInstance_WhenCreatingSecondCommandHandler_expectSameInstanceAsFirst(){
@@ -37,5 +40,6 @@ public class CommandHandleTest {
         CommandHandle commandHandle1 = new CommandHandle(args);
 
         Assert.assertSame(CommandHandle.getInstance(), commandHandle1);
+        commandHandle1.delete();
     }
 }
