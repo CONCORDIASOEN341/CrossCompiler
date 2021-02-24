@@ -35,7 +35,9 @@ public class CodeGen implements ICodeGen {
             listingWriter.close();
         }catch(IOException e){
             System.out.println("An error occurred");
+            System.out.println("The program will terminate.");
             e.printStackTrace();
+            System.exit(0);
         }
     }
 
