@@ -11,8 +11,7 @@ import java.util.ArrayList;
 
 public class CodeGen implements ICodeGen {
 
-    public void generateListingFile(String fileName, ArrayList<LineStatement> ir){
-        CodeMap codeGen = new CodeMap();
+    public void generateListingFile(String fileName,ArrayList<LineStatement> ir){
         String listFile = fileName.substring(0,fileName.length()-4) + ".lst";
         try{
             File listingFile = new File (listFile);
@@ -27,16 +26,32 @@ public class CodeGen implements ICodeGen {
             FileWriter listingWriter = new FileWriter(listFile);
             listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
 
-            for(int i = 0; i < ir.size(); i ++) {
-                String hexAddress = String.format("%04X", i);
-                String codeMnemonic = codeGen.getValue(ir.get(i).getInstruction().toString());
-                listingWriter.write((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + ir.get(i).getInstruction() + " \t\t \t\t\t \t\n");
-            }
-            listingWriter.close();
+            String[] listings = listing(ir);
 
+            for(int i =0; i < listings.length; i++){
+                listingWriter.write(listings[i].toString());
+            }
+
+            listingWriter.close();
         }catch(IOException e){
             System.out.println("An error occurred");
+            System.out.println("The program will terminate.");
             e.printStackTrace();
+            System.exit(0);
         }
     }
+
+    public String[] listing(ArrayList<LineStatement> ir){
+        CodeMap codeGen = new CodeMap();
+        String[] listings = new String[ir.size()];
+
+        for(int i = 0; i < ir.size(); i ++) {
+            String hexAddress = String.format("%04X", i);
+            String codeMnemonic = codeGen.getValue(ir.get(i).getInstruction().toString());
+            listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + ir.get(i).getInstruction() + " \t\t \t\t\t \t\n");
+        }
+
+        return listings;
+    }
+
 }
