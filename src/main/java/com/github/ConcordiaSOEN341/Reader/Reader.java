@@ -9,11 +9,10 @@ import java.io.IOException;
 
 public class Reader implements IReader {
     private final static int EOF = -1;
-    private final File file;
     private FileInputStream inputStream;
 
     public Reader(String fileName) {
-        file = new File(fileName);
+        File file = new File(fileName);
 
         try {
             inputStream = new FileInputStream(file);
