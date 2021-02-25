@@ -21,7 +21,7 @@ public class CodeGenTest extends TestCase {
 
 
     @Test
-    public void listingstesting(){
+    public void listingsTesting(){
         String testToken1 = "halt";
         String testToken2 = "or";
         String testToken3 = "EOL";

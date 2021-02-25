@@ -3,9 +3,7 @@ package com.github.ConcordiaSOEN341.CodeGen;
 import com.github.ConcordiaSOEN341.Interfaces.ICodeGen;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
-import com.github.ConcordiaSOEN341.Parser.LineStatement;
 
-//import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,14 +13,13 @@ public class CodeGen implements ICodeGen {
     public void generateListingFile(String fileName,ArrayList<ILineStatement> ir){
         String listFile = fileName.substring(0,fileName.length()-4) + ".lst";
         try{
-
             FileWriter listingWriter = new FileWriter(listFile);
             listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
 
             String[] listings = listing(ir);
 
-            for(int i =0; i < listings.length; i++){
-                listingWriter.write(listings[i]);
+            for (String listing : listings) {
+                listingWriter.write(listing);
             }
 
             listingWriter.close();
