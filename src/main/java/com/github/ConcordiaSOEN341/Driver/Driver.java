@@ -1,13 +1,10 @@
 package com.github.ConcordiaSOEN341.Driver;
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
+import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.Lexer;
-import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Parser.LineStatement;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
-import com.github.ConcordiaSOEN341.Reader.Reader;
 import com.github.ConcordiaSOEN341.Parser.Parser;
+import com.github.ConcordiaSOEN341.Reader.Reader;
 
 import java.util.ArrayList;
 
@@ -17,22 +14,13 @@ public class Driver {
         String fileName = "src/TestInherentMnemonics.asm";
 
         IReader reader = new Reader(fileName);
+        ILexer lexer = new Lexer(reader);
+        IParser parser = new Parser();
+        ICodeGen cg = new CodeGen();
 
-        Lexer lexer = new Lexer(reader);
-        Parser parser = new Parser();
-        CodeGen cg = new CodeGen();
+        ArrayList<IToken> tokenList = lexer.generateTokenList();
 
-        ArrayList<Token> tokenList = new ArrayList<>(); // Use this for listing file/parsing
-        Token t;
-        do{
-            t = lexer.getNextToken();
-            System.out.println(t);
-
-            tokenList.add(t);
-
-        }while(t.getTokenType() != TokenType.EOF);
-
-        ArrayList<LineStatement> ir = parser.generateIR(tokenList);
+        ArrayList<ILineStatement> ir = parser.generateIR(tokenList);
 
         cg.generateListingFile(fileName,ir);
     }

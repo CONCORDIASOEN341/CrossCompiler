@@ -1,32 +1,27 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IParser;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
 import java.util.ArrayList;
 
 public class Parser implements IParser {
-    private final ArrayList<LineStatement> intermediateRep;
+    private final ArrayList<ILineStatement> intermediateRep;
 
     public Parser() {
         this.intermediateRep = new ArrayList<>();
     }
 
-    public ArrayList<LineStatement> getIntermediateRep() {
+    public ArrayList<ILineStatement> getIntermediateRep() {
         return intermediateRep;
     }
 
-    /* Create the IR here
-           1. get arraylist of tokens (from driver)
-           2. loop through tlist while building instruction object
-           3. @ EOL or EOF create line statement obj.
-           4. Add line statement to IR
-           5. @ EOF return the IR
-        */
-    public ArrayList<LineStatement> generateIR(ArrayList<Token> tList) {
+    public ArrayList<ILineStatement> generateIR(ArrayList<IToken> tList) {
         Instruction inst = null;
-        for(Token t : tList) {
+        for(IToken t : tList) {
             if (t.getTokenType() == TokenType.MNEMONIC) {
                 inst = new Instruction(t);
             } else if (t.getTokenType() == TokenType.EOL) {

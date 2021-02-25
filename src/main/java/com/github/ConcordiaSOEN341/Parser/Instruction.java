@@ -1,25 +1,25 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
-import com.github.ConcordiaSOEN341.Lexer.Token;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
 //For Sprint 2, instruction is only a mnemonic token
 public class Instruction implements IInstruction {
-    private Token mnemonic;
+    private IToken mnemonic;
 
     public Instruction() {
         this.mnemonic = null;
     }
 
-    public Instruction(Token mnemonic) {
+    public Instruction(IToken mnemonic) {
         this.mnemonic = mnemonic;
     }
 
-    public Token getMnemonic() {
+    public IToken getMnemonic() {
         return mnemonic;
     }
 
-    public void setMnemonic(Token mnemonic) {
+    public void setMnemonic(IToken mnemonic) {
         this.mnemonic = mnemonic;
     }
 

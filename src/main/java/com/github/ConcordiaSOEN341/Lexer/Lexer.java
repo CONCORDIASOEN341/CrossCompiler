@@ -1,9 +1,12 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Maps.StateMap;
 import com.github.ConcordiaSOEN341.Interfaces.IReader;
+
+import java.util.ArrayList;
 
 public class Lexer implements ILexer {
     private int currentLine = 1;
@@ -18,6 +21,19 @@ public class Lexer implements ILexer {
         reader = r;
         sm = new StateMap();
         cm = new CodeMap();
+    }
+
+    public ArrayList<IToken> generateTokenList() {
+        ArrayList<IToken> tokenList = new ArrayList<>();
+        IToken t;
+
+        do{
+            t = getNextToken();
+            tokenList.add(t);
+
+        }while(t.getTokenType() != TokenType.EOF);
+
+        return tokenList;
     }
 
     // Bad but working attempt at DFA
@@ -35,7 +51,7 @@ public class Lexer implements ILexer {
 
 
 
-    public Token getNextToken(){
+    private IToken getNextToken(){
 
         Token token = new Token(currentLine, currentCol, currentCol);
         StringBuilder tokenString = new StringBuilder();
