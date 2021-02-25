@@ -6,5 +6,5 @@ import com.github.ConcordiaSOEN341.Parser.LineStatement;
 import java.util.ArrayList;
 
 public interface IParser {
-    ArrayList<LineStatement> generateIR(ArrayList<Token> tList);
+    ArrayList<ILineStatement> generateIR(ArrayList<IToken> tList);
 }

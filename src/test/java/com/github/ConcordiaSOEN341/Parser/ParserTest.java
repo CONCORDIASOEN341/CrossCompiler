@@ -1,5 +1,7 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import org.junit.Test;
@@ -10,20 +12,20 @@ import static org.junit.Assert.assertEquals;
 
 public class ParserTest {
     private Parser parser;
-    private ArrayList<Token> tokenList;
+    private ArrayList<IToken> tokenList;
 
     @Test
     public void generateIR_whenTokenListSize2_expect1LineStatement() {
         parser = new Parser();
         tokenList = new ArrayList<>();
 
-        Token mnemonic = new Token("halt", 0, 1, "halt".length(), TokenType.MNEMONIC);
-        Token eol = new Token("~", 0, mnemonic.getEndColumn() + 1, mnemonic.getEndColumn() + 1, TokenType.EOL);
+        IToken mnemonic = new Token("halt", 0, 1, "halt".length(), TokenType.MNEMONIC);
+        IToken eol = new Token("~", 0, mnemonic.getEndColumn() + 1, mnemonic.getEndColumn() + 1, TokenType.EOL);
 
         tokenList.add(mnemonic);
         tokenList.add(eol);
 
-        ArrayList<LineStatement> lineStatements = parser.generateIR(tokenList);
+        ArrayList<ILineStatement> lineStatements = parser.generateIR(tokenList);
 
         assertEquals(1, lineStatements.size());
         assertEquals(mnemonic.getTokenString(), lineStatements.iterator().next().getInstruction().getMnemonic().getTokenString());
@@ -34,7 +36,7 @@ public class ParserTest {
         parser = new Parser();
         tokenList = new ArrayList<>();
 
-        ArrayList<LineStatement> lineStatements = parser.generateIR(tokenList);
+        ArrayList<ILineStatement> lineStatements = parser.generateIR(tokenList);
 
         assertEquals(0, lineStatements.size());
     }
