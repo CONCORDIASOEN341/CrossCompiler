@@ -15,9 +15,9 @@ public class TokenTest extends TestCase {
         token = new Token(null, new Position(0, 0, 0), null);
 
         assertTrue(StringUtils.isEmpty(token.getTokenString()));
-        assertEquals(0, token.getLine());
-        assertEquals(0, token.getStartColumn());
-        assertEquals(0, token.getEndColumn());
+        assertEquals(0, token.getPosition().getLine());
+        assertEquals(0, token.getPosition().getStartColumn());
+        assertEquals(0, token.getPosition().getEndColumn());
         assertNull(token.getTokenType());
     }
 
@@ -26,9 +26,9 @@ public class TokenTest extends TestCase {
         token = new Token("", new Position(0, 0, 0), null);
 
         assertTrue(StringUtils.isEmpty(token.getTokenString()));
-        assertEquals(0, token.getLine());
-        assertEquals(0, token.getStartColumn());
-        assertEquals(0, token.getEndColumn());
+        assertEquals(0, token.getPosition().getLine());
+        assertEquals(0, token.getPosition().getStartColumn());
+        assertEquals(0, token.getPosition().getEndColumn());
         assertNull(token.getTokenType());
     }
 
@@ -39,9 +39,9 @@ public class TokenTest extends TestCase {
         token = new Token(HALT_MNEMONIC, new Position(1, 1, HALT_MNEMONIC.length()), TokenType.MNEMONIC);
 
         assertEquals("halt", token.getTokenString());
-        assertEquals(1, token.getLine());
-        assertEquals(1, token.getStartColumn());
-        assertEquals(4, token.getEndColumn());
+        assertEquals(1, token.getPosition().getLine());
+        assertEquals(1, token.getPosition().getStartColumn());
+        assertEquals(4, token.getPosition().getEndColumn());
         assertEquals(TokenType.MNEMONIC, token.getTokenType());
     }
 
@@ -50,11 +50,11 @@ public class TokenTest extends TestCase {
         String comment = "; bruh";
         token = new Token(comment, new Position(1, 1, comment.length()), TokenType.COMMENT);
 
-        assertEquals(1, token.getLine());
+        assertEquals(1, token.getPosition().getLine());
 
-        token.setLine(20);
+        token.getPosition().setLine(20);
 
-        assertEquals(20, token.getLine());
+        assertEquals(20, token.getPosition().getLine());
     }
 
     @Test
@@ -63,11 +63,11 @@ public class TokenTest extends TestCase {
 
         token = new Token(label, new Position(1, 1, label.length()), TokenType.LABEL);
 
-        assertEquals(1, token.getStartColumn());
+        assertEquals(1, token.getPosition().getStartColumn());
 
-        token.setStartColumn(420);
+        token.getPosition().setStartColumn(420);
 
-        assertEquals(420, token.getStartColumn());
+        assertEquals(420, token.getPosition().getStartColumn());
     }
 
     @Test
@@ -76,11 +76,11 @@ public class TokenTest extends TestCase {
 
         token = new Token(offset, new Position(1, 1, offset.length()), TokenType.OFFSET);
 
-        assertEquals(1, token.getEndColumn());
+        assertEquals(1, token.getPosition().getEndColumn());
 
-        token.setEndColumn(420);
+        token.getPosition().setEndColumn(420);
 
-        assertEquals(420, token.getEndColumn());
+        assertEquals(420, token.getPosition().getEndColumn());
     }
 
     @Test

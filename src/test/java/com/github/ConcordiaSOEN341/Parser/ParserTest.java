@@ -21,7 +21,7 @@ public class ParserTest {
         tokenList = new ArrayList<>();
 
         IToken mnemonic = new Token("halt", new Position(0, 1, "halt".length()), TokenType.MNEMONIC);
-        IToken eol = new Token("~", new Position(0, mnemonic.getEndColumn() + 1, mnemonic.getEndColumn() + 1), TokenType.EOL);
+        IToken eol = new Token("~", new Position(0, mnemonic.getPosition().getEndColumn() + 1, mnemonic.getPosition().getEndColumn() + 1), TokenType.EOL);
 
         tokenList.add(mnemonic);
         tokenList.add(eol);
