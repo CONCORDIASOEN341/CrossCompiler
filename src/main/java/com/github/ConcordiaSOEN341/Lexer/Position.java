@@ -1,6 +1,8 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-public class Position {
+import com.github.ConcordiaSOEN341.Interfaces.IPosition;
+
+public class Position implements IPosition {
     private int line;
     private int startColumn;
     private int endColumn;
