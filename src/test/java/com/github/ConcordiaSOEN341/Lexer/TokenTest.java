@@ -12,7 +12,7 @@ public class TokenTest extends TestCase {
 
     @Test
     public void createToken_whenArgumentsDefault_expectDefaultFields() {
-        token = new Token(null, 0, 0, 0, null);
+        token = new Token(null, new Position(0, 0, 0), null);
 
         assertTrue(StringUtils.isEmpty(token.getTokenString()));
         assertEquals(0, token.getLine());
@@ -23,7 +23,7 @@ public class TokenTest extends TestCase {
 
     @Test
     public void createToken_whenArgumentsEmptyString_expectDefaultFields() {
-        token = new Token("", 0, 0, 0, null);
+        token = new Token("", new Position(0, 0, 0), null);
 
         assertTrue(StringUtils.isEmpty(token.getTokenString()));
         assertEquals(0, token.getLine());
@@ -36,7 +36,7 @@ public class TokenTest extends TestCase {
     public void createToken_whenArgumentsNonDefault_expectValuesSet() {
         final String HALT_MNEMONIC = "halt";
 
-        token = new Token(HALT_MNEMONIC, 1, 1, HALT_MNEMONIC.length(), TokenType.MNEMONIC);
+        token = new Token(HALT_MNEMONIC, new Position(1, 1, HALT_MNEMONIC.length()), TokenType.MNEMONIC);
 
         assertEquals("halt", token.getTokenString());
         assertEquals(1, token.getLine());
@@ -48,7 +48,7 @@ public class TokenTest extends TestCase {
     @Test
     public void setLine() {
         String comment = "; bruh";
-        token = new Token(comment, 1, 1, comment.length(), TokenType.COMMENT);
+        token = new Token(comment, new Position(1, 1, comment.length()), TokenType.COMMENT);
 
         assertEquals(1, token.getLine());
 
@@ -61,7 +61,7 @@ public class TokenTest extends TestCase {
     public void setStartColumn() {
         String label = "loop";
 
-        token = new Token(label, 1, 1, label.length(), TokenType.LABEL);
+        token = new Token(label, new Position(1, 1, label.length()), TokenType.LABEL);
 
         assertEquals(1, token.getStartColumn());
 
@@ -74,7 +74,7 @@ public class TokenTest extends TestCase {
     public void setEndColumn() {
         String offset = "1";
 
-        token = new Token(offset, 1, 1, offset.length(), TokenType.OFFSET);
+        token = new Token(offset, new Position(1, 1, offset.length()), TokenType.OFFSET);
 
         assertEquals(1, token.getEndColumn());
 
@@ -87,7 +87,7 @@ public class TokenTest extends TestCase {
     public void setTokenString() {
         String cString = "c";
 
-        token = new Token(cString, 1, 1, cString.length(), TokenType.CSTRING);
+        token = new Token(cString, new Position(1, 1, cString.length()), TokenType.CSTRING);
 
         assertEquals(cString, token.getTokenString());
 
@@ -101,7 +101,7 @@ public class TokenTest extends TestCase {
     public void setTokenType() {
         String EOF = "EOF";
 
-        token = new Token(EOF, 1, 1, EOF.length(), TokenType.EOF);
+        token = new Token(EOF, new Position(1, 1, EOF.length()), TokenType.EOF);
 
         assertEquals(TokenType.EOF, token.getTokenType());
 

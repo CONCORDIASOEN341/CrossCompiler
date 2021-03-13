@@ -3,56 +3,48 @@ package com.github.ConcordiaSOEN341.Lexer;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
 public class Token implements IToken {
-
-    private int line;
-    private int startColumn;
-    private int endColumn;
+    private Position position;
     private String tokenString;
     private TokenType tokenType;
 
-    public Token(int line, int startColumn, int endColumn) {
+    public Token(Position position) {
         this.tokenString = "";
-        this.line = line;
-        this.startColumn = startColumn;
-        this.endColumn = endColumn;
+        this.position = position;
         this.tokenType = TokenType.ERROR;
     }
 
-    public Token(String tokenString, int line, int startColumn, int endColumn, TokenType tokenType) {
+    public Token(String tokenString, Position position, TokenType tokenType) {
         this.tokenString = tokenString;
-        this.line = line;
-        this.startColumn = startColumn;
-        this.endColumn = endColumn;
+        this.position = position;
         this.tokenType = tokenType;
     }
 
-    public String toString(){
-        return tokenString + " " + line + " " + startColumn + " " + endColumn+ " " + tokenType;
+    public String toString() {
+        return tokenString + " " + position.getLine() + " " + position.getStartColumn() + " " + position.getEndColumn() + " " + tokenType;
     }
 
-    // TODO: Remove getters/setters that are not needed or not logical to have ?
     public int getLine() {
-        return line;
+        return position.getLine();
     }
 
     public void setLine(int line) {
-        this.line = line;
+        this.position.setLine(line);
     }
 
     public int getStartColumn() {
-        return startColumn;
+        return position.getStartColumn();
     }
 
     public void setStartColumn(int startColumn) {
-        this.startColumn = startColumn;
+        this.position.setStartColumn(startColumn);
     }
 
     public int getEndColumn() {
-        return endColumn;
+        return position.getEndColumn();
     }
 
     public void setEndColumn(int endColumn) {
-        this.endColumn = endColumn;
+        this.position.setEndColumn(endColumn);
     }
 
     public String getTokenString() {
