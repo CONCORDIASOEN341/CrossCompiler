@@ -21,11 +21,15 @@ public class Token implements IToken {
     }
 
     public String toString() {
-        return tokenString + " " + position.getLine() + " " + position.getStartColumn() + " " + position.getEndColumn() + " " + tokenType;
+        return tokenString + " " + position + " " + tokenType;
     }
 
     public IPosition getPosition() {
         return position;
+    }
+
+    public void setPosition(IPosition pos){
+        position = pos;
     }
 
     public String getTokenString() {

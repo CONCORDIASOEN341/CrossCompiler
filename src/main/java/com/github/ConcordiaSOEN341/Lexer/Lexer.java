@@ -1,6 +1,7 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 import com.github.ConcordiaSOEN341.Interfaces.IReader;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
@@ -55,6 +56,8 @@ public class Lexer implements ILexer {
         Token token = new Token(new Position(currentLine, currentCol, currentCol));
         StringBuilder tokenString = new StringBuilder();
         TokenType type;
+        int startCol = 0;
+        int line = 0;
 
 
         // if we encountered an EOL EOF right after letters
@@ -67,7 +70,7 @@ public class Lexer implements ILexer {
         // colomns are not where it actually is but we know its at the end of the line it is on
         if (temp == 10) {
             token.setTokenType(TokenType.EOL);
-            token.getPosition().setLine(currentLine - 1);
+            token.setPosition(new Position(currentLine - 1, currentCol, currentCol));
             temp = 0;
             return token;
         }
@@ -83,8 +86,10 @@ public class Lexer implements ILexer {
 
             // Gather token info at start
             if (!tokenStarted && currentChar != ' ' && currentChar != '\r') {
-                token.getPosition().setStartColumn(currentCol);
-                token.getPosition().setLine(currentLine);
+                startCol = currentCol;
+                line = currentLine;
+//                token.getPosition().setStartColumn(currentCol);
+//                token.getPosition().setLine(currentLine);
                 tokenStarted = true;
             }
 
@@ -121,7 +126,8 @@ public class Lexer implements ILexer {
 
         // trim and finalize token
         token.setTokenString(tokenString.toString().trim());
-        token.getPosition().setEndColumn(token.getPosition().getStartColumn() + token.getTokenString().length());
+        token.setPosition(new Position(line, startCol, startCol + token.getTokenString().length()));
+//        token.getPosition().setEndColumn(token.getPosition().getStartColumn() + token.getTokenString().length());
 
         if (type == TokenType.IDENTIFIER) {
             if (cm.getValue(token.getTokenString()) != null) {

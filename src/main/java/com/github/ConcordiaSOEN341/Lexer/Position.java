@@ -13,6 +13,10 @@ public class Position implements IPosition {
         this.endColumn = endColumn;
     }
 
+    public String toString() {
+        return line + " " + startColumn + " " + endColumn;
+    }
+
     public int getLine() {
         return line;
     }
