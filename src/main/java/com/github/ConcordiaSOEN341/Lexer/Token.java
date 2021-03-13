@@ -1,19 +1,20 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
+import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
 public class Token implements IToken {
-    private Position position;
+    private IPosition position;
     private String tokenString;
     private TokenType tokenType;
 
-    public Token(Position position) {
+    public Token(IPosition position) {
         this.tokenString = "";
         this.position = position;
         this.tokenType = TokenType.ERROR;
     }
 
-    public Token(String tokenString, Position position, TokenType tokenType) {
+    public Token(String tokenString, IPosition position, TokenType tokenType) {
         this.tokenString = tokenString;
         this.position = position;
         this.tokenType = tokenType;
@@ -23,28 +24,8 @@ public class Token implements IToken {
         return tokenString + " " + position.getLine() + " " + position.getStartColumn() + " " + position.getEndColumn() + " " + tokenType;
     }
 
-    public int getLine() {
-        return position.getLine();
-    }
-
-    public void setLine(int line) {
-        this.position.setLine(line);
-    }
-
-    public int getStartColumn() {
-        return position.getStartColumn();
-    }
-
-    public void setStartColumn(int startColumn) {
-        this.position.setStartColumn(startColumn);
-    }
-
-    public int getEndColumn() {
-        return position.getEndColumn();
-    }
-
-    public void setEndColumn(int endColumn) {
-        this.position.setEndColumn(endColumn);
+    public IPosition getPosition() {
+        return position;
     }
 
     public String getTokenString() {

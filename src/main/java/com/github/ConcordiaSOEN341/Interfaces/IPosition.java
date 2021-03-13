@@ -6,4 +6,10 @@ public interface IPosition {
     int getStartColumn();
 
     int getEndColumn();
+
+    void setLine(int line);
+
+    void setStartColumn(int startColumn);
+
+    void setEndColumn(int endColumn);
 }

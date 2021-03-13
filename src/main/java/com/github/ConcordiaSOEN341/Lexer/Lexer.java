@@ -67,7 +67,7 @@ public class Lexer implements ILexer {
         // colomns are not where it actually is but we know its at the end of the line it is on
         if (temp == 10) {
             token.setTokenType(TokenType.EOL);
-            token.setLine(currentLine - 1);
+            token.getPosition().setLine(currentLine - 1);
             temp = 0;
             return token;
         }
@@ -83,8 +83,8 @@ public class Lexer implements ILexer {
 
             // Gather token info at start
             if (!tokenStarted && currentChar != ' ' && currentChar != '\r') {
-                token.setStartColumn(currentCol);
-                token.setLine(currentLine);
+                token.getPosition().setStartColumn(currentCol);
+                token.getPosition().setLine(currentLine);
                 tokenStarted = true;
             }
 
@@ -121,7 +121,7 @@ public class Lexer implements ILexer {
 
         // trim and finalize token
         token.setTokenString(tokenString.toString().trim());
-        token.setEndColumn(token.getStartColumn() + token.getTokenString().length());
+        token.getPosition().setEndColumn(token.getPosition().getStartColumn() + token.getTokenString().length());
 
         if (type == TokenType.IDENTIFIER) {
             if (cm.getValue(token.getTokenString()) != null) {
