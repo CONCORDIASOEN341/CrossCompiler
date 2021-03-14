@@ -1,10 +1,10 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILexer;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IParser;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.LexerMoq;
+import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import org.junit.Test;
@@ -20,8 +20,8 @@ public class ParserTest {
     @Test
     public void generateIR_whenTokenListSize2_expect1LineStatement() {
         tokenList = new ArrayList<>();
-        tokenList.add(new Token("halt", 0, 1, "halt".length(), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", 0, 2, "halt".length()+1, TokenType.EOL));
+        tokenList.add(new Token("halt", new Position(0, 1, "halt".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
 
         parser = new Parser(new LexerMoq(tokenList));
 

@@ -1,11 +1,10 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Lexer.Lexer;
-import com.github.ConcordiaSOEN341.Lexer.Token;
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IParser;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Reader.Reader;
 
 import java.util.ArrayList;
 
@@ -18,11 +17,11 @@ public class Parser implements IParser {
         intermediateRep = new ArrayList<>();
     }
 
-    public ArrayList<ILineStatement> parse(){
+    public ArrayList<ILineStatement> parse() {
         ArrayList<IToken> tokenList = lexer.generateTokenList();
 
         Instruction inst = null;
-        for(IToken t : tokenList) {
+        for (IToken t : tokenList) {
             if (t.getTokenType() == TokenType.MNEMONIC) {
                 inst = new Instruction(t);
             } else if (t.getTokenType() == TokenType.EOL) {
@@ -38,10 +37,10 @@ public class Parser implements IParser {
         return intermediateRep;
     }
 
-    // DEPRECATED: REPLACED BY PARSE()
+    @Deprecated
     public ArrayList<ILineStatement> generateIR(ArrayList<IToken> tList) {
         Instruction inst = null;
-        for(IToken t : tList) {
+        for (IToken t : tList) {
             if (t.getTokenType() == TokenType.MNEMONIC) {
                 inst = new Instruction(t);
             } else if (t.getTokenType() == TokenType.EOL) {
@@ -51,8 +50,6 @@ public class Parser implements IParser {
         }
         return intermediateRep;
     }
-
-
 
 
 }
