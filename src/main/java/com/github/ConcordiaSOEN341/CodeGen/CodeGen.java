@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class CodeGen implements ICodeGen {
 
-    public void generateListingFile(String fileName,ArrayList<ILineStatement> ir){
-        String listFile = fileName.substring(0,fileName.length()-4) + ".lst";
-        try{
+    public void generateListingFile(String fileName, ArrayList<ILineStatement> ir) {
+        String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
+        try {
             FileWriter listingWriter = new FileWriter(listFile);
             listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
 
@@ -23,7 +23,7 @@ public class CodeGen implements ICodeGen {
             }
 
             listingWriter.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("An error occurred");
             System.out.println("The program will terminate.");
             e.printStackTrace();
@@ -31,11 +31,11 @@ public class CodeGen implements ICodeGen {
         }
     }
 
-    public String[] listing(ArrayList<ILineStatement> ir){
+    public String[] listing(ArrayList<ILineStatement> ir) {
         CodeMap codeGen = new CodeMap();
         String[] listings = new String[ir.size()];
 
-        for(int i = 0; i < ir.size(); i ++) {
+        for (int i = 0; i < ir.size(); i++) {
             String hexAddress = String.format("%04X", i);
             String mnemonic = ir.get(i).getInstruction().toString();
             String codeMnemonic = codeGen.getValue(mnemonic);
