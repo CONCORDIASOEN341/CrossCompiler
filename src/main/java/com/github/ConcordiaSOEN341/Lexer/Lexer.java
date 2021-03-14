@@ -1,7 +1,6 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Interfaces.ILexer;
-import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 import com.github.ConcordiaSOEN341.Interfaces.IReader;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
