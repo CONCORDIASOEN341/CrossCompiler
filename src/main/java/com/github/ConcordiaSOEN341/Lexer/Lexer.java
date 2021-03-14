@@ -1,10 +1,11 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.IPosition;
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 import com.github.ConcordiaSOEN341.Maps.StateMap;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class Lexer implements ILexer {
     private int stateID = 0;
     private int temp = 0;
 
-    public Lexer(IReader r){
+    public Lexer(IReader r) {
         reader = r;
         sm = new StateMap();
         cm = new CodeMap();
@@ -27,21 +28,21 @@ public class Lexer implements ILexer {
         ArrayList<IToken> tokenList = new ArrayList<>();
         IToken t;
 
-        do{
+        do {
             t = getNextToken();
             tokenList.add(t);
 
-        }while(t.getTokenType() != TokenType.EOF);
+        } while (t.getTokenType() != TokenType.EOF);
 
         return tokenList;
     }
 
     // Bad but working attempt at DFA
-    private TokenType getState(char character){
+    private TokenType getState(char character) {
 
-        if(stateID == 1 && !Character.isWhitespace(character)){
+        if (stateID == 1 && !Character.isWhitespace(character)) {
             stateID = 2;
-        } else if(stateID == 2 && Character.isWhitespace(character)) {
+        } else if (stateID == 2 && Character.isWhitespace(character)) {
             stateID = 3;
         }
 
@@ -50,25 +51,26 @@ public class Lexer implements ILexer {
     }
 
 
+    private IToken getNextToken() {
 
-    private IToken getNextToken(){
-
-        Token token = new Token(currentLine, currentCol, currentCol);
+        Token token = new Token(new Position(currentLine, currentCol, currentCol));
         StringBuilder tokenString = new StringBuilder();
         TokenType type;
+        int startCol = 0;
+        int line = 0;
 
 
         // if we encountered an EOL EOF right after letters
-        if (temp == reader.getEof()){
+        if (temp == reader.getEof()) {
             token.setTokenType(TokenType.EOF);
             temp = 0;
             return token;
         }
 
         // colomns are not where it actually is but we know its at the end of the line it is on
-        if (temp == 10){
+        if (temp == 10) {
             token.setTokenType(TokenType.EOL);
-            token.setLine(currentLine-1);
+            token.setPosition(new Position(currentLine - 1, currentCol, currentCol));
             temp = 0;
             return token;
         }
@@ -78,19 +80,21 @@ public class Lexer implements ILexer {
         boolean tokenStarted = false;
 
         // loop till we have read a token
-        while(type == TokenType.START) {
+        while (type == TokenType.START) {
             int currentChar;
             currentChar = reader.read();
 
             // Gather token info at start
-            if(!tokenStarted && currentChar != ' ' && currentChar != '\r'){
-                token.setStartColumn(currentCol);
-                token.setLine(currentLine);
+            if (!tokenStarted && currentChar != ' ' && currentChar != '\r') {
+                startCol = currentCol;
+                line = currentLine;
+//                token.getPosition().setStartColumn(currentCol);
+//                token.getPosition().setLine(currentLine);
                 tokenStarted = true;
             }
 
             if (currentChar == reader.getEof()) {
-                if(stateID == 1){
+                if (stateID == 1) {
                     type = TokenType.EOF;
                     token.setTokenType(type);
                 } else {
@@ -101,7 +105,7 @@ public class Lexer implements ILexer {
             }
 
             if (currentChar == '\n') {
-                if(stateID == 1){
+                if (stateID == 1) {
                     type = TokenType.EOL;
                     token.setTokenType(type);
                 } else {
@@ -116,17 +120,17 @@ public class Lexer implements ILexer {
             }
 
 
-
             type = getState((char) currentChar);
             tokenString.append((char) currentChar);
         }
 
         // trim and finalize token
         token.setTokenString(tokenString.toString().trim());
-        token.setEndColumn(token.getStartColumn()+token.getTokenString().length());
+        token.setPosition(new Position(line, startCol, startCol + token.getTokenString().length()));
+//        token.getPosition().setEndColumn(token.getPosition().getStartColumn() + token.getTokenString().length());
 
-        if(type == TokenType.IDENTIFIER){
-            if(cm.getValue(token.getTokenString()) != null){
+        if (type == TokenType.IDENTIFIER) {
+            if (cm.getValue(token.getTokenString()) != null) {
                 type = TokenType.MNEMONIC;
             }
             token.setTokenType(type);

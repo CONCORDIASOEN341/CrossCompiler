@@ -26,14 +26,14 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("",1,0,0,TokenType.EOF));
+        expectedTList.add(new Token("", new Position(1, 0, 0), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -46,14 +46,14 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("",1,1,1,TokenType.EOF));
+        expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -69,15 +69,15 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("halt",1,0,4,TokenType.MNEMONIC));
-        expectedTList.add(new Token("",1,4,4,TokenType.EOF));
+        expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
+        expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -92,15 +92,15 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("abc",1,0,3,TokenType.IDENTIFIER));
-        expectedTList.add(new Token("",1,3,3,TokenType.EOF));
+        expectedTList.add(new Token("abc", new Position(1, 0, 3), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -117,15 +117,15 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("halt",1,0,4,TokenType.MNEMONIC));
-        expectedTList.add(new Token("",1,5,5,TokenType.EOF));
+        expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
+        expectedTList.add(new Token("", new Position(1, 5, 5), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -142,15 +142,15 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("halt",1,1,5,TokenType.MNEMONIC));
-        expectedTList.add(new Token("",1,5,5,TokenType.EOF));
+        expectedTList.add(new Token("halt", new Position(1, 1, 5), TokenType.MNEMONIC));
+        expectedTList.add(new Token("", new Position(1, 5, 5), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -167,16 +167,16 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("halt",1,0,4,TokenType.MNEMONIC));
-        expectedTList.add(new Token("",1,0,0,TokenType.EOL));
-        expectedTList.add(new Token("",2,0,0,TokenType.EOF));
+        expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
+        expectedTList.add(new Token("", new Position(1, 0, 0), TokenType.EOL));
+        expectedTList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
     @Test
@@ -196,16 +196,15 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("halt",1,0,4,TokenType.MNEMONIC));
-        expectedTList.add(new Token("",1,0,0,TokenType.EOL));
-        expectedTList.add(new Token("pop",2,0,3,TokenType.MNEMONIC));
-        expectedTList.add(new Token("",2,3,3,TokenType.EOF));
+        expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
+        expectedTList.add(new Token("", new Position(1, 0, 0), TokenType.EOL));
+        expectedTList.add(new Token("pop", new Position(2, 0, 3), TokenType.MNEMONIC));
+        expectedTList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
 
         //Act
-        ArrayList<IToken> actualTList =  lTest.generateTokenList();
-
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
 
         //Assert
-        assertEquals(expectedTList.toString(),actualTList.toString());
+        assertEquals(expectedTList.toString(), actualTList.toString());
     }
 }
