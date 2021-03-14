@@ -22,7 +22,7 @@ public class LexerTest extends TestCase {
         //Arrange
         file = new ArrayList<>();
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class LexerTest extends TestCase {
         file = new ArrayList<>();
         file.add(' ');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class LexerTest extends TestCase {
         file.add('l');
         file.add('t');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -88,7 +88,7 @@ public class LexerTest extends TestCase {
         file.add('b');
         file.add('c');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -113,7 +113,7 @@ public class LexerTest extends TestCase {
         file.add('t');
         file.add(' ');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -138,7 +138,7 @@ public class LexerTest extends TestCase {
         file.add('l');
         file.add('t');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -163,7 +163,7 @@ public class LexerTest extends TestCase {
         file.add('t');
         file.add('\n');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
@@ -192,7 +192,7 @@ public class LexerTest extends TestCase {
         file.add('o');
         file.add('p');
         file.add('~');
-        rTest = new ReaderTest(file);
+        rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
