@@ -4,7 +4,6 @@ import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
-import javax.sound.sampled.Line;
 import java.util.ArrayList;
 
 public class Parser implements IParser {
@@ -19,36 +18,42 @@ public class Parser implements IParser {
     public ArrayList<ILineStatement> parse() {
         ArrayList<IToken> tokenList = lexer.generateTokenList();
 
-        Instruction inst = null;
+        Instruction instruction = null;
         IToken cstring = null;
         IToken comment = null;
         LineStatement lStatement = new LineStatement();
         for (IToken t : tokenList) {
-            inst = new Instruction(t);
+            instruction = new Instruction(t);
 
-            if (t.getTokenType() == TokenType.MNEMONIC) { //MNEMONIC currently doesn't include anything with the .
-
+            if (t.getTokenType() == TokenType.MNEMONIC) {
+                instruction.setMnemonic(t);
+                instruction.setInstructionType(checkAddressingMode(t));
+            } else if (t.getTokenType() == TokenType.LABEL) {
+                instruction.setLabel(t);
+            } else if (t.getTokenType() == TokenType.OFFSET) {
+                instruction.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
                 cstring = t;
-                lStatement.setDirective(cstring);
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 comment = t;
-                lStatement.setComment(comment);
             } else if (t.getTokenType() == TokenType.EOL) {
-                intermediateRep.add(lStatement);
+                lStatement.setInstruction(instruction);
+                lStatement.setDirective(cstring);
+                lStatement.setComment(comment);
 
+                intermediateRep.add(lStatement);
+                instruction = null;
+                cstring = null;
+                comment = null;
             }
         }
         return intermediateRep;
 
     }
 
-    /*
-        Split mnemonic at the dot, after the dot parse the u3 or u5 etc, based on that determine addressing mode
-     */
-
     public InstructionType checkAddressingMode(IToken t) {
         String temp [] = t.getTokenString().split("\\.");
+        System.out.println(temp[0]);
 
 
         return InstructionType.INHERENT;
