@@ -1,9 +1,7 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
-
 import java.util.ArrayList;
 
 public class Parser implements IParser {
@@ -18,33 +16,31 @@ public class Parser implements IParser {
     public ArrayList<ILineStatement> parse() {
         ArrayList<IToken> tokenList = lexer.generateTokenList();
 
+        int line = -1;
         Instruction instruction = null;
-        IToken cstring = null;
-        IToken comment = null;
-        LineStatement lStatement = new LineStatement();
+        LineStatement lStatement = null;
         for (IToken t : tokenList) {
-            instruction = new Instruction(t);
-
+            int currentLine = t.getPosition().getLine();
+            if (currentLine > line){                                     //create new line statement + instruction per line
+                line = currentLine;
+                lStatement = new LineStatement();
+                instruction = new Instruction();
+            }
             if (t.getTokenType() == TokenType.MNEMONIC) {
                 instruction.setMnemonic(t);
                 instruction.setInstructionType(checkAddressingMode(t));
+                lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.LABEL) {
                 instruction.setLabel(t);
+                lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
                 instruction.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
-                cstring = t;
+                lStatement.setDirective(t);
             } else if (t.getTokenType() == TokenType.COMMENT) {
-                comment = t;
+                lStatement.setComment(t);
             } else if (t.getTokenType() == TokenType.EOL) {
-                lStatement.setInstruction(instruction);
-                lStatement.setDirective(cstring);
-                lStatement.setComment(comment);
-
                 intermediateRep.add(lStatement);
-                instruction = null;
-                cstring = null;
-                comment = null;
             }
         }
         return intermediateRep;
@@ -52,12 +48,17 @@ public class Parser implements IParser {
     }
 
     public InstructionType checkAddressingMode(IToken t) {
-        String temp [] = t.getTokenString().split("\\.");
-        System.out.println(temp[0]);
-
-
-        return InstructionType.INHERENT;
-
+        if (!(t.getTokenString().contains("."))) {                      //no dot it's definitely inherent
+            return InstructionType.INHERENT;
+        }
+        String temp = t.getTokenString();
+        String[] sNum = temp.split("(u)|(i)", 2);            //take string after the u or the i (this leaves only the number)
+        int num = Integer.parseInt(sNum[1]);
+        if (num <= 8 ){                                                 //less than or equal to 1 byte is immediate
+            return InstructionType.IMMEDIATE;
+        } else {
+            return InstructionType.RELATIVE;
+        }
     }
 
     public ArrayList<ILineStatement> getIntermediateRep() {

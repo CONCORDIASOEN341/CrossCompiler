@@ -19,10 +19,15 @@ public class Instruction implements IInstruction {
 
     public Instruction(IToken mnemonic) {
         this.mnemonic = mnemonic;
+        IToken label = null;
+        IToken offset = null;
+        InstructionType instructionType = null;
     }
 
     public Instruction(IToken mnemonic, InstructionType instructionType) {
         this.mnemonic = mnemonic;
+        IToken label = null;
+        IToken offset = null;
         this.instructionType = instructionType;
     }
 
@@ -32,10 +37,6 @@ public class Instruction implements IInstruction {
 
     public void setMnemonic(IToken mnemonic) {
         this.mnemonic = mnemonic;
-    }
-
-    public InstructionType getInstructionType(){
-        return instructionType;
     }
 
     public IToken getLabel() {
@@ -50,8 +51,12 @@ public class Instruction implements IInstruction {
         return offset;
     }
 
-    public void setOffset(IToken label) {
+    public void setOffset(IToken offset) {
         this.offset = offset;
+    }
+
+    public InstructionType getInstructionType(){
+        return instructionType;
     }
 
     public void setInstructionType(InstructionType instructionType) {
