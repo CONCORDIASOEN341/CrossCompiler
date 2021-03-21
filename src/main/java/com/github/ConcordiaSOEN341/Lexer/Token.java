@@ -1,56 +1,35 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-public class Token {
+import com.github.ConcordiaSOEN341.Interfaces.IPosition;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
-    private int line;
-    private int startColumn;
-    private int endColumn;
+public class Token implements IToken {
+    private IPosition position;
     private String tokenString;
     private TokenType tokenType;
 
-    public Token(int line, int startColumn, int endColumn) {
+    public Token(IPosition position) {
         this.tokenString = "";
-        this.line = line;
-        this.startColumn = startColumn;
-        this.endColumn = endColumn;
+        this.position = position;
         this.tokenType = TokenType.ERROR;
     }
 
-    public Token(String tokenString, int line, int startColumn, int endColumn, TokenType tokenType) {
+    public Token(String tokenString, IPosition position, TokenType tokenType) {
         this.tokenString = tokenString;
-        this.line = line;
-        this.startColumn = startColumn;
-        this.endColumn = endColumn;
+        this.position = position;
         this.tokenType = tokenType;
     }
 
-    public String toString(){
-        return tokenString + " " + line + " " + startColumn + " " + endColumn+ " " + tokenType;
+    public String toString() {
+        return tokenString + " " + position + " " + tokenType;
     }
 
-    // TODO: Remove getters/setters that are not needed or not logical to have ?
-    public int getLine() {
-        return line;
+    public IPosition getPosition() {
+        return position;
     }
 
-    public void setLine(int line) {
-        this.line = line;
-    }
-
-    public int getStartColumn() {
-        return startColumn;
-    }
-
-    public void setStartColumn(int startColumn) {
-        this.startColumn = startColumn;
-    }
-
-    public int getEndColumn() {
-        return endColumn;
-    }
-
-    public void setEndColumn(int endColumn) {
-        this.endColumn = endColumn;
+    public void setPosition(IPosition pos){
+        position = pos;
     }
 
     public String getTokenString() {

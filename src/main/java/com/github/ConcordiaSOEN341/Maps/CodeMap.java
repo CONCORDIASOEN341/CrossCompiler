@@ -1,8 +1,10 @@
 package com.github.ConcordiaSOEN341.Maps;
 
+import com.github.ConcordiaSOEN341.Interfaces.ICompilerMap;
+
 import java.util.HashMap;
 
-public class CodeMap implements ICompilerMap<String,String>{
+public class CodeMap implements ICompilerMap<String,String> {
     private HashMap<String, String> instructions;
 
     public CodeMap() {

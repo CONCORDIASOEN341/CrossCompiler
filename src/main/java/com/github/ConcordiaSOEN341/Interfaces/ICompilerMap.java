@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.Maps;
+package com.github.ConcordiaSOEN341.Interfaces;
 
 public interface ICompilerMap<K,V> {
     void initializeMap();

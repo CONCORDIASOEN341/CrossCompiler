@@ -1,15 +1,15 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Reader.IReader;
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ReaderTest implements IReader {
+public class ReaderMoq implements IReader {
     private final static char EOF = '~';
     private final Iterator<Character> it;
 
-    public ReaderTest(ArrayList<Character> file) {
+    public ReaderMoq(ArrayList<Character> file) {
         it = file.iterator();
 
     }

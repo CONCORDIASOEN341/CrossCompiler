@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.Reader;
+package com.github.ConcordiaSOEN341.Interfaces;
 
 public interface IReader {
     int getEof();
