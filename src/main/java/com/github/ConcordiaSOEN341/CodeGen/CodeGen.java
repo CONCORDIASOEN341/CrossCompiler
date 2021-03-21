@@ -37,6 +37,7 @@ public class CodeGen implements ICodeGen {
 
         for (int i = 0; i < ir.size(); i++) {
             String hexAddress = String.format("%04X", i);
+
             String mnemonic = ir.get(i).getInstruction().toString();
             String codeMnemonic = codeGen.getValue(mnemonic);
             listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t\t \t\t\t \t\n");
