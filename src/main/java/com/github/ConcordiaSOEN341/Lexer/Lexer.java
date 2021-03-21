@@ -37,42 +37,35 @@ public class Lexer implements ILexer {
     }
 
     // Bad but working attempt at DFA
-    private TokenType getState(char character) {
+    private TokenType getState(int character) {
 
-        if (stateID == 1 && !Character.isWhitespace(character)) {
+        if (stateID == 1 && character == reader.getEof()) {
+            stateID = 7;
+        } else if (stateID == 1 && character == '\n') {
+            stateID = 6;
+        } else if (stateID == 1 && Character.isLetter(character)) {
             stateID = 2;
-        } else if (stateID == 2 && Character.isWhitespace(character)) {
+        } else if (stateID == 2 && (Character.isWhitespace(character) || isBackTrack(character))) {
             stateID = 3;
+        } else if (stateID == 1 && character == ';'){
+            stateID = 4;
+        } else if (stateID == 4 && hasNoChar(character)) {
+            stateID = 5;
         }
-
         return sm.getValue(stateID);
 
     }
 
 
     private IToken getNextToken() {
+        // THIS HAS TO CHANGE SOMETIME!!!!
+        if(temp == '\n') currentLine--;
 
         Token token = new Token(new Position(currentLine, currentCol, currentCol));
         StringBuilder tokenString = new StringBuilder();
         TokenType type;
         int startCol = 0;
         int line = 0;
-
-
-        // if we encountered an EOL EOF right after letters
-        if (temp == reader.getEof()) {
-            token.setTokenType(TokenType.EOF);
-            temp = 0;
-            return token;
-        }
-
-        // colomns are not where it actually is but we know its at the end of the line it is on
-        if (temp == 10) {
-            token.setTokenType(TokenType.EOL);
-            token.setPosition(new Position(currentLine - 1, currentCol, currentCol));
-            temp = 0;
-            return token;
-        }
 
         stateID = 1;
         type = TokenType.START;
@@ -81,49 +74,40 @@ public class Lexer implements ILexer {
         // loop till we have read a token
         while (type == TokenType.START) {
             int currentChar;
-            currentChar = reader.read();
+            currentChar = (temp == 0)? reader.read() : temp;
 
             // Gather token info at start
             if (!tokenStarted && currentChar != ' ' && currentChar != '\r') {
                 startCol = currentCol;
                 line = currentLine;
-//                token.getPosition().setStartColumn(currentCol);
-//                token.getPosition().setLine(currentLine);
                 tokenStarted = true;
             }
 
-            if (currentChar == reader.getEof()) {
-                if (stateID == 1) {
-                    type = TokenType.EOF;
-                    token.setTokenType(type);
-                } else {
-                    temp = reader.getEof();
-                    type = TokenType.IDENTIFIER;
-                }
-                continue;
-            }
-
             if (currentChar == '\n') {
-                if (stateID == 1) {
-                    type = TokenType.EOL;
-                    token.setTokenType(type);
-                } else {
-                    temp = 10;
-                    type = TokenType.IDENTIFIER;
-                }
                 currentCol = 0;
                 currentLine++;
-                continue;
-            } else {
-                currentCol++;
             }
 
+            if(isBackTrack(currentChar)){
+                if(stateID != 1){
+                    type = getState(currentChar);
+                    temp = currentChar;
+                    continue;
+                } else {
+                    temp = 0;
+                }
+            }
 
-            type = getState((char) currentChar);
-            tokenString.append((char) currentChar);
+            type = getState(currentChar);
+
+            if(!hasNoChar(currentChar)) {
+                currentCol++;
+                tokenString.append((char) currentChar);
+            }
         }
 
         // trim and finalize token
+
         token.setTokenString(tokenString.toString().trim());
         token.setPosition(new Position(line, startCol, startCol + token.getTokenString().length()));
 //        token.getPosition().setEndColumn(token.getPosition().getStartColumn() + token.getTokenString().length());
@@ -132,11 +116,20 @@ public class Lexer implements ILexer {
             if (cm.getValue(token.getTokenString()) != null) {
                 type = TokenType.MNEMONIC;
             }
-            token.setTokenType(type);
         }
+
+        token.setTokenType(type);
 
         return token;
 
+    }
+
+    private boolean isBackTrack(int character){
+        return character == reader.getEof() || character == '\n' || character == ';';
+    }
+
+    private boolean hasNoChar(int character){
+        return character == reader.getEof() || character == '\n';
     }
 
 }
