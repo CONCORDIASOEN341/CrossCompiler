@@ -21,7 +21,7 @@ public class Reader implements IReader {
             System.exit(0);
         }
     }
-    public int getEof() { return EOF; }
+    public final int getEof() { return EOF; }
 
     public int read() {
         try {
