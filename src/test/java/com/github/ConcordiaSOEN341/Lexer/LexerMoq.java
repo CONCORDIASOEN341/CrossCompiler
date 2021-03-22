@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class LexerMoq implements ILexer {
     private final ArrayList<IToken> tokenList;
 
-    public LexerMoq(ArrayList<IToken> tL){
+    public LexerMoq(ArrayList<IToken> tL) {
         tokenList = tL;
     }
 

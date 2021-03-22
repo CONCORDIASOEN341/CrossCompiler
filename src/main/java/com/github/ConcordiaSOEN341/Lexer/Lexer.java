@@ -47,7 +47,7 @@ public class Lexer implements ILexer {
             stateID = 2;
         } else if (stateID == 2 && (Character.isWhitespace(character) || isBackTrack(character))) {
             stateID = 3;
-        } else if (stateID == 1 && character == ';'){
+        } else if (stateID == 1 && character == ';') {
             stateID = 4;
         } else if (stateID == 4 && hasNoChar(character)) {
             stateID = 5;
@@ -59,7 +59,7 @@ public class Lexer implements ILexer {
 
     private IToken getNextToken() {
         // THIS HAS TO CHANGE SOMETIME!!!!
-        if(temp == '\n') currentLine--;
+        if (temp == '\n') currentLine--;
 
         Token token = new Token(new Position(currentLine, currentCol, currentCol));
         StringBuilder tokenString = new StringBuilder();
@@ -74,7 +74,7 @@ public class Lexer implements ILexer {
         // loop till we have read a token
         while (type == TokenType.START) {
             int currentChar;
-            currentChar = (temp == 0)? reader.read() : temp;
+            currentChar = (temp == 0) ? reader.read() : temp;
 
             // Gather token info at start
             if (!tokenStarted && currentChar != ' ' && currentChar != '\r') {
@@ -88,8 +88,8 @@ public class Lexer implements ILexer {
                 currentLine++;
             }
 
-            if(isBackTrack(currentChar)){
-                if(stateID != 1){
+            if (isBackTrack(currentChar)) {
+                if (stateID != 1) {
                     type = getState(currentChar);
                     temp = currentChar;
                     continue;
@@ -100,7 +100,7 @@ public class Lexer implements ILexer {
 
             type = getState(currentChar);
 
-            if(!hasNoChar(currentChar)) {
+            if (!hasNoChar(currentChar)) {
                 currentCol++;
                 tokenString.append((char) currentChar);
             }
@@ -110,7 +110,6 @@ public class Lexer implements ILexer {
 
         token.setTokenString(tokenString.toString().trim());
         token.setPosition(new Position(line, startCol, startCol + token.getTokenString().length()));
-//        token.getPosition().setEndColumn(token.getPosition().getStartColumn() + token.getTokenString().length());
 
         if (type == TokenType.IDENTIFIER) {
             if (cm.getValue(token.getTokenString()) != null) {
@@ -124,11 +123,11 @@ public class Lexer implements ILexer {
 
     }
 
-    private boolean isBackTrack(int character){
+    private boolean isBackTrack(int character) {
         return character == reader.getEof() || character == '\n' || character == ';';
     }
 
-    private boolean hasNoChar(int character){
+    private boolean hasNoChar(int character) {
         return character == reader.getEof() || character == '\n';
     }
 
