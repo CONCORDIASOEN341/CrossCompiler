@@ -20,9 +20,9 @@ public class Error implements IError {
         return invalidLine;
     }
 
-    // TODO: Change invalidLine.toString()
+    // TODO: Change invalidLine.toString() to smtg that rebuilds the initial line of code
     @Override
     public String toString() {
-        return errorType.toString() + ": " + invalidLine.toString();
+        return invalidLine + "\n" + errorType;
     }
 }
