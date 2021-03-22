@@ -12,6 +12,7 @@ public class Driver {
         String fileName = "src/TestInherentMnemonics.asm";
         IParser parser = new Parser(new Lexer(new Reader(fileName)));
 
+
         ICodeGen cg = new CodeGen();
         cg.generateListingFile(fileName,parser.parse());
     }
