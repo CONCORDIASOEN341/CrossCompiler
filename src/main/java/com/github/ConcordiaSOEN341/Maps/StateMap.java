@@ -12,7 +12,7 @@ public class StateMap implements ICompilerMap<Integer, TokenType> {
         initializeMap();
     }
 
-    public void initializeMap() {
+    private void initializeMap() {
         stateMap = new HashMap<>();
         stateMap.put(0, TokenType.ERROR);
 
@@ -29,6 +29,10 @@ public class StateMap implements ICompilerMap<Integer, TokenType> {
         //NewLine and EOF
         stateMap.put(6, TokenType.EOL);
         stateMap.put(7, TokenType.EOF);
+
+        //Number
+        stateMap.put(8, TokenType.START);
+        stateMap.put(9, TokenType.OFFSET);
 
     }
 

@@ -7,6 +7,7 @@ public enum TokenType {
     MNEMONIC,
     LABEL,
     OFFSET,
+    DIRECTIVE,
     CSTRING,
     COMMENT,
     EOF,
