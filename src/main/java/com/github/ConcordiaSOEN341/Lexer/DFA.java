@@ -37,7 +37,7 @@ public class DFA {
 
         transitions.put(states.get(0).getStateID(), new HashMap<>());
 
-        // STATE 1
+        // STATE 1: INTERMEDIATE
         transitions.put(states.get(1).getStateID(), new HashMap<>());
         transitions.get(1).put(tab,1);
         transitions.get(1).put(cr,1);
@@ -55,7 +55,7 @@ public class DFA {
         transitions.get(1).put(period,11);
         transitions.get(1).put(quote,13);
 
-        // STATE 2
+        // STATE 2: IDENTIFIER
         transitions.put(states.get(2).getStateID(), new HashMap<>());
         for (int letter : letters){
             transitions.get(2).put(letter,2);
@@ -72,7 +72,7 @@ public class DFA {
         transitions.get(2).put(newline,3);
         transitions.get(2).put(endOfFile,3);
 
-        // STATE 4
+        // STATE 4: COMMENTS
         transitions.put(states.get(4).getStateID(), new HashMap<>());
         for (int c : anyChar){
             transitions.get(4).put(c,4);
@@ -80,7 +80,7 @@ public class DFA {
         transitions.get(4).put(newline,5);
         transitions.get(4).put(endOfFile,5);
 
-        // STATE 8
+        // STATE 8: ZERO
         transitions.put(states.get(8).getStateID(), new HashMap<>());
 //        for (int nonZero : nonZero){
 //            transitions.get(8).put(nonZero,10);
@@ -96,7 +96,7 @@ public class DFA {
         transitions.get(8).put(newline,10);
         transitions.get(8).put(endOfFile,10);
 
-        // STATE 9
+        // STATE 9: NUMBERS
         transitions.put(states.get(9).getStateID(), new HashMap<>());
         transitions.get(9).put(zero,9);
         for (int nonZero : nonZero){
@@ -113,7 +113,7 @@ public class DFA {
         transitions.get(9).put(newline,10);
         transitions.get(9).put(endOfFile,10);
 
-        // STATE 11
+        // STATE 11: DIRECTIVE
         transitions.put(states.get(11).getStateID(), new HashMap<>());
         transitions.get(11).put(zero,11);
         for (int nonZero : nonZero){
@@ -130,15 +130,15 @@ public class DFA {
         transitions.get(11).put(newline,12);
         transitions.get(11).put(endOfFile,12);
 
-        // STATE 13
+        // STATE 13: CSTRING
         transitions.put(states.get(13).getStateID(), new HashMap<>());
         for (int c : anyChar){
             if(c != endOfFile)
                 transitions.get(13).put(c,13);
         }
         transitions.get(13).put(quote,14);
-
-
+        transitions.get(13).put(newline,15);
+        transitions.get(13).put(endOfFile,16);
     }
 
     private void initializeAlphabet(){
@@ -189,6 +189,8 @@ public class DFA {
         states.add(new State(12, TokenType.DIRECTIVE,true));
         states.add(new State(13, TokenType.START,false));
         states.add(new State(14, TokenType.CSTRING,false));
+        states.add(new State(15, TokenType.ERROR,true));
+        states.add(new State(16, TokenType.ERROR,true));
     }
 
     public boolean isBackTrack(int id){

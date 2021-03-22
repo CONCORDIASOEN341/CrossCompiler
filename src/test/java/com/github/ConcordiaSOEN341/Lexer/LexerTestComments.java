@@ -59,7 +59,6 @@ public class LexerTestComments extends TestCase {
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
 
-
         //Assert
         assertEquals(expectedTList.toString(), actualTList.toString());
     }

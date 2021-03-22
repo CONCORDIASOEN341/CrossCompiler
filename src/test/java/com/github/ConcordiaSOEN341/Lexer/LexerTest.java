@@ -269,12 +269,7 @@ public class LexerTest extends TestCase {
     public void lexer_Error1() {
         //Arrange
         file = new ArrayList<>();
-        file.add('"');
-        file.add('h');
-        file.add('e');
-        file.add('l');
-        file.add('l');
-        file.add('o');
+        file.add('$');
         file.add('~');
         rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
