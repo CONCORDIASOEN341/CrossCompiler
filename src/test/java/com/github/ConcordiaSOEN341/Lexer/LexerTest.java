@@ -168,7 +168,7 @@ public class LexerTest extends TestCase {
 
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
-        expectedTList.add(new Token("", new Position(1, 0, 0), TokenType.EOL));
+        expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         expectedTList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
         //Act
@@ -197,12 +197,94 @@ public class LexerTest extends TestCase {
 
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
-        expectedTList.add(new Token("", new Position(1, 0, 0), TokenType.EOL));
+        expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         expectedTList.add(new Token("pop", new Position(2, 0, 3), TokenType.MNEMONIC));
         expectedTList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+    }
+
+    @Test
+    public void lexer_idk() {
+        //Arrange
+        file = new ArrayList<>();
+        file.add('h');
+        file.add('a');
+        file.add('l');
+        file.add('t');
+        file.add('.');
+        file.add('y');
+        file.add('5');
+        file.add('~');
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        expectedTList.add(new Token("halt.y5", new Position(1, 0, 7), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("", new Position(1, 7, 7), TokenType.EOF));
+
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+    }
+
+    @Test
+    public void lexer_idk2() {
+        //Arrange
+        file = new ArrayList<>();
+        file.add('5');
+        file.add('5');
+        file.add('5');
+        file.add('5');
+        file.add(' ');
+        file.add(';');
+        file.add('h');
+        file.add('e');
+        file.add('l');
+        file.add('l');
+        file.add('o');
+        file.add('~');
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        expectedTList.add(new Token("5555", new Position(1, 0, 4), TokenType.OFFSET));
+        expectedTList.add(new Token(";hello", new Position(1, 5, 11), TokenType.COMMENT));
+        expectedTList.add(new Token("", new Position(1, 11,11), TokenType.EOF));
+
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+    }
+
+    @Test
+    public void lexer_Error1() {
+        //Arrange
+        file = new ArrayList<>();
+        file.add('"');
+        file.add('h');
+        file.add('e');
+        file.add('l');
+        file.add('l');
+        file.add('o');
+        file.add('~');
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        expectedTList.add(new Token("$", new Position(1, 0, 1), TokenType.ERROR));
+        expectedTList.add(new Token("", new Position(1, 1,1), TokenType.EOF));
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
 
         //Assert
         assertEquals(expectedTList.toString(), actualTList.toString());
