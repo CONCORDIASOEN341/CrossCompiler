@@ -4,8 +4,8 @@ import com.github.ConcordiaSOEN341.Interfaces.IError;
 import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 
 public class Error implements IError {
-    private ErrorType errorType;
-    private IPosition position;
+    private final ErrorType errorType;
+    private final IPosition position;
 
     public Error(ErrorType errorType, IPosition position) {
         this.errorType = errorType;

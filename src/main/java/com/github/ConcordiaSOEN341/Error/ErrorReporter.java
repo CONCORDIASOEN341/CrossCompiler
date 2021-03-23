@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class ErrorReporter implements IErrorReporter {
-    private final ArrayList<IError> errors = new ArrayList<>();
+    private static final ArrayList<IError> errors = new ArrayList<>();
     private final Comparator<IError> ascLines = Comparator.comparingInt(e -> e.getPosition().getLine());
 
     public ErrorReporter(){}
