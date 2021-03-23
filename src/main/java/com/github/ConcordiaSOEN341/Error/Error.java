@@ -1,7 +1,6 @@
 package com.github.ConcordiaSOEN341.Error;
 
 import com.github.ConcordiaSOEN341.Interfaces.IError;
-import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 
 public class Error implements IError {
@@ -24,6 +23,6 @@ public class Error implements IError {
     // TODO: Change invalidLine.toString() to smtg that rebuilds the initial line of code
     @Override
     public String toString() {
-        return position + "\n" + errorType;
+        return "Error:line " + position.getLine() + ": " + errorType;
     }
 }

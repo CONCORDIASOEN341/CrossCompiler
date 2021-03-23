@@ -23,6 +23,6 @@ public enum ErrorType {
 
     @Override
     public String toString() {
-        return "Error: " + description;
+        return description;
     }
 }
