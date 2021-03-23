@@ -80,99 +80,103 @@ public class Parser implements IParser {
 
     //check inherent and immediate instructions
     private boolean isValid(LineStatement lineStatement) {
-        int currentLine = lineStatement.getInstruction().getMnemonic().getPosition().getLine();
-        int currentColumn = lineStatement.getInstruction().getMnemonic().getPosition().getStartColumn();
+        int currentLine = 0;
+        int currentColumn = 0;
+        if (lineStatement.getInstruction() != null) {
+            currentLine = lineStatement.getInstruction().getMnemonic().getPosition().getLine();
+            currentColumn = lineStatement.getInstruction().getMnemonic().getPosition().getStartColumn();
 
-        if (lineStatement.getInstruction().getInstructionType() == InstructionType.INHERENT){
-            if (lineStatement.getInstruction().getOffset() == null) {
-                return true;
-            } else {
-                reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                return false;
-            }
-        }
-
-        //check all immediate instruction possibilities
-        if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
-            //immediate without a value is instantly not good
-            if (lineStatement.getInstruction().getOffset() == null) {
-                reporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                return false;
-            }
-
-            int opSize = getInt(lineStatement.getInstruction().getMnemonic());              //get operator value
-            String temp = lineStatement.getInstruction().getMnemonic().getTokenString();
-            String symbol = temp.substring(temp.indexOf('.') + 1, temp.indexOf('.') + 2);   //get i or u
-            String op = lineStatement.getInstruction().getOffset().getTokenString();        //get operand value (String)
-            int opNum = Integer.parseInt(op);                                               //get operand value (int)
-
-            //SIGNED
-            if (symbol == "i") {
-                if (opSize == 3) {   //i3
-                    if (opNum < -4 || opNum > 3){
-                        reporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } else if (opSize == 4){    //i4
-                    if (opNum < -8 || opNum > 7){
-                        reporter.record(new Error(ErrorType.INVALID_SIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } else if (opSize == 5){    //i5
-                    if (opNum < -16 || opNum > 15){
-                        reporter.record(new Error(ErrorType.INVALID_SIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } else if (opSize == 8){    //i8
-                    if (opNum < -128 || opNum > 127){
-                        reporter.record(new Error(ErrorType.INVALID_SIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-                //UNSIGNED
-            } else if (symbol == "u") {
-                if (opSize == 3){   //u3
-                    if (opNum < 0 || opNum > 7){
-                        reporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } else if (opSize == 4){    //u4
-                    if (opNum < 0 || opNum > 15){
-                        reporter.record(new Error(ErrorType.INVALID_UNSIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } else if (opSize == 5){    //u5
-                    if (opNum < 0 || opNum > 31){
-                        reporter.record(new Error(ErrorType.INVALID_UNSIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }else if (opSize == 8){    //u8
-                    if (opNum < 0 || opNum > 255){
-                        reporter.record(new Error(ErrorType.INVALID_UNSIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn+1)));
-                        return false;
-                    } else {
-                        return true;
-                    }
+            if (lineStatement.getInstruction().getInstructionType() == InstructionType.INHERENT) {
+                if (lineStatement.getInstruction().getOffset() == null) {
+                    return true;
+                } else {
+                    reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                    return false;
                 }
             }
-        }
 
-        //if it's not wrong by this point, the input should be good
-        return true;
+            //check all immediate instruction possibilities
+            if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
+                //immediate without a value is instantly not good
+                if (lineStatement.getInstruction().getOffset() == null) {
+                    reporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                    return false;
+                }
+
+                int opSize = getInt(lineStatement.getInstruction().getMnemonic());              //get operator value
+                String temp = lineStatement.getInstruction().getMnemonic().getTokenString();
+                String symbol = temp.substring(temp.indexOf('.') + 1, temp.indexOf('.') + 2);   //get i or u
+                String op = lineStatement.getInstruction().getOffset().getTokenString();        //get operand value (String)
+                int opNum = Integer.parseInt(op);                                               //get operand value (int)
+
+                //SIGNED
+                if (symbol == "i") {
+                    if (opSize == 3) {   //i3
+                        if (opNum < -4 || opNum > 3) {
+                            reporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else if (opSize == 4) {    //i4
+                        if (opNum < -8 || opNum > 7) {
+                            reporter.record(new Error(ErrorType.INVALID_SIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else if (opSize == 5) {    //i5
+                        if (opNum < -16 || opNum > 15) {
+                            reporter.record(new Error(ErrorType.INVALID_SIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else if (opSize == 8) {    //i8
+                        if (opNum < -128 || opNum > 127) {
+                            reporter.record(new Error(ErrorType.INVALID_SIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                    //UNSIGNED
+                } else if (symbol == "u") {
+                    if (opSize == 3) {   //u3
+                        if (opNum < 0 || opNum > 7) {
+                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else if (opSize == 4) {    //u4
+                        if (opNum < 0 || opNum > 15) {
+                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else if (opSize == 5) {    //u5
+                        if (opNum < 0 || opNum > 31) {
+                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else if (opSize == 8) {    //u8
+                        if (opNum < 0 || opNum > 255) {
+                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

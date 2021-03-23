@@ -55,8 +55,9 @@ public class ParserTest {
     public void getLabel_giveArrayList_expectTheSameLabel() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("loop", new Position(0, 2, "loop".length()), TokenType.LABEL));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        tokenList.add(new Token("340", new Position(0, 2, "340".length()), TokenType.OFFSET));
+        tokenList.add(new Token("loop", new Position(0, 3, "loop".length()), TokenType.LABEL));
+        tokenList.add(new Token("~", new Position(0, 4, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
