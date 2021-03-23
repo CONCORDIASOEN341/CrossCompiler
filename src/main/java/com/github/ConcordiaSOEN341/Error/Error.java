@@ -16,7 +16,7 @@ public class Error implements IError {
         return errorType;
     }
 
-    public IPosition getInvalidLine() {
+    public IPosition getPosition() {
         return position;
     }
 
