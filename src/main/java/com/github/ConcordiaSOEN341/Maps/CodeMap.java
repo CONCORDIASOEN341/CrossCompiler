@@ -11,7 +11,7 @@ public class CodeMap implements ICompilerMap<String, String> {
         initializeMap();
     }
 
-    public void initializeMap() {
+    private void initializeMap() {
         instructions = new HashMap<>();
         instructions.put("halt", "00");
         instructions.put("pop", "01");

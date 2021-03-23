@@ -59,7 +59,6 @@ public class LexerTestComments extends TestCase {
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
 
-
         //Assert
         assertEquals(expectedTList.toString(), actualTList.toString());
     }
@@ -112,6 +111,69 @@ public class LexerTestComments extends TestCase {
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";hello abc", new Position(1, 0, 10), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 10, 10), TokenType.EOF));
+
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+    }
+
+    @Test
+    public void lexer_CommentNewLine() {
+        //Arrange
+        file = new ArrayList<>();
+        file.add(';');
+        file.add('h');
+        file.add('e');
+        file.add('l');
+        file.add('l');
+        file.add('o');
+        file.add(' ');
+        file.add('a');
+        file.add('b');
+        file.add('c');
+        file.add('~');
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        expectedTList.add(new Token(";hello abc", new Position(1, 0, 10), TokenType.COMMENT));
+        expectedTList.add(new Token("", new Position(1, 10, 10), TokenType.EOF));
+
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+    }
+
+    @Test
+    public void lexer_Directive() {
+        //Arrange
+        file = new ArrayList<>();
+        file.add('"');
+        file.add('"');
+        file.add(';');
+        file.add('h');
+        file.add('e');
+        file.add('l');
+        file.add('l');
+        file.add('o');
+        file.add(' ');
+        file.add('a');
+        file.add('b');
+        file.add('c');
+        file.add('~');
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        expectedTList.add(new Token("\"\"", new Position(1, 0, 2), TokenType.CSTRING));
+        expectedTList.add(new Token(";hello abc", new Position(1, 2, 12), TokenType.COMMENT));
+        expectedTList.add(new Token("", new Position(1, 12, 12), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
