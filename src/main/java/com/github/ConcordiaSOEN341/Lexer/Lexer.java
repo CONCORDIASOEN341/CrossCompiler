@@ -62,7 +62,7 @@ public class Lexer implements ILexer {
                 continue;
 
             // Record token info at start
-            if (!tokenStarted && currentChar != ' ') {
+            if (!tokenStarted && currentChar != ' ' && currentChar != '\t') {
                 startCol = currentCol;
                 line = currentLine;
                 tokenStarted = true;
@@ -75,7 +75,10 @@ public class Lexer implements ILexer {
                 currentCol = 0;
                 currentLine++;
             } else {
-                currentCol++;
+                if(currentChar == '\t')
+                    currentCol += 8;
+                else
+                    currentCol++;
             }
 
             stateID = dfa.getNextStateID(stateID,currentChar);
