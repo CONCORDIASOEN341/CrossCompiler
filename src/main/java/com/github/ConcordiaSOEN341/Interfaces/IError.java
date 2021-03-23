@@ -5,5 +5,5 @@ import com.github.ConcordiaSOEN341.Error.ErrorType;
 public interface IError {
     ErrorType getErrorType();
 
-    ILineStatement getInvalidLine();
+    IPosition getPosition();
 }

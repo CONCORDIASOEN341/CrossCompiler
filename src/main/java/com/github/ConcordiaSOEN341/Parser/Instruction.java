@@ -55,7 +55,7 @@ public class Instruction implements IInstruction {
         this.offset = offset;
     }
 
-    public InstructionType getInstructionType(){
+    public InstructionType getInstructionType() {
         return instructionType;
     }
 
@@ -63,7 +63,7 @@ public class Instruction implements IInstruction {
         this.instructionType = instructionType;
     }
 
-    public String toString(){
+    public String toString() {
         return mnemonic.getTokenString();
     }
 

@@ -28,7 +28,7 @@ public class Token implements IToken {
         return position;
     }
 
-    public void setPosition(IPosition pos){
+    public void setPosition(IPosition pos) {
         position = pos;
     }
 
