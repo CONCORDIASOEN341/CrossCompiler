@@ -2,19 +2,17 @@ package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IParser;
-import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.LexerMoq;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class ParserTest {
     private IParser parser;
@@ -24,7 +22,7 @@ public class ParserTest {
     public void getAddressingMode_giveToken_expectAddressingModeIsInherent() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("add", new Position(0, 1, "add".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -35,7 +33,7 @@ public class ParserTest {
     public void getAddressingMode_giveToken_expectAddressingModeIsImmediate() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.u3", new Position(0, 1, "addv.u3".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -46,7 +44,7 @@ public class ParserTest {
     public void getAddressingMode_giveToken_expectAddressingModeIsRelative() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.i16", new Position(0, 1, "addv.i16".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -58,7 +56,7 @@ public class ParserTest {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
         tokenList.add(new Token("loop", new Position(0, 2, "loop".length()), TokenType.LABEL));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -70,7 +68,7 @@ public class ParserTest {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
         tokenList.add(new Token("50", new Position(0, 2, "50".length()), TokenType.OFFSET));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -83,7 +81,7 @@ public class ParserTest {
         tokenList.add(new Token("addv.i8", new Position(0, 1, "addv.i8".length()), TokenType.MNEMONIC));
         tokenList.add(new Token("5", new Position(0, 2, "5".length()), TokenType.OFFSET));
         tokenList.add(new Token("ABCD", new Position(0, 2, "5".length()), TokenType.CSTRING));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -97,7 +95,7 @@ public class ParserTest {
         tokenList.add(new Token("5", new Position(0, 2, "5".length()), TokenType.OFFSET));
         tokenList.add(new Token("ABCD", new Position(0, 2, "5".length()), TokenType.CSTRING));
         tokenList.add(new Token("A comment", new Position(0, 2, "5".length()), TokenType.COMMENT));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -118,7 +116,6 @@ public class ParserTest {
         assertEquals(1, lineStatements.size());
         assertEquals(tokenList.get(0).getTokenString(), lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
     }
-
 
 
     @Test

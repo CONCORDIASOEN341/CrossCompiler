@@ -1,28 +1,28 @@
 package com.github.ConcordiaSOEN341.Error;
 
 import com.github.ConcordiaSOEN341.Interfaces.IError;
-import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 
 public class Error implements IError {
     private ErrorType errorType;
-    private ILineStatement invalidLine;
+    private IPosition position;
 
-    public Error(ErrorType errorType, ILineStatement invalidLine) {
+    public Error(ErrorType errorType, IPosition position) {
         this.errorType = errorType;
-        this.invalidLine = invalidLine;
+        this.position = position;
     }
 
     public ErrorType getErrorType() {
         return errorType;
     }
 
-    public ILineStatement getInvalidLine() {
-        return invalidLine;
+    public IPosition getPosition() {
+        return position;
     }
 
-    // TODO: Change invalidLine.toString()
+    // TODO: Change invalidLine.toString() to smtg that rebuilds the initial line of code
     @Override
     public String toString() {
-        return errorType.toString() + ": " + invalidLine.toString();
+        return "Error:line " + position.getLine() + ": " + errorType;
     }
 }

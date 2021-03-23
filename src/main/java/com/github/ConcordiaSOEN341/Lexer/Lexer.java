@@ -80,7 +80,7 @@ public class Lexer implements ILexer {
                 else
                     currentCol++;
             }
-
+          
             stateID = dfa.getNextStateID(stateID,currentChar);
             type = dfa.getStateType(stateID);
 

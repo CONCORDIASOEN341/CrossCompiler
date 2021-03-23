@@ -85,8 +85,8 @@ public class LineStatement implements ILineStatement {
         this.comment = comment;
     }
 
-    public String toString(){
-        return "["+ instruction.toString() + "][" + eol.getTokenType()+"]\n";
+    public String toString() {
+        return "[" + instruction.toString() + "][" + eol.getTokenType() + "]\n";
     }
 
 }

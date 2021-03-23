@@ -1,7 +1,11 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IParser;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+
 import java.util.ArrayList;
 
 public class Parser implements IParser {
@@ -21,7 +25,7 @@ public class Parser implements IParser {
         LineStatement lStatement = null;
         for (IToken t : tokenList) {
             int currentLine = t.getPosition().getLine();
-            if (currentLine > line){                                     //create new line statement + instruction per line
+            if (currentLine > line) {                                     //create new line statement + instruction per line
                 line = currentLine;
                 lStatement = new LineStatement();
                 instruction = new Instruction();
@@ -54,7 +58,7 @@ public class Parser implements IParser {
         String temp = t.getTokenString();
         String[] sNum = temp.split("(u)|(i)", 2);            //take string after the u or the i (this leaves only the number)
         int num = Integer.parseInt(sNum[1]);
-        if (num <= 8 ){                                                 //less than or equal to 1 byte is immediate
+        if (num <= 8) {                                                 //less than or equal to 1 byte is immediate
             return InstructionType.IMMEDIATE;
         } else {
             return InstructionType.RELATIVE;
