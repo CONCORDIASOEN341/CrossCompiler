@@ -1,5 +1,6 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
+import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.ICodeGen;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
@@ -11,23 +12,29 @@ import java.util.ArrayList;
 public class CodeGen implements ICodeGen {
 
     public void generateListingFile(String fileName, ArrayList<ILineStatement> ir) {
-        String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
-        try {
-            FileWriter listingWriter = new FileWriter(listFile);
-            listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
-
-            String[] listings = listing(ir);
-
-            for (String listing : listings) {
-                listingWriter.write(listing);
-            }
-
-            listingWriter.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred");
-            System.out.println("The program will terminate.");
-            e.printStackTrace();
+        System.out.println(ErrorReporter.getNumberOfErrors());
+        if (ErrorReporter.hasErrors()) {
+            ErrorReporter.report(fileName);
             System.exit(0);
+        } else {
+            String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
+            try {
+                FileWriter listingWriter = new FileWriter(listFile);
+                listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
+
+                String[] listings = listing(ir);
+
+                for (String listing : listings) {
+                    listingWriter.write(listing);
+                }
+
+                listingWriter.close();
+            } catch (IOException e) {
+                System.out.println("An error occurred");
+                System.out.println("The program will terminate.");
+                e.printStackTrace();
+                System.exit(0);
+            }
         }
     }
 

@@ -1,9 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IParser;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
@@ -47,7 +50,7 @@ public class Parser implements IParser {
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 lStatement.setComment(t);
             } else if (t.getTokenType() == TokenType.EOL) {
-                if (isValid(lStatement)){
+                if (isValid(lStatement)) {
                     intermediateRep.add(lStatement);
                 } else {
                     //there was an error
@@ -109,7 +112,7 @@ public class Parser implements IParser {
                 int opNum = Integer.parseInt(op);                                               //get operand value (int)
 
                 //SIGNED
-                if (symbol == "i") {
+                if (symbol.equals("i")) {
                     if (opSize == 3) {   //i3
                         if (opNum < -4 || opNum > 3) {
                             ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -140,7 +143,7 @@ public class Parser implements IParser {
                         }
                     }
                     //UNSIGNED
-                } else if (symbol == "u") {
+                } else if (symbol.equals("u")) {
                     if (opSize == 3) {   //u3
                         if (opNum < 0 || opNum > 7) {
                             ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -178,24 +181,7 @@ public class Parser implements IParser {
         }
     }
 
-
     public ArrayList<ILineStatement> getIntermediateRep() {
         return intermediateRep;
     }
-
-    @Deprecated
-    public ArrayList<ILineStatement> generateIR(ArrayList<IToken> tList) {
-        Instruction inst = null;
-        for (IToken t : tList) {
-            if (t.getTokenType() == TokenType.MNEMONIC) {
-                inst = new Instruction(t);
-            } else if (t.getTokenType() == TokenType.EOL) {
-                LineStatement lStatement = new LineStatement(inst, t);
-                intermediateRep.add(lStatement);
-            }
-        }
-        return intermediateRep;
-    }
-
-
 }
