@@ -2,7 +2,7 @@ package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 
-public class Position extends Throwable implements IPosition {
+public class Position implements IPosition {
     private int line;
     private int startColumn;
     private int endColumn;
