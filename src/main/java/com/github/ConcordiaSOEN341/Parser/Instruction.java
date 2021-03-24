@@ -31,6 +31,13 @@ public class Instruction implements IInstruction {
         this.instructionType = instructionType;
     }
 
+    public Instruction(IToken mnemonic, IToken label, IToken offset, InstructionType is){
+        this.mnemonic = mnemonic;
+        this.label = label;
+        this.offset = offset;
+        this.instructionType = is;
+    }
+
     public IToken getMnemonic() {
         return mnemonic;
     }

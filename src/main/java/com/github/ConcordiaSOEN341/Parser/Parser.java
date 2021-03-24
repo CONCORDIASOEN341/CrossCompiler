@@ -8,9 +8,12 @@ import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IParser;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Position;
+import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
 import java.util.ArrayList;
+
+import static com.github.ConcordiaSOEN341.Lexer.TokenType.EOL;
 
 public class Parser implements IParser {
     private final ArrayList<ILineStatement> intermediateRep;
@@ -32,11 +35,16 @@ public class Parser implements IParser {
             int currentLine = t.getPosition().getLine();
             if (currentLine > line) {                                     //create new line statement + instruction per line
                 line = currentLine;
-                lStatement = new LineStatement();
-                instruction = new Instruction();
+                instruction = new Instruction(new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), InstructionType.EMPTY);
+                lStatement = new LineStatement(instruction, new Token("", new Position(0, 0, 0), TokenType.DIRECTIVE), new Token("", new Position(0, 0, 0), TokenType.OFFSET), new Token("", new Position(0, 0, 0), TokenType.COMMENT), new Token("", new Position(0, 0, 0), TokenType.EOL));
             }
-            if (t.getTokenType() == TokenType.MNEMONIC) {
-
+            if (t.getTokenType() == TokenType.EMPTY) {
+                instruction.setInstructionType(InstructionType.EMPTY);
+           } else if (t.getTokenType() == TokenType.MNEMONIC) {
+                instruction.setMnemonic(t);
+                instruction.setInstructionType(checkAddressingMode(t));
+                lStatement.setInstruction(instruction);
+            } else if (t.getTokenType() == TokenType.IDENTIFIER) {
                 instruction.setMnemonic(t);
                 instruction.setInstructionType(checkAddressingMode(t));
                 lStatement.setInstruction(instruction);
@@ -45,18 +53,21 @@ public class Parser implements IParser {
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
                 instruction.setOffset(t);
+                lStatement.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
                 lStatement.setDirective(t);
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 lStatement.setComment(t);
-            } else if (t.getTokenType() == TokenType.EOL) {
-                if (isValid(lStatement)) {
+            } else if (t.getTokenType() == EOL) {
+                lStatement.setEOL(t);
+                if (isValid(lStatement)){
                     intermediateRep.add(lStatement);
                 } else {
                     //there was an error
                 }
             }
         }
+
         return intermediateRep;
 
     }
@@ -84,12 +95,17 @@ public class Parser implements IParser {
     private boolean isValid(LineStatement lineStatement) {
         int currentLine = 0;
         int currentColumn = 0;
+
+        if (lineStatement.getInstruction().getInstructionType() == InstructionType.EMPTY){
+            return true;
+        }
+
         if (lineStatement.getInstruction() != null) {
             currentLine = lineStatement.getInstruction().getMnemonic().getPosition().getLine();
             currentColumn = lineStatement.getInstruction().getMnemonic().getPosition().getStartColumn();
 
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.INHERENT) {
-                if (lineStatement.getInstruction().getOffset() == null) {
+                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
                     return true;
                 } else {
                     ErrorReporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -100,7 +116,7 @@ public class Parser implements IParser {
             //check all immediate instruction possibilities
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
                 //immediate without a value is instantly not good
-                if (lineStatement.getInstruction().getOffset() == null) {
+                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
                     ErrorReporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                     return false;
                 }
@@ -112,7 +128,7 @@ public class Parser implements IParser {
                 int opNum = Integer.parseInt(op);                                               //get operand value (int)
 
                 //SIGNED
-                if (symbol.equals("i")) {
+                if (symbol.contains("i")) {
                     if (opSize == 3) {   //i3
                         if (opNum < -4 || opNum > 3) {
                             ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -143,7 +159,7 @@ public class Parser implements IParser {
                         }
                     }
                     //UNSIGNED
-                } else if (symbol.equals("u")) {
+                } else if (symbol.contains("u")) {
                     if (opSize == 3) {   //u3
                         if (opNum < 0 || opNum > 7) {
                             ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -184,4 +200,20 @@ public class Parser implements IParser {
     public ArrayList<ILineStatement> getIntermediateRep() {
         return intermediateRep;
     }
+
+    @Deprecated
+    public ArrayList<ILineStatement> generateIR(ArrayList<IToken> tList) {
+        Instruction inst = null;
+        for (IToken t : tList) {
+            if (t.getTokenType() == TokenType.MNEMONIC) {
+                inst = new Instruction(t);
+            } else if (t.getTokenType() == EOL) {
+                LineStatement lStatement = new LineStatement(inst, t);
+                intermediateRep.add(lStatement);
+            }
+        }
+        return intermediateRep;
+    }
+
+
 }
