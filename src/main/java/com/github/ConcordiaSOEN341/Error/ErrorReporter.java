@@ -17,7 +17,7 @@ public class ErrorReporter {
         errors.sort(ascLines);
 
         for (IError e : errors) {
-            System.out.println(fileName + ":" + e);
+            System.out.println(fileName + ":" + e.toStringWithoutPosition());
         }
     }
 
@@ -32,4 +32,7 @@ public class ErrorReporter {
     public static void clearErrors(){
         errors.clear();
     }
+
+    public static ArrayList<IError> getErrors() { return errors; }
+
 }
