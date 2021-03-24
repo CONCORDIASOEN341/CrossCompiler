@@ -1,8 +1,8 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILexer;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
-import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Error.Error;
+import com.github.ConcordiaSOEN341.Error.ErrorReporter;
+import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ public class Lexer implements ILexer {
     private final DFA dfa;
     private int stateID = 0;
     private int temp = 0;
+
+
 
     public Lexer(IReader r) {
         reader = r;
@@ -48,6 +50,7 @@ public class Lexer implements ILexer {
         int currentChar;
         int previousCol;
         int previousLine;
+        int previousStateID;
 
         // loop till we have read a token
         while (type == TokenType.START) {
@@ -62,7 +65,7 @@ public class Lexer implements ILexer {
                 continue;
 
             // Record token info at start
-            if (!tokenStarted && currentChar != ' ') {
+            if (!tokenStarted && currentChar != ' ' && currentChar != '\t') {
                 startCol = currentCol;
                 line = currentLine;
                 tokenStarted = true;
@@ -75,11 +78,22 @@ public class Lexer implements ILexer {
                 currentCol = 0;
                 currentLine++;
             } else {
-                currentCol++;
+                if(currentChar == '\t')
+                    currentCol += 8;
+                else
+                    currentCol++;
             }
-          
+
+            previousStateID = stateID;
             stateID = dfa.getNextStateID(stateID,currentChar);
             type = dfa.getStateType(stateID);
+
+            // TRACK ERRORS
+            if(type == TokenType.ERROR){
+                stateID = (stateID == 0)? previousStateID : stateID;
+                ErrorReporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine,previousCol,previousCol+1)));
+                type = dfa.getStateType(stateID);
+            }
 
             if(dfa.isBackTrack(stateID)) {
                 currentCol = previousCol;
