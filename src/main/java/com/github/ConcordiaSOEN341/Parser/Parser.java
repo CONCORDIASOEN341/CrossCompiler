@@ -12,12 +12,11 @@ import java.util.ArrayList;
 public class Parser implements IParser {
     private final ArrayList<ILineStatement> intermediateRep;
     private final ILexer lexer;
-    private final IErrorReporter reporter;
+
 
     public Parser(ILexer l) {
         lexer = l;
         intermediateRep = new ArrayList<>();
-        reporter = new ErrorReporter();
     }
 
     public ArrayList<ILineStatement> parse() {
@@ -90,7 +89,7 @@ public class Parser implements IParser {
                 if (lineStatement.getInstruction().getOffset() == null) {
                     return true;
                 } else {
-                    reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                    ErrorReporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                     return false;
                 }
             }
@@ -99,7 +98,7 @@ public class Parser implements IParser {
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
                 //immediate without a value is instantly not good
                 if (lineStatement.getInstruction().getOffset() == null) {
-                    reporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                    ErrorReporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                     return false;
                 }
 
@@ -113,28 +112,28 @@ public class Parser implements IParser {
                 if (symbol == "i") {
                     if (opSize == 3) {   //i3
                         if (opNum < -4 || opNum > 3) {
-                            reporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
                         }
                     } else if (opSize == 4) {    //i4
                         if (opNum < -8 || opNum > 7) {
-                            reporter.record(new Error(ErrorType.INVALID_SIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
                         }
                     } else if (opSize == 5) {    //i5
                         if (opNum < -16 || opNum > 15) {
-                            reporter.record(new Error(ErrorType.INVALID_SIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
                         }
                     } else if (opSize == 8) {    //i8
                         if (opNum < -128 || opNum > 127) {
-                            reporter.record(new Error(ErrorType.INVALID_SIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
@@ -144,28 +143,28 @@ public class Parser implements IParser {
                 } else if (symbol == "u") {
                     if (opSize == 3) {   //u3
                         if (opNum < 0 || opNum > 7) {
-                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
                         }
                     } else if (opSize == 4) {    //u4
                         if (opNum < 0 || opNum > 15) {
-                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_4BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
                         }
                     } else if (opSize == 5) {    //u5
                         if (opNum < 0 || opNum > 31) {
-                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_5BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
                         }
                     } else if (opSize == 8) {    //u8
                         if (opNum < 0 || opNum > 255) {
-                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
