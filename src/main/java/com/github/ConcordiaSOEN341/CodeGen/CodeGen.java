@@ -42,6 +42,7 @@ public class CodeGen implements ICodeGen {
             String codeMnemonic = codeGen.getValue(mnemonic);
             listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t\t \t\t\t \t\n");
         }
+        System.out.print(ir.size());
         return listings;
     }
 
