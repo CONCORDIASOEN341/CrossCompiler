@@ -44,7 +44,9 @@ public class Parser implements IParser {
                 instruction.setLabel(t);
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
+                System.out.println(t);
                 instruction.setOffset(t);
+                //lStatement.setOffset();
             } else if (t.getTokenType() == TokenType.CSTRING) {
                 lStatement.setDirective(t);
             } else if (t.getTokenType() == TokenType.COMMENT) {

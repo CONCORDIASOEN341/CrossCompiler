@@ -87,8 +87,16 @@ public class LineStatement implements ILineStatement {
         this.comment = comment;
     }
 
+    public IToken getOffset() {
+        return offset;
+    }
+
+    public void setOffset(IToken directive) {
+        this.directive = offset;
+    }
+
     public String toString() {
-        return "[" + instruction.toString() + "][" + eol.getTokenType() + "]\n";
+        return "[" + instruction.toString() + " "+ offset.toString()+"][" + eol.getTokenType() + "]\n";
     }
 
 }
