@@ -1,5 +1,6 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IParser;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
@@ -16,6 +17,19 @@ import static org.junit.Assert.*;
 public class ParserTest {
     private IParser parser;
     private ArrayList<IToken> tokenList;
+
+    @Test
+    public void parse_whenUnsigned3bitWithOutOfBounds_expectErrorReported() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("enter.u3", new Position(0, 1, "add".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("32", new Position(0, 2, "0".length()), TokenType.OFFSET));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
+
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+        ErrorReporter.report("allo");
+    }
 
     @Test
     public void getAddressingMode_giveToken_expectAddressingModeIsInherent() {
