@@ -5,9 +5,12 @@ import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.Position;
+import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 
 import java.util.ArrayList;
+
+import static com.github.ConcordiaSOEN341.Lexer.TokenType.EOL;
 
 public class Parser implements IParser {
     private final ArrayList<ILineStatement> intermediateRep;
@@ -29,10 +32,10 @@ public class Parser implements IParser {
             int currentLine = t.getPosition().getLine();
             if (currentLine > line) {                                     //create new line statement + instruction per line
                 line = currentLine;
-                lStatement = new LineStatement();
-                instruction = new Instruction();
+                instruction = new Instruction(new Token("",new Position(0,0,0),TokenType.EMPTY),new Token("",new Position(0,0,0),TokenType.EMPTY),new Token("",new Position(0,0,0),TokenType.EMPTY), InstructionType.EMPTY);
+                lStatement = new LineStatement(instruction, new Token("",new Position(0,0,0), TokenType.DIRECTIVE),new Token("",new Position(0,0,0), TokenType.OFFSET),new Token("",new Position(0,0,0), TokenType.COMMENT),new Token("",new Position(0,0,0), TokenType.EOL));
             }
-            if (t.getTokenType() == TokenType.MNEMONIC) {
+            if (t.getTokenType() == TokenType.IDENTIFIER) {
 
                 instruction.setMnemonic(t);
                 instruction.setInstructionType(checkAddressingMode(t));
@@ -46,7 +49,7 @@ public class Parser implements IParser {
                 lStatement.setDirective(t);
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 lStatement.setComment(t);
-            } else if (t.getTokenType() == TokenType.EOL) {
+            } else if (t.getTokenType() == EOL) {
                 if (isValid(lStatement)){
                     intermediateRep.add(lStatement);
                 } else {
@@ -189,7 +192,7 @@ public class Parser implements IParser {
         for (IToken t : tList) {
             if (t.getTokenType() == TokenType.MNEMONIC) {
                 inst = new Instruction(t);
-            } else if (t.getTokenType() == TokenType.EOL) {
+            } else if (t.getTokenType() == EOL) {
                 LineStatement lStatement = new LineStatement(inst, t);
                 intermediateRep.add(lStatement);
             }

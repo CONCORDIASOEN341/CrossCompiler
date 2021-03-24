@@ -10,6 +10,7 @@ public class LineStatement implements ILineStatement {
     private IToken directive;
     private IToken comment;
     private IToken eol;
+    private IToken offset;
 
     public LineStatement() {
         this.instruction = null;
@@ -46,11 +47,12 @@ public class LineStatement implements ILineStatement {
         this.eol = eol;
     }
 
-    public LineStatement(IInstruction instruction, IToken directive, IToken comment, IToken eol) {
+    public LineStatement(IInstruction instruction, IToken directive, IToken comment, IToken eol, IToken offset) {
         this.instruction = instruction;
         this.directive = directive;
         this.comment = comment;
         this.eol = eol;
+        this.offset = offset;
     }
 
     public IInstruction getInstruction() {
