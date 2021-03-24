@@ -265,6 +265,28 @@ public class LexerTest extends TestCase {
         assertEquals(expectedTList.toString(), actualTList.toString());
     }
 
+    @Test
+    public void lexer_negativeNumberTest() {
+        //Arrange
+        file = new ArrayList<>();
+        String s = "-5~";
+        for(char c : s.toCharArray()){
+            file.add(c);
+        }
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        expectedTList.add(new Token("-5", new Position(1, 0, 2), TokenType.OFFSET));
+        expectedTList.add(new Token("", new Position(1, 2,2), TokenType.EOF));
+
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+    }
+
     // THESE TESTS WILL BE FIXED SOON
 
 //    @Test
