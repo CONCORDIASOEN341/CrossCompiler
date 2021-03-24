@@ -1,4 +1,5 @@
 package com.github.ConcordiaSOEN341.Lexer;
+import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.IReader;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class DFA {
         for (int wp : whiteSpace){
             transitions.get(2).put(wp,3);
         }
+        transitions.get(2).put(quote,3);
         transitions.get(2).put(semiColon,3);
         transitions.get(2).put(newline,3);
         transitions.get(2).put(endOfFile,3);
@@ -189,8 +191,8 @@ public class DFA {
         states.add(new State(12, TokenType.DIRECTIVE,true));
         states.add(new State(13, TokenType.START,false));
         states.add(new State(14, TokenType.CSTRING,false));
-        states.add(new State(15, TokenType.ERROR,true));
-        states.add(new State(16, TokenType.ERROR,true));
+        states.add(new State(15, TokenType.ERROR,true, ErrorType.EOL_FOUND));
+        states.add(new State(16, TokenType.ERROR,true, ErrorType.EOF_FOUND));
     }
 
     public boolean isBackTrack(int id){
@@ -207,5 +209,9 @@ public class DFA {
 
     public TokenType getStateType(int id){
         return states.get(id).getType();
+    }
+
+    public ErrorType getErrorType(int id){
+        return states.get(id).getErrorType();
     }
 }

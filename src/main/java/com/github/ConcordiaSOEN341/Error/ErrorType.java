@@ -21,6 +21,10 @@ public enum ErrorType {
         return description;
     }
 
+    public static ErrorType getDefault(){
+        return INVALID_CHARACTER;
+    }
+
     @Override
     public String toString() {
         return description;
