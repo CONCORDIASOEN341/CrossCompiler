@@ -32,21 +32,24 @@ public class Parser implements IParser {
             int currentLine = t.getPosition().getLine();
             if (currentLine > line) {                                     //create new line statement + instruction per line
                 line = currentLine;
-                instruction = new Instruction(new Token("",new Position(0,0,0),TokenType.EMPTY),new Token("",new Position(0,0,0),TokenType.EMPTY),new Token("",new Position(0,0,0),TokenType.EMPTY), InstructionType.EMPTY);
-                lStatement = new LineStatement(instruction, new Token("",new Position(0,0,0), TokenType.DIRECTIVE),new Token("",new Position(0,0,0), TokenType.OFFSET),new Token("",new Position(0,0,0), TokenType.COMMENT),new Token("",new Position(0,0,0), TokenType.EOL));
+                instruction = new Instruction(new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), InstructionType.EMPTY);
+                lStatement = new LineStatement(instruction, new Token("", new Position(0, 0, 0), TokenType.DIRECTIVE), new Token("", new Position(0, 0, 0), TokenType.OFFSET), new Token("", new Position(0, 0, 0), TokenType.COMMENT), new Token("", new Position(0, 0, 0), TokenType.EOL));
             }
-            if (t.getTokenType() == TokenType.IDENTIFIER) {
-
+            if (t.getTokenType() == TokenType.EMPTY) {
+                instruction.setInstructionType(InstructionType.EMPTY);
+           } else if (t.getTokenType() == TokenType.MNEMONIC) {
                 instruction.setMnemonic(t);
                 instruction.setInstructionType(checkAddressingMode(t));
+                lStatement.setInstruction(instruction);
+            } else if (t.getTokenType() == TokenType.IDENTIFIER) {
+                instruction.setLabel(t);
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.LABEL) {
                 instruction.setLabel(t);
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
-                System.out.println(t);
                 instruction.setOffset(t);
-                //lStatement.setOffset();
+                lStatement.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
                 lStatement.setDirective(t);
             } else if (t.getTokenType() == TokenType.COMMENT) {
@@ -86,12 +89,17 @@ public class Parser implements IParser {
     private boolean isValid(LineStatement lineStatement) {
         int currentLine = 0;
         int currentColumn = 0;
+
+        if (lineStatement.getInstruction().getInstructionType() == InstructionType.EMPTY){
+            return true;
+        }
+
         if (lineStatement.getInstruction() != null) {
             currentLine = lineStatement.getInstruction().getMnemonic().getPosition().getLine();
             currentColumn = lineStatement.getInstruction().getMnemonic().getPosition().getStartColumn();
 
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.INHERENT) {
-                if (lineStatement.getInstruction().getOffset() == null) {
+                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
                     return true;
                 } else {
                     ErrorReporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -114,7 +122,7 @@ public class Parser implements IParser {
                 int opNum = Integer.parseInt(op);                                               //get operand value (int)
 
                 //SIGNED
-                if (symbol == "i") {
+                if (symbol.contains("i")) {
                     if (opSize == 3) {   //i3
                         if (opNum < -4 || opNum > 3) {
                             ErrorReporter.record(new Error(ErrorType.INVALID_SIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -145,7 +153,7 @@ public class Parser implements IParser {
                         }
                     }
                     //UNSIGNED
-                } else if (symbol == "u") {
+                } else if (symbol.contains("u")) {
                     if (opSize == 3) {   //u3
                         if (opNum < 0 || opNum > 7) {
                             ErrorReporter.record(new Error(ErrorType.INVALID_UNSIGNED_3BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));

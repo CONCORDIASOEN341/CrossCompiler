@@ -91,12 +91,12 @@ public class LineStatement implements ILineStatement {
         return offset;
     }
 
-    public void setOffset(IToken directive) {
-        this.directive = offset;
+    public void setOffset(IToken offset) {
+        this.offset = offset;
     }
 
     public String toString() {
-        return "[" + instruction.toString() + " "+ offset.toString()+"][" + eol.getTokenType() + "]\n";
+        return "[" + instruction.toString() + " | "+ offset.toString()+"][" + eol.getTokenType() + "]\n";
     }
 
 }

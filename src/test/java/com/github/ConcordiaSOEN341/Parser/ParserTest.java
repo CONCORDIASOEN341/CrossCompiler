@@ -1,5 +1,6 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IParser;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
@@ -32,7 +33,7 @@ public class ParserTest {
     public void getAddressingMode_giveToken_expectAddressingModeIsImmediateNoError() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.u3", new Position(0, 1, "addv.u3".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("50", new Position(0, 2, "0".length()), TokenType.OFFSET));
+        tokenList.add(new Token("5", new Position(0, 2, "0".length()), TokenType.OFFSET));
         tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
@@ -40,48 +41,13 @@ public class ParserTest {
         assertSame(InstructionType.IMMEDIATE, lineStatements.get(0).getInstruction().getInstructionType());
     }
 
-    @Test
-    public void getAddressingMode_giveToken_expectAddressingModeIsRelative() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i16", new Position(0, 1, "addv.i16".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame(InstructionType.RELATIVE, lineStatements.get(0).getInstruction().getInstructionType());
-    }
-
-    @Test
-    public void getLabel_giveArrayList_expectTheSameLabel() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("340", new Position(0, 2, "340".length()), TokenType.OFFSET));
-        tokenList.add(new Token("loop", new Position(0, 3, "loop".length()), TokenType.LABEL));
-        tokenList.add(new Token("~", new Position(0, 4, "halt".length() + 1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame("loop", lineStatements.get(0).getInstruction().getLabel().getTokenString());
-    }
-
-    @Test
-    public void getOffset_giveArrayList_expectTheSameOffset() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("50", new Position(0, 2, "50".length()), TokenType.OFFSET));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame("50", lineStatements.get(0).getInstruction().getOffset().getTokenString());
-    }
 
     @Test
     public void getDirective_giveArrayList_expectTheSameDirective() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.i8", new Position(0, 1, "addv.i8".length()), TokenType.MNEMONIC));
         tokenList.add(new Token("5", new Position(0, 2, "5".length()), TokenType.OFFSET));
-        tokenList.add(new Token("ABCD", new Position(0, 2, "5".length()), TokenType.CSTRING));
+        tokenList.add(new Token("ABCD", new Position(0, 2, "ABCD".length()), TokenType.CSTRING));
         tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
@@ -104,17 +70,16 @@ public class ParserTest {
     }
 
     @Test
-    public void dontAddWrongValue_giveArrayList_ImmediateWithoutValue() {
+    public void parse_WhenUnsigned3bitWithOutOfBounds_expectErrorReported() {
         tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i8", new Position(0, 1, "addv.i8".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("A comment", new Position(0, 2, "5".length()), TokenType.COMMENT));
+        tokenList.add(new Token("enter.u3", new Position(0, 1, "enter.u3".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("32", new Position(0, 2, "32".length()), TokenType.OFFSET));
         tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertTrue(lineStatements.isEmpty());
+        assertEquals(1, ErrorReporter.getNumberOfErrors());
     }
-
 
     @Test
     public void generateIR_whenTokenListSize2_expect1LineStatement() {
