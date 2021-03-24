@@ -28,4 +28,8 @@ public class ErrorReporter {
     public static int getNumberOfErrors() {
         return errors.size();
     }
+
+    public static void clearErrors(){
+        errors.clear();
+    }
 }
