@@ -2,7 +2,6 @@ package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 
@@ -12,7 +11,6 @@ public class Lexer implements ILexer {
     private int currentLine = 1;
     private int currentCol = 0;
     private final IReader reader;
-    private final IErrorReporter reporter;
     private final CodeMap cm;
     private final DFA dfa;
     private int stateID = 0;
@@ -24,7 +22,6 @@ public class Lexer implements ILexer {
         reader = r;
         cm = new CodeMap();
         dfa = new DFA(r);
-        reporter = new ErrorReporter();
     }
 
     public ArrayList<IToken> generateTokenList() {
@@ -36,8 +33,6 @@ public class Lexer implements ILexer {
             tokenList.add(t);
 
         } while (t.getTokenType() != TokenType.EOF);
-
-        reporter.report();
 
         return tokenList;
     }
@@ -96,7 +91,7 @@ public class Lexer implements ILexer {
             // TRACK ERRORS
             if(type == TokenType.ERROR){
                 stateID = (stateID == 0)? previousStateID : stateID;
-                reporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine,previousCol,previousCol+1)));
+                ErrorReporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine,previousCol,previousCol+1)));
                 type = dfa.getStateType(stateID);
             }
 
