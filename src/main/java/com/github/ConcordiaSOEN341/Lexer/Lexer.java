@@ -2,7 +2,9 @@ package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.IReader;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Maps.CodeMap;
 
 import java.util.ArrayList;
@@ -15,8 +17,6 @@ public class Lexer implements ILexer {
     private final DFA dfa;
     private int stateID = 0;
     private int temp = 0;
-
-
 
     public Lexer(IReader r) {
         reader = r;
@@ -54,14 +54,14 @@ public class Lexer implements ILexer {
 
         // loop till we have read a token
         while (type == TokenType.START) {
-            if(temp == 0){
+            if (temp == 0) {
                 currentChar = reader.read();
             } else {
                 currentChar = temp;
                 temp = 0;
             }
 
-            if(currentChar == '\r')
+            if (currentChar == '\r')
                 continue;
 
             // Record token info at start
@@ -78,29 +78,29 @@ public class Lexer implements ILexer {
                 currentCol = 0;
                 currentLine++;
             } else {
-                if(currentChar == '\t')
+                if (currentChar == '\t')
                     currentCol += 8;
                 else
                     currentCol++;
             }
 
             previousStateID = stateID;
-            stateID = dfa.getNextStateID(stateID,currentChar);
+            stateID = dfa.getNextStateID(stateID, currentChar);
             type = dfa.getStateType(stateID);
 
             // TRACK ERRORS
-            if(type == TokenType.ERROR){
-                stateID = (stateID == 0)? previousStateID : stateID;
-                ErrorReporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine,previousCol,previousCol+1)));
+            if (type == TokenType.ERROR) {
+                stateID = (stateID == 0) ? previousStateID : stateID;
+                ErrorReporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine, previousCol, previousCol + 1)));
                 type = dfa.getStateType(stateID);
             }
 
-            if(dfa.isBackTrack(stateID)) {
+            if (dfa.isBackTrack(stateID)) {
                 currentCol = previousCol;
                 currentLine = previousLine;
                 temp = currentChar;
             } else {
-                if(!hasNoChar(currentChar))
+                if (!hasNoChar(currentChar))
                     tokenString.append((char) currentChar);
             }
         }
@@ -121,7 +121,7 @@ public class Lexer implements ILexer {
 
     }
 
-    private boolean hasNoChar(int character){
+    private boolean hasNoChar(int character) {
         return character == reader.getEof() || character == '\n';
     }
 

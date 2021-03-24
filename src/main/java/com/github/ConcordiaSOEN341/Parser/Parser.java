@@ -1,9 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IParser;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
@@ -193,7 +196,6 @@ public class Parser implements IParser {
             return false;
         }
     }
-
 
     public ArrayList<ILineStatement> getIntermediateRep() {
         return intermediateRep;
