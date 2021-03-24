@@ -19,7 +19,7 @@ public class ErrorReporter {
         for (IError e : errors) {
             String error = fileName + ":" + e.toStringWithoutPosition();
             System.out.println(error);
-            output.append(error);
+            output.append(error+"\n");
         }
         return output.toString();
     }
