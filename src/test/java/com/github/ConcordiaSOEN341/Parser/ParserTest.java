@@ -11,8 +11,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class ParserTest {
     private IParser parser;
@@ -30,9 +29,10 @@ public class ParserTest {
     }
 
     @Test
-    public void getAddressingMode_giveToken_expectAddressingModeIsImmediate() {
+    public void getAddressingMode_giveToken_expectAddressingModeIsImmediateNoError() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.u3", new Position(0, 1, "addv.u3".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("50", new Position(0, 2, "0".length()), TokenType.OFFSET));
         tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
@@ -55,8 +55,9 @@ public class ParserTest {
     public void getLabel_giveArrayList_expectTheSameLabel() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("loop", new Position(0, 2, "loop".length()), TokenType.LABEL));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        tokenList.add(new Token("340", new Position(0, 2, "340".length()), TokenType.OFFSET));
+        tokenList.add(new Token("loop", new Position(0, 3, "loop".length()), TokenType.LABEL));
+        tokenList.add(new Token("~", new Position(0, 4, "halt".length() + 1), TokenType.EOL));
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
@@ -100,6 +101,18 @@ public class ParserTest {
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
         assertSame("A comment", lineStatements.get(0).getComment().getTokenString());
+    }
+
+    @Test
+    public void dontAddWrongValue_giveArrayList_ImmediateWithoutValue() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("addv.i8", new Position(0, 1, "addv.i8".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("A comment", new Position(0, 2, "5".length()), TokenType.COMMENT));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+        assertTrue(lineStatements.isEmpty());
     }
 
 
