@@ -44,30 +44,66 @@ public class LexerErrorTest extends TestCase {
         //Assert
         assertEquals(expectedTList.toString(), actualTList.toString());
         assertEquals(expectedErrorsList.toString(), ErrorReporter.getErrors().toString());
+
+        ErrorReporter.clearErrors();
     }
 
     @Test
-    public void lexer_errorTest() {
+    public void lexer_EOLInString() {
         //Arrange
         file = new ArrayList<>();
-        String s = "\"`hel\n$!lo\" $~";
-        for(char c : s.toCharArray()){
-            file.add(c);
-        }
-
+        file.add('\"');
+        file.add('\n');
+        file.add('~');
         rTest = new ReaderMoq(file);
         lTest = new Lexer(rTest);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("5555", new Position(1, 0, 4), TokenType.OFFSET));
-        expectedTList.add(new Token(";hello", new Position(1, 5, 11), TokenType.COMMENT));
-        expectedTList.add(new Token("", new Position(1, 11,11), TokenType.EOF));
+        ArrayList<IError> expectedErrorsList = new ArrayList<>();
+
+        expectedTList.add(new Token("\"", new Position(1, 0, 1), TokenType.ERROR));
+        expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOL));
+        expectedTList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
+        expectedErrorsList.add(new Error(ErrorType.EOL_FOUND, new Position(1, 1,2)));
+
+        //System.out.println(expectedErrorsList);
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
 
         //Assert
         assertEquals(expectedTList.toString(), actualTList.toString());
+        assertEquals(expectedErrorsList.toString(), ErrorReporter.getErrors().toString());
+
+        ErrorReporter.clearErrors();
+    }
+
+    @Test
+    public void lexer_EOFInString() {
+        //Arrange
+        file = new ArrayList<>();
+        file.add('\"');
+        file.add('~');
+        rTest = new ReaderMoq(file);
+        lTest = new Lexer(rTest);
+
+        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IError> expectedErrorsList = new ArrayList<>();
+
+        expectedTList.add(new Token("\"", new Position(1, 0, 1), TokenType.ERROR));
+        expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
+        expectedErrorsList.add(new Error(ErrorType.EOF_FOUND, new Position(1, 1,2)));
+
+        //System.out.println(expectedErrorsList);
+
+        //Act
+        ArrayList<IToken> actualTList = lTest.generateTokenList();
+
+        //Assert
+        assertEquals(expectedTList.toString(), actualTList.toString());
+        assertEquals(expectedErrorsList.toString(), ErrorReporter.getErrors().toString());
+
+        ErrorReporter.clearErrors();
     }
 }
 
