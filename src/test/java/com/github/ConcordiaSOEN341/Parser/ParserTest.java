@@ -41,6 +41,29 @@ public class ParserTest {
         assertSame(InstructionType.IMMEDIATE, lineStatements.get(0).getInstruction().getInstructionType());
     }
 
+    @Test
+    public void giveMissingValue_ExpectErrorBack() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("addv.u3", new Position(0, 1, "addv.u3".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+        assertEquals(1, ErrorReporter.getNumberOfErrors());
+    }
+
+    @Test
+    public void parse_WhenUnsigned3bitWithOutOfBounds_expectErrorReported() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("enter.u3", new Position(0, 1, "enter.u3".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("32", new Position(0, 2, "32".length()), TokenType.OFFSET));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+        assertEquals(2, ErrorReporter.getNumberOfErrors());
+    }
+
 
     @Test
     public void getDirective_giveArrayList_expectTheSameDirective() {
@@ -70,15 +93,20 @@ public class ParserTest {
     }
 
     @Test
-    public void parse_WhenUnsigned3bitWithOutOfBounds_expectErrorReported() {
+    public void generateIR_withTokenList_expectLineStatement() {
         tokenList = new ArrayList<>();
-        tokenList.add(new Token("enter.u3", new Position(0, 1, "enter.u3".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("32", new Position(0, 2, "32".length()), TokenType.OFFSET));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        tokenList.add(new Token("enter.u5", new Position(0, 1, "enter.u5".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("7", new Position(0, 1, "7".length()), TokenType.OFFSET));
+        tokenList.add(new Token(";test", new Position(0, 2, ";test".length()), TokenType.COMMENT));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
+
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertEquals(1, ErrorReporter.getNumberOfErrors());
+
+        assertEquals(1, lineStatements.size());
+        assertEquals(tokenList.get(0).getTokenString(), lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
+        assertEquals(tokenList.get(0).getTokenString(), "enter.u5");
     }
 
     @Test
