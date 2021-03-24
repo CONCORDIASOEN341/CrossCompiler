@@ -314,23 +314,23 @@ public class LexerTest extends TestCase {
 //        assertEquals(expectedTList.toString(), actualTList.toString());
 //    }
 
-    @Test
-    public void lexer_Error1() {
-        //Arrange
-        file = new ArrayList<>();
-        file.add('$');
-        file.add('~');
-        rTest = new ReaderMoq(file);
-        lTest = new Lexer(rTest);
-
-        ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("$", new Position(1, 0, 1), TokenType.ERROR));
-        expectedTList.add(new Token("", new Position(1, 1,1), TokenType.EOF));
-        //Act
-        ArrayList<IToken> actualTList = lTest.generateTokenList();
-
-
-        //Assert
-        assertEquals(expectedTList.toString(), actualTList.toString());
-    }
+//    @Test
+//    public void lexer_Error1() {
+//        //Arrange
+//        file = new ArrayList<>();
+//        file.add('$');
+//        file.add('~');
+//        rTest = new ReaderMoq(file);
+//        lTest = new Lexer(rTest);
+//
+//        ArrayList<Token> expectedTList = new ArrayList<>();
+//        expectedTList.add(new Token("$", new Position(1, 0, 1), TokenType.ERROR));
+//        expectedTList.add(new Token("", new Position(1, 1,1), TokenType.EOF));
+//        //Act
+//        ArrayList<IToken> actualTList = lTest.generateTokenList();
+//
+//
+//        //Assert
+//        assertEquals(expectedTList.toString(), actualTList.toString());
+//    }
 }
