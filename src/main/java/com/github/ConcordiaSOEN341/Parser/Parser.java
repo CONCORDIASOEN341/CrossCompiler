@@ -40,14 +40,16 @@ public class Parser implements IParser {
             }
             if (t.getTokenType() == TokenType.EMPTY) {
                 instruction.setInstructionType(InstructionType.EMPTY);
-           } else if (t.getTokenType() == TokenType.MNEMONIC) {
+            } else if (t.getTokenType() == TokenType.MNEMONIC) {
                 instruction.setMnemonic(t);
                 instruction.setInstructionType(checkAddressingMode(t));
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.IDENTIFIER) {
+
                 instruction.setMnemonic(t);
                 instruction.setInstructionType(checkAddressingMode(t));
                 lStatement.setInstruction(instruction);
+
             } else if (t.getTokenType() == TokenType.LABEL) {
                 instruction.setLabel(t);
                 lStatement.setInstruction(instruction);
@@ -96,7 +98,7 @@ public class Parser implements IParser {
         int currentLine = 0;
         int currentColumn = 0;
 
-        if (lineStatement.getInstruction().getInstructionType() == InstructionType.EMPTY){
+        if (lineStatement.getInstruction().getInstructionType() == InstructionType.EMPTY) {
             return true;
         }
 
