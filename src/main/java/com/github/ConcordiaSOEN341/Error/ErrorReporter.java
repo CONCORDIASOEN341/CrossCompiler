@@ -14,6 +14,9 @@ public class ErrorReporter {
     }
 
     public static String report(String fileName) {
+        if (fileName.contains("/")) {
+            fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+        }
         errors.sort(ascLines);
         StringBuilder output = new StringBuilder();
         for (IError e : errors) {
