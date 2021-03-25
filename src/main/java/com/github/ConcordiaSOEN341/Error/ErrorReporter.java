@@ -17,9 +17,7 @@ public class ErrorReporter {
         errors.sort(ascLines);
         StringBuilder output = new StringBuilder();
         for (IError e : errors) {
-            String error = fileName + ":" + e.toStringWithoutPosition();
-            System.out.println(error);
-            output.append(error+"\n");
+            output.append(fileName).append(":").append(e).append("\n");
         }
         return output.toString();
     }

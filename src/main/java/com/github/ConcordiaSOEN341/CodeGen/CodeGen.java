@@ -14,7 +14,7 @@ public class CodeGen implements ICodeGen {
     public void generateListingFile(String fileName, ArrayList<ILineStatement> ir) {
         System.out.println(ErrorReporter.getNumberOfErrors());
         if (ErrorReporter.hasErrors()) {
-            ErrorReporter.report(fileName);
+            System.out.println(ErrorReporter.report(fileName));
             System.exit(0);
         } else {
             String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";

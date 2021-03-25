@@ -6,6 +6,4 @@ public interface IError {
     ErrorType getErrorType();
 
     IPosition getPosition();
-
-    String toStringWithoutPosition();
 }
