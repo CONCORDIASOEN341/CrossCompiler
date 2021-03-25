@@ -13,12 +13,15 @@ public class ErrorReporter {
         errors.add(error);
     }
 
-    public static void report(String fileName) {
+    public static String report(String fileName) {
         errors.sort(ascLines);
-
+        StringBuilder output = new StringBuilder();
         for (IError e : errors) {
-            System.out.println(fileName + ":" + e);
+            String error = fileName + ":" + e.toStringWithoutPosition();
+            System.out.println(error);
+            output.append(error+"\n");
         }
+        return output.toString();
     }
 
     public static boolean hasErrors() {
@@ -32,4 +35,7 @@ public class ErrorReporter {
     public static void clearErrors(){
         errors.clear();
     }
+
+    public static ArrayList<IError> getErrors() { return errors; }
+
 }
