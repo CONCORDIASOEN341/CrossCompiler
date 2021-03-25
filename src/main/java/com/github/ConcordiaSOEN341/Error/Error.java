@@ -20,13 +20,6 @@ public class Error implements IError {
         return position;
     }
 
-    // TODO: Change invalidLine.toString() to smtg that rebuilds the initial line of code
-
-    public String toStringWithoutPosition() {
-        return "Error:line " + position.getLine() + ": " + errorType;
-    }
-
     @Override
-    public String toString() {return "Error:line " + position.getLine() + ": " + errorType +
-                                          " Position: " + position.toString(); }
+    public String toString() {return "Error:line " + position.getLine() + ": " + errorType; }
 }
