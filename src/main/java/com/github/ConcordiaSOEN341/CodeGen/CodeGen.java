@@ -42,18 +42,33 @@ public class CodeGen implements ICodeGen {
     public String[] listing(ArrayList<ILineStatement> ir) {
         CodeMap codeGen = new CodeMap();
         String[] listings = new String[ir.size()];
+        String hexAddress = "0000";
+        String offset = "";
+        String comment = "";
+        int skips = 0;
 
         for (int i = 0; i < ir.size(); i++) {
-            String hexAddress = String.format("%04X", i);
+
+            if(ir.get(i).getInstruction().toString().equals("") && i > 2){
+                skips++;
+                hexAddress = String.format("%04X", i+1-skips);
+            }else if(ir.get(i).getInstruction().toString().equals("")){
+                skips++;
+            }else{
+                hexAddress = String.format("%04X", i-skips);
+            }
+
             String codeMnemonic = "";
 
             String mnemonic = ir.get(i).getInstruction().toString();
-            String offset = ir.get(i).getInstruction().getOffset().getTokenString();
-            String comment = ir.get(i).getComment().getTokenString();
+            offset = ir.get(i).getInstruction().getOffset().getTokenString();
+            comment = ir.get(i).getComment().getTokenString();
 
             if (!ir.get(i).getInstruction().getOffset().getTokenString().equals("")) {
                 codeMnemonic = codeGen.determineOpCode(mnemonic, offset);
             }
+
+
             listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t " + offset + "\t\t\t\t" + comment + " \t\n");
         }
         System.out.print(ir.size());
