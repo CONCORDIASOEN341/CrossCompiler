@@ -4,7 +4,7 @@ import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.IError;
-import com.github.ConcordiaSOEN341.Lexer.*;
+import com.github.ConcordiaSOEN341.Lexer.Position;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ public class ErrorReporterTest extends TestCase {
     @Test
     public void ErrorReporter_RecordErrorAndReport() {
         //Arrange
-        IError error = new Error(ErrorType.getDefault(), new Position(1,1,1) );
+        IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
         String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.\n";
 
@@ -34,7 +34,7 @@ public class ErrorReporterTest extends TestCase {
     @Test
     public void ErrorReporter_HasErrors() {
         //Arrange
-        IError error = new Error(ErrorType.getDefault(), new Position(1,1,1) );
+        IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
         String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.";
 
@@ -51,7 +51,7 @@ public class ErrorReporterTest extends TestCase {
     @Test
     public void ErrorReporter_ClearErrors() {
         //Arrange
-        IError error = new Error(ErrorType.getDefault(), new Position(1,1,1) );
+        IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
         String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.";
 

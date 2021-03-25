@@ -13,8 +13,6 @@ import java.util.ArrayList;
 public class CodeGen implements ICodeGen {
 
     public void generateListingFile(String fileName, ArrayList<ILineStatement> ir) {
-
-        //System.out.println(ErrorReporter.getNumberOfErrors());
         if (ErrorReporter.hasErrors()) {
             System.out.println(ErrorReporter.report(fileName));
             System.exit(0);

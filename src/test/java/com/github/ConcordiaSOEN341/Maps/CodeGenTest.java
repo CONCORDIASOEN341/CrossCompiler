@@ -46,8 +46,8 @@ public class CodeGenTest extends TestCase {
         t.add(t3);
         t.add(t4);
         t.add(t5);
-        ILineStatement l1 = new LineStatement(I1,t3, t4);
-        ILineStatement l2 = new LineStatement(I2,t3, t4);
+        ILineStatement l1 = new LineStatement(I1, t3, t4);
+        ILineStatement l2 = new LineStatement(I2, t3, t4);
 
         ArrayList<ILineStatement> ir = new ArrayList<>();
         ir.add(0, l1);

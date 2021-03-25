@@ -62,10 +62,8 @@ public class Parser implements IParser {
                 lStatement.setComment(t);
             } else if (t.getTokenType() == EOL) {
                 lStatement.setEOL(t);
-                if (isValid(lStatement)){
+                if (isValid(lStatement)) {
                     intermediateRep.add(lStatement);
-                } else {
-                    //there was an error
                 }
             }
         }
@@ -89,8 +87,7 @@ public class Parser implements IParser {
     private int getInt(IToken t) {
         String temp = t.getTokenString();
         String[] sNum = temp.split("(u)|(i)", 2);            //take string after the u or the i (this leaves only the number)
-        int num = Integer.parseInt(sNum[1]);
-        return num;
+        return Integer.parseInt(sNum[1]);
     }
 
     //check inherent and immediate instructions
@@ -200,20 +197,6 @@ public class Parser implements IParser {
     }
 
     public ArrayList<ILineStatement> getIntermediateRep() {
-        return intermediateRep;
-    }
-
-    @Deprecated
-    public ArrayList<ILineStatement> generateIR(ArrayList<IToken> tList) {
-        Instruction inst = null;
-        for (IToken t : tList) {
-            if (t.getTokenType() == TokenType.MNEMONIC) {
-                inst = new Instruction(t);
-            } else if (t.getTokenType() == EOL) {
-                LineStatement lStatement = new LineStatement(inst, t);
-                intermediateRep.add(lStatement);
-            }
-        }
         return intermediateRep;
     }
 
