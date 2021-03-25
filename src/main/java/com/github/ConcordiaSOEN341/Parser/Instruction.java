@@ -70,8 +70,7 @@ public class Instruction implements IInstruction {
         this.instructionType = instructionType;
     }
 
-    public String toString() {
-        return mnemonic.getTokenString();
-    }
+    public String toString() { return mnemonic.getTokenString();}
+
 
 }

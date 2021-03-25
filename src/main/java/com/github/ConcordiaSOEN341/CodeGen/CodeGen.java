@@ -14,7 +14,7 @@ public class CodeGen implements ICodeGen {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
         try {
             FileWriter listingWriter = new FileWriter(listFile);
-            listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \tOperand \t  Comments\n");
+            listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t  Comments\n");
 
             String[] listings = listing(ir);
 
@@ -37,10 +37,16 @@ public class CodeGen implements ICodeGen {
 
         for (int i = 0; i < ir.size(); i++) {
             String hexAddress = String.format("%04X", i);
+            String codeMnemonic = "";
 
             String mnemonic = ir.get(i).getInstruction().toString();
-            String codeMnemonic = codeGen.getValue(mnemonic);
-            listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t\t \t\t\t \t\n");
+            String offset = ir.get(i).getInstruction().getOffset().getTokenString();
+            String comment = ir.get(i).getComment().getTokenString();
+
+            if (!ir.get(i).getInstruction().getOffset().getTokenString().equals("")) {
+                codeMnemonic = codeGen.determineOpCode(mnemonic, offset);
+            }
+            listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t " + offset + "\t\t\t\t" + comment + " \t\n");
         }
         System.out.print(ir.size());
         return listings;

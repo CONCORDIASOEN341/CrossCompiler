@@ -96,7 +96,7 @@ public class LineStatement implements ILineStatement {
     }
 
     public String toString() {
-        return "[" + instruction.toString() + " | "+ offset.toString()+"][" + eol.getTokenType() + "]\n";
+        return "[" + instruction.toString() + " | "+ offset.getTokenString()+"]["+ comment.getTokenString() +"][" + eol.getTokenType() + "]\n";
     }
 
 }
