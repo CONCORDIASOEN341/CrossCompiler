@@ -1,9 +1,9 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
-import com.github.ConcordiaSOEN341.Interfaces.IParser;
-import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Error.ErrorType;
+import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.LexerMoq;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
@@ -19,6 +19,24 @@ public class ParserTest {
     private ArrayList<IToken> tokenList;
 
     @Test
+    public void parse_whenUnsigned3bitWithOutOfBounds_expectErrorReported() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("enter.u3", new Position(0, 1, "add".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("32", new Position(0, 2, "0".length()), TokenType.OFFSET));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
+
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+
+        String description = "The immediate instruction using '.u3' must have a 3-bit unsigned operand number ranging from 0 to 7.";
+
+        assertEquals(description, ErrorReporter.getErrors().get(0).getErrorType().getDescription());
+
+        ErrorReporter.clearErrors();
+    }
+
+    @Test
     public void getAddressingMode_giveToken_expectAddressingModeIsInherent() {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("add", new Position(0, 1, "add".length()), TokenType.MNEMONIC));
@@ -27,6 +45,7 @@ public class ParserTest {
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
         assertSame(InstructionType.INHERENT, lineStatements.get(0).getInstruction().getInstructionType());
+        ErrorReporter.clearErrors();
     }
 
     @Test
@@ -39,6 +58,32 @@ public class ParserTest {
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
         assertSame(InstructionType.IMMEDIATE, lineStatements.get(0).getInstruction().getInstructionType());
+        ErrorReporter.clearErrors();
+    }
+
+    @Test
+    public void giveMissingValue_ExpectErrorBack() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("addv.u3", new Position(0, 1, "addv.u3".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+        assertEquals(1, ErrorReporter.getNumberOfErrors());
+        ErrorReporter.clearErrors();
+    }
+
+    @Test
+    public void parse_WhenUnsigned3bitWithOutOfBounds_expectErrorReported() {
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("enter.u3", new Position(0, 1, "enter.u3".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("32", new Position(0, 2, "32".length()), TokenType.OFFSET));
+        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        parser = new Parser(new LexerMoq(tokenList));
+
+        ArrayList<ILineStatement> lineStatements = parser.parse();
+        assertEquals(1, ErrorReporter.getNumberOfErrors());
+        ErrorReporter.clearErrors();
     }
 
 
@@ -53,6 +98,7 @@ public class ParserTest {
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
         assertSame("ABCD", lineStatements.get(0).getDirective().getTokenString());
+        ErrorReporter.clearErrors();
     }
 
     @Test
@@ -67,18 +113,25 @@ public class ParserTest {
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
         assertSame("A comment", lineStatements.get(0).getComment().getTokenString());
+        ErrorReporter.clearErrors();
     }
 
     @Test
-    public void parse_WhenUnsigned3bitWithOutOfBounds_expectErrorReported() {
+    public void generateIR_withTokenList_expectLineStatement() {
         tokenList = new ArrayList<>();
-        tokenList.add(new Token("enter.u3", new Position(0, 1, "enter.u3".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("32", new Position(0, 2, "32".length()), TokenType.OFFSET));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length() + 1), TokenType.EOL));
+        tokenList.add(new Token("enter.u5", new Position(0, 1, "enter.u5".length()), TokenType.MNEMONIC));
+        tokenList.add(new Token("7", new Position(0, 1, "7".length()), TokenType.OFFSET));
+        tokenList.add(new Token(";test", new Position(0, 2, ";test".length()), TokenType.COMMENT));
+        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
+
         parser = new Parser(new LexerMoq(tokenList));
 
         ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertEquals(1, ErrorReporter.getNumberOfErrors());
+
+        assertEquals(1, lineStatements.size());
+        assertEquals(tokenList.get(0).getTokenString(), lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
+        assertEquals(tokenList.get(0).getTokenString(), "enter.u5");
+        ErrorReporter.clearErrors();
     }
 
     @Test
@@ -93,6 +146,7 @@ public class ParserTest {
 
         assertEquals(1, lineStatements.size());
         assertEquals(tokenList.get(0).getTokenString(), lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
+        ErrorReporter.clearErrors();
     }
 
 
@@ -104,5 +158,6 @@ public class ParserTest {
         ArrayList<ILineStatement> lineStatements = parser.parse();
 
         assertEquals(0, lineStatements.size());
+        ErrorReporter.clearErrors();
     }
 }

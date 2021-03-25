@@ -1,9 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Interfaces.ILexer;
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IParser;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
@@ -44,9 +47,8 @@ public class Parser implements IParser {
             } else if (t.getTokenType() == TokenType.IDENTIFIER) {
 
                 instruction.setMnemonic(t);
+                instruction.setInstructionType(checkAddressingMode(t));
                 lStatement.setInstruction(instruction);
-
-                System.out.println(t);
 
             } else if (t.getTokenType() == TokenType.LABEL) {
                 instruction.setLabel(t);
@@ -59,13 +61,15 @@ public class Parser implements IParser {
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 lStatement.setComment(t);
             } else if (t.getTokenType() == EOL) {
-                if (isValid(lStatement)) {
+                lStatement.setEOL(t);
+                if (isValid(lStatement)){
                     intermediateRep.add(lStatement);
                 } else {
                     //there was an error
                 }
             }
         }
+
         return intermediateRep;
 
     }
@@ -114,7 +118,7 @@ public class Parser implements IParser {
             //check all immediate instruction possibilities
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
                 //immediate without a value is instantly not good
-                if (lineStatement.getInstruction().getOffset() == null) {
+                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
                     ErrorReporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                     return false;
                 }
@@ -194,7 +198,6 @@ public class Parser implements IParser {
             return false;
         }
     }
-
 
     public ArrayList<ILineStatement> getIntermediateRep() {
         return intermediateRep;

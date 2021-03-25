@@ -16,6 +16,7 @@ public class DFA {
     private final List<Integer> letters = new ArrayList<>();
     private final List<Integer> nonZero = new ArrayList<>();
     private final List<Integer> whiteSpace = new ArrayList<>();
+    private int minus;
     private int zero;
     private int semiColon;
     private int period;
@@ -55,6 +56,7 @@ public class DFA {
         }
         transitions.get(1).put(period,11);
         transitions.get(1).put(quote,13);
+        transitions.get(1).put(minus,17);
 
         // STATE 2: IDENTIFIER
         transitions.put(states.get(2).getStateID(), new HashMap<>());
@@ -141,6 +143,12 @@ public class DFA {
         transitions.get(13).put(quote,14);
         transitions.get(13).put(newline,15);
         transitions.get(13).put(endOfFile,16);
+
+        // STATE 17: NEGATIVES
+        transitions.put(states.get(17).getStateID(), new HashMap<>());
+        for (int nonZero : nonZero){
+            transitions.get(17).put(nonZero,9);
+        }
     }
 
     private void initializeAlphabet(){
@@ -153,9 +161,10 @@ public class DFA {
         for (int i = 97; i < 123; i++){
             letters.add(i);
         }
-        for (int i = 48; i < 58; i++){
+        for (int i = 49; i < 58; i++){
             nonZero.add(i);
         }
+        minus = '-';
         zero = '0';
         semiColon = ';';
         period = '.';
@@ -193,6 +202,7 @@ public class DFA {
         states.add(new State(14, TokenType.CSTRING,false));
         states.add(new State(15, TokenType.ERROR,true, ErrorType.EOL_FOUND));
         states.add(new State(16, TokenType.ERROR,true, ErrorType.EOF_FOUND));
+        states.add(new State(17,TokenType.START,false));
     }
 
     public boolean isBackTrack(int id){

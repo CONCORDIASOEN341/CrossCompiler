@@ -9,25 +9,31 @@ public class ErrorReporter {
     private static final ArrayList<IError> errors = new ArrayList<>();
     private static final Comparator<IError> ascLines = Comparator.comparingInt(e -> e.getPosition().getLine());
 
-    public ErrorReporter(){}
-
     public static void record(IError error) {
         errors.add(error);
     }
 
-    public static void report() {
+    public static String report(String fileName) {
         errors.sort(ascLines);
-
-        for (IError e : errors){
-            System.out.println(e);
+        StringBuilder output = new StringBuilder();
+        for (IError e : errors) {
+            output.append(fileName).append(":").append(e).append("\n");
         }
+        return output.toString();
     }
 
-    public static boolean hasErrors(){
-        return errors.size() > 0;
+    public static boolean hasErrors() {
+        return !errors.isEmpty();
     }
 
-    public static int getNumberOfErrors(){
+    public static int getNumberOfErrors() {
         return errors.size();
     }
+
+    public static void clearErrors(){
+        errors.clear();
+    }
+
+    public static ArrayList<IError> getErrors() { return errors; }
+
 }
