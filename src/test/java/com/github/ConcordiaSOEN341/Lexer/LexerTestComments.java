@@ -151,6 +151,7 @@ public class LexerTestComments extends TestCase {
         //Assert
         assertEquals(expectedTList.toString(), actualTList.toString());
     }
+
     @Test
     public void lexer_CommentWithInvalidCharacter() {
         //Arrange

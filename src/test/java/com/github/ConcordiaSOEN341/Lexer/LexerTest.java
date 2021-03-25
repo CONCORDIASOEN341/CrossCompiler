@@ -1,6 +1,5 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.ILexer;
 import com.github.ConcordiaSOEN341.Interfaces.IReader;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
@@ -223,7 +222,7 @@ public class LexerTest extends TestCase {
 
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("5555", new Position(1, 0, 4), TokenType.OFFSET));
-        expectedTList.add(new Token("", new Position(1, 4,4), TokenType.EOF));
+        expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
@@ -237,7 +236,7 @@ public class LexerTest extends TestCase {
         //Arrange
         file = new ArrayList<>();
         String s = "-5~";
-        for(char c : s.toCharArray()){
+        for (char c : s.toCharArray()) {
             file.add(c);
         }
         rTest = new ReaderMoq(file);
@@ -245,7 +244,7 @@ public class LexerTest extends TestCase {
 
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("-5", new Position(1, 0, 2), TokenType.OFFSET));
-        expectedTList.add(new Token("", new Position(1, 2,2), TokenType.EOF));
+        expectedTList.add(new Token("", new Position(1, 2, 2), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
@@ -259,7 +258,7 @@ public class LexerTest extends TestCase {
         //Arrange
         file = new ArrayList<>();
         String s = "\"Dmitri\"~";
-        for(char c : s.toCharArray()){
+        for (char c : s.toCharArray()) {
             file.add(c);
         }
         rTest = new ReaderMoq(file);
@@ -267,7 +266,7 @@ public class LexerTest extends TestCase {
 
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("\"Dmitri\"", new Position(1, 0, 8), TokenType.CSTRING));
-        expectedTList.add(new Token("", new Position(1, 8,8), TokenType.EOF));
+        expectedTList.add(new Token("", new Position(1, 8, 8), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
@@ -281,7 +280,7 @@ public class LexerTest extends TestCase {
         //Arrange
         file = new ArrayList<>();
         String s = ".Dmitri~";
-        for(char c : s.toCharArray()){
+        for (char c : s.toCharArray()) {
             file.add(c);
         }
         rTest = new ReaderMoq(file);
@@ -289,7 +288,7 @@ public class LexerTest extends TestCase {
 
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(".Dmitri", new Position(1, 0, 7), TokenType.DIRECTIVE));
-        expectedTList.add(new Token("", new Position(1, 7,7), TokenType.EOF));
+        expectedTList.add(new Token("", new Position(1, 7, 7), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();
@@ -305,7 +304,7 @@ public class LexerTest extends TestCase {
         //Arrange
         file = new ArrayList<>();
         String s = "\t enter.u5 0\t ; OK, number <u5> [0..31].\r\n~";
-        for(char c : s.toCharArray()){
+        for (char c : s.toCharArray()) {
             file.add(c);
         }
         rTest = new ReaderMoq(file);
@@ -314,9 +313,9 @@ public class LexerTest extends TestCase {
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("enter.u5", new Position(1, 9, 17), TokenType.IDENTIFIER));
         expectedTList.add(new Token("0", new Position(1, 18, 19), TokenType.OFFSET));
-        expectedTList.add(new Token("; OK, number <u5> [0..31].", new Position(1, 28,54), TokenType.COMMENT));
-        expectedTList.add(new Token("", new Position(1, 54,54), TokenType.EOL));
-        expectedTList.add(new Token("", new Position(2, 0,0), TokenType.EOF));
+        expectedTList.add(new Token("; OK, number <u5> [0..31].", new Position(1, 28, 54), TokenType.COMMENT));
+        expectedTList.add(new Token("", new Position(1, 54, 54), TokenType.EOL));
+        expectedTList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
         //Act
         ArrayList<IToken> actualTList = lTest.generateTokenList();

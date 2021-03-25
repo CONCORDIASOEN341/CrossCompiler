@@ -15,9 +15,9 @@ public enum ErrorType {
     INVALID_SIGNED_8BIT_OPERAND("The immediate instruction using '.i8' must have a 8-bit signed operand number ranging from -128 to 127."),
     INVALID_UNSIGNED_3BIT_OPERAND("The immediate instruction using '.u3' must have a 3-bit unsigned operand number ranging from 0 to 7.");
 
-    private String description;
+    private final String description;
 
-    private ErrorType(String description) {
+    ErrorType(String description) {
         this.description = description;
     }
 

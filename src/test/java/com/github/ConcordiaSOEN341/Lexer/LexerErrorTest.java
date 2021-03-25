@@ -33,8 +33,8 @@ public class LexerErrorTest extends TestCase {
         ArrayList<Token> expectedTList = new ArrayList<>();
         ArrayList<IError> expectedErrorsList = new ArrayList<>();
 
-        expectedTList.add(new Token("$", new Position(1, 0,1), TokenType.EOF));
-        expectedErrorsList.add(new Error(ErrorType.INVALID_CHARACTER, new Position(1, 0,1)));
+        expectedTList.add(new Token("$", new Position(1, 0, 1), TokenType.EOF));
+        expectedErrorsList.add(new Error(ErrorType.INVALID_CHARACTER, new Position(1, 0, 1)));
 
         //System.out.println(expectedErrorsList);
 
@@ -64,7 +64,7 @@ public class LexerErrorTest extends TestCase {
         expectedTList.add(new Token("\"", new Position(1, 0, 1), TokenType.ERROR));
         expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOL));
         expectedTList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
-        expectedErrorsList.add(new Error(ErrorType.EOL_FOUND, new Position(1, 1,2)));
+        expectedErrorsList.add(new Error(ErrorType.EOL_FOUND, new Position(1, 1, 2)));
 
         //System.out.println(expectedErrorsList);
 
@@ -92,7 +92,7 @@ public class LexerErrorTest extends TestCase {
 
         expectedTList.add(new Token("\"", new Position(1, 0, 1), TokenType.ERROR));
         expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
-        expectedErrorsList.add(new Error(ErrorType.EOF_FOUND, new Position(1, 1,2)));
+        expectedErrorsList.add(new Error(ErrorType.EOF_FOUND, new Position(1, 1, 2)));
 
         //System.out.println(expectedErrorsList);
 
