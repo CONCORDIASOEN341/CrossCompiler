@@ -1,9 +1,9 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.ICodeGen;
+import com.github.ConcordiaSOEN341.Interfaces.IErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
-import com.github.ConcordiaSOEN341.Maps.CodeMap;
+import com.github.ConcordiaSOEN341.Maps.SymbolTable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileWriter;
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public class CodeGen implements ICodeGen {
 
-    public void generateListingFile(String fileName, ArrayList<ILineStatement> ir) {
-        if (ErrorReporter.hasErrors()) {
-            System.out.println(ErrorReporter.report(fileName));
+    public void generateListingFile(String fileName, ArrayList<ILineStatement> ir, IErrorReporter reporter) {
+        if (reporter.hasErrors()) {
+            System.out.println(reporter.report(fileName));
             System.exit(0);
         } else {
             String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
@@ -39,7 +39,7 @@ public class CodeGen implements ICodeGen {
     }
 
     public String[] listing(ArrayList<ILineStatement> ir) {
-        CodeMap codeGen = new CodeMap();
+        SymbolTable codeGen = new SymbolTable();
         String[] listings = new String[ir.size()];
         String hexAddress = "0000";
         String offset = "";

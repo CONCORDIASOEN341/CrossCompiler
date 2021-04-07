@@ -2,10 +2,8 @@ package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Interfaces.ILexer;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
-import com.github.ConcordiaSOEN341.Interfaces.IToken;
-import com.github.ConcordiaSOEN341.Maps.CodeMap;
+import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Maps.SymbolTable;
 
 import java.util.ArrayList;
 
@@ -13,17 +11,20 @@ public class Lexer implements ILexer {
     private int currentLine = 1;
     private int currentCol = 0;
     private final IReader reader;
-    private final CodeMap cm;
+    private final SymbolTable symbolTable;
     private final DFA dfa;
+    private final IErrorReporter reporter;
     private int stateID = 0;
     private int temp = 0;
 
-    public Lexer(IReader r) {
+    public Lexer(SymbolTable s, DFA d, IReader r, IErrorReporter e) {
+        symbolTable = s;
+        dfa = d;
         reader = r;
-        cm = new CodeMap();
-        dfa = new DFA(r);
+        reporter = e;
     }
 
+    @Deprecated
     public ArrayList<IToken> generateTokenList() {
         ArrayList<IToken> tokenList = new ArrayList<>();
         IToken t;
@@ -37,7 +38,7 @@ public class Lexer implements ILexer {
         return tokenList;
     }
 
-    private IToken getNextToken() {
+    public IToken getNextToken() {
         Token token = new Token(new Position(currentLine, currentCol, currentCol));
         StringBuilder tokenString = new StringBuilder();
         TokenType type;
@@ -91,7 +92,7 @@ public class Lexer implements ILexer {
             // TRACK ERRORS
             if (type == TokenType.ERROR) {
                 stateID = (stateID == 0) ? previousStateID : stateID;
-                ErrorReporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine, previousCol, previousCol + 1)));
+                reporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine, previousCol, previousCol + 1)));
                 type = dfa.getStateType(stateID);
             }
 
@@ -110,7 +111,7 @@ public class Lexer implements ILexer {
         token.setPosition(new Position(line, startCol, startCol + token.getTokenString().length()));
 
         if (type == TokenType.IDENTIFIER) {
-            if (cm.getValue(token.getTokenString()) != null) {
+            if (symbolTable.getValue(token.getTokenString()) != null) {
                 type = TokenType.MNEMONIC;
             }
         }

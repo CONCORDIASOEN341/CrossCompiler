@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.Maps;
+package com.github.ConcordiaSOEN341.CodeGen;
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
 import com.github.ConcordiaSOEN341.Interfaces.ICodeGen;

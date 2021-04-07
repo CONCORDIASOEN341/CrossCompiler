@@ -1,19 +1,20 @@
 package com.github.ConcordiaSOEN341.Error;
 
 import com.github.ConcordiaSOEN341.Interfaces.IError;
+import com.github.ConcordiaSOEN341.Interfaces.IErrorReporter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class ErrorReporter {
-    private static final ArrayList<IError> errors = new ArrayList<>();
-    private static final Comparator<IError> ascLines = Comparator.comparingInt(e -> e.getPosition().getLine());
+public class ErrorReporter implements IErrorReporter {
+    private final ArrayList<IError> errors = new ArrayList<>();
+    private final Comparator<IError> ascLines = Comparator.comparingInt(e -> e.getPosition().getLine());
 
-    public static void record(IError error) {
+    public void record(IError error) {
         errors.add(error);
     }
 
-    public static String report(String fileName) {
+    public String report(String fileName) {
         if (fileName.contains("/")) {
             fileName = fileName.substring(fileName.lastIndexOf("/")+1);
         }
@@ -25,18 +26,18 @@ public class ErrorReporter {
         return output.toString();
     }
 
-    public static boolean hasErrors() {
+    public boolean hasErrors() {
         return !errors.isEmpty();
     }
 
-    public static int getNumberOfErrors() {
+    public int getNumberOfErrors() {
         return errors.size();
     }
 
-    public static void clearErrors(){
+    public void clearErrors(){
         errors.clear();
     }
 
-    public static ArrayList<IError> getErrors() { return errors; }
+    public ArrayList<IError> getErrors() { return errors; }
 
 }
