@@ -1,6 +1,10 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
 import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Lexer.Position;
+import com.github.ConcordiaSOEN341.Lexer.Token;
+import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
 import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
@@ -145,7 +149,7 @@ public class CodeGen implements ICodeGen {
 
     private int bitSpace(IInstruction instr){
         String[] sNum = instr.getMnemonic().getTokenString().split(".((u)|(i))", 2);            //take string after the u or the i (this leaves only the number)
-        return Integer.parseInt(sNum[1])/4;
+        return Integer.parseInt(sNum[1]);
     }
 
     private String calculateImmediateOpCode(IInstruction instr){
@@ -153,10 +157,41 @@ public class CodeGen implements ICodeGen {
         // SEE: determineOpCode() in symbol table (Vincent code)
         // SEE: Michel Email (SOEN-341-2204-S: How to generate the opcode byte for an immediate instruction)
 
-        Integer.toHexString(
+        /*Integer.toHexString(
                 Integer.parseInt(symbolTable.getValue(instr.getMnemonic().getTokenString())) +
-                        Integer.parseInt(instr.getOffset().getTokenString()));
+                        Integer.parseInt(instr.getOffset().getTokenString()));*/
+        String mnemonic = instr.getMnemonic().getTokenString();
+        int offset = Integer.parseInt(instr.getOffset().getTokenString());
+        int hexNumber = 0;
+
+        //special case for enter.u5, offset do not increase normally
+        if (mnemonic.equals("enter.u5")){
+            if (offset <= 15) {
+                hexNumber = Integer.parseInt("80", 16) + offset;
+            } else {
+                hexNumber = Integer.parseInt("60", 16) + offset;
+            }
+        }
+        else {
+            //special case for negative numbers
+            if (offset < 0 ) {
+                int size = (int)Math.pow(2,bitSpace(instr));
+                offset = size + offset;
+            }
+            //the rest
+            hexNumber = Integer.parseInt(symbolTable.getValue(mnemonic), 16) + offset;
+        }
+
+        return String.format("%02X", hexNumber);
     }
-
-
+    //For testing purposes
+//    public static void main(String[] args) {
+//        SymbolTable s = new SymbolTable();
+//        CodeGen c = new CodeGen(s);
+//        Instruction i = new Instruction();
+//        i.setMnemonic(new Token( "br.i5", new Position(1,1,1), TokenType.MNEMONIC));
+//        i.setOffset(new Token( "-2", new Position(1,1,1), TokenType.OFFSET));
+//        System.out.print(c.calculateImmediateOpCode(i));
+        //System.out.print(c.bitSpace(i));
+//    }
 }

@@ -82,7 +82,7 @@ public class SymbolTable implements ICompilerMap<String, String> {
         int hexNumber = 0;
         int offset = Integer.parseInt(offsetString);
 
-        if (!keyExists(mnemonic)) {
+        if (keyExists(mnemonic)) {
             if (mnemonic.equals("br.i5")) {
                 hexNumber = Integer.parseInt("30", 16) + offset;
             } else if (mnemonic.equals("brf.i5")) {
@@ -114,5 +114,4 @@ public class SymbolTable implements ICompilerMap<String, String> {
 
         return String.format("%2X", hexNumber);
     }
-
 }
