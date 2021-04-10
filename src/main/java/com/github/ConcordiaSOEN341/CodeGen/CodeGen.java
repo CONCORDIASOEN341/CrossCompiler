@@ -106,15 +106,22 @@ public class CodeGen implements ICodeGen {
                     oTE.setOpCode(symbolTable.getValue(lS.getInstruction().getMnemonic().getTokenString()));
                 }
 
+                // Inc address for the opcode
+                address++;
+
                 // Determine Hex for operand (label or integer)
                 if(lS.getInstruction().getInstructionType() == InstructionType.RELATIVE) {
+                    oTE.setBitSpace(bitSpace(lS.getInstruction())); // Based on mnemonic
                     try{
+                        // FIGURE OUT NEGATIVES
                         int operand = Integer.parseInt(lS.getInstruction().getOffset().getTokenString());
-                        oTE.addOperand(String.format("%X", operand));
+                        oTE.addOperand(String.format("%0"+oTE.getBitSpace()+"X", operand));
 
                     } catch (NumberFormatException e){
                         oTE.setLabel(lS.getInstruction().getOffset().getTokenString());
                     }
+                    // Inc address for relative operand
+                    address += oTE.getBitSpace()/2;
                 }
 
             } else if(lS.getDirective() != null && lS.getDirective().getDirectiveName().equals(".cstring")){
@@ -123,12 +130,13 @@ public class CodeGen implements ICodeGen {
                 for (char c : cstring.toCharArray()){
                     if(c != '\"'){
                         oTE.addOperand(String.format("%02X", (int) c));
+                        address++;
                     }
                 }
                 oTE.addOperand("00");
+                address++;
             }
-
-
+            
             line++;
         }
 
@@ -136,7 +144,7 @@ public class CodeGen implements ICodeGen {
 
     private int bitSpace(IInstruction instr){
         String[] sNum = instr.getMnemonic().getTokenString().split(".((u)|(i))", 2);            //take string after the u or the i (this leaves only the number)
-        return Integer.parseInt(sNum[1]);
+        return Integer.parseInt(sNum[1])/4;
     }
 
     private String calculateImmediateOpCode(IInstruction instr){

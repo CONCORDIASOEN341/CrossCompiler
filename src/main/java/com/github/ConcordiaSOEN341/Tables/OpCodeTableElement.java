@@ -9,7 +9,17 @@ public class OpCodeTableElement implements IOpCodeTableElement {
     private String address;
     private String opCode;
     private ArrayList<String> operands;
+    private int bitSpace;
     private String label = null;
+
+
+    public int getBitSpace() {
+        return bitSpace;
+    }
+
+    public void setBitSpace(int bitSpace) {
+        this.bitSpace = bitSpace;
+    }
 
     public int getLine() {
         return line;
