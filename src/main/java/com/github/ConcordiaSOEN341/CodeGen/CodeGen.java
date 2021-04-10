@@ -97,7 +97,7 @@ public class CodeGen implements ICodeGen {
                 symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
             }
 
-
+            // Account for Instruction or Directive
             if(lS.getInstruction() != null){
                 // Determine opcode of mnemonic if there is an instruction
                 if(lS.getInstruction().getInstructionType() == InstructionType.IMMEDIATE){
@@ -136,7 +136,8 @@ public class CodeGen implements ICodeGen {
                 oTE.addOperand("00");
                 address++;
             }
-            
+
+            opCodeTable.put(line, oTE);
             line++;
         }
 
