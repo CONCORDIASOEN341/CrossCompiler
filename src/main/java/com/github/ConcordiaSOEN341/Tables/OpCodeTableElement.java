@@ -8,10 +8,22 @@ public class OpCodeTableElement implements IOpCodeTableElement {
     private int line;
     private String address;
     private String opCode;
-    private ArrayList<String> operands;
+    private final ArrayList<String> operands;
     private int bitSpace;
     private String label = null;
 
+    public OpCodeTableElement(){
+        operands = new ArrayList<>();
+    }
+
+    public OpCodeTableElement(int line, String address, String opCode, int bitSpace, String label) {
+        this.line = line;
+        this.address = address;
+        this.opCode = opCode;
+        this.operands = new ArrayList<>();
+        this.bitSpace = bitSpace;
+        this.label = label;
+    }
 
     public int getBitSpace() {
         return bitSpace;
@@ -61,7 +73,9 @@ public class OpCodeTableElement implements IOpCodeTableElement {
         this.label = label;
     }
 
-
+    public String toString(){
+        return line + " " + address + " " + opCode + " " + operands.toString() + " " + bitSpace + " " + label;
+    }
 
 
 }

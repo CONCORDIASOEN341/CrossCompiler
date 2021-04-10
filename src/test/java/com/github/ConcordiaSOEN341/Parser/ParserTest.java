@@ -131,7 +131,7 @@ public class ParserTest {
         init(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.parse();
 
-        assertEquals("ABCD1", lineStatements.get(0).getDirective().getTokenString());
+        assertEquals("ABCD1", lineStatements.get(0).getDirective().getDirectiveName());
 
     }
 

@@ -54,12 +54,12 @@ public class Parser implements IParser {
                 lStatement.setInstruction(instruction);
 
             } else if (t.getTokenType() == TokenType.LABEL) {
-                instruction.setLabel(t);
+//                instruction.setLabel(t);
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
-                instruction.setOffset(t);
+//                instruction.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
-                lStatement.setDirective(t);
+//                lStatement.setDirective(t); // ERROR HERE
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 lStatement.setComment(t);
             } else if (t.getTokenType() == EOL) {
@@ -106,18 +106,18 @@ public class Parser implements IParser {
             currentColumn = lineStatement.getInstruction().getMnemonic().getPosition().getStartColumn();
 
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.INHERENT) {
-                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
-                    return true;
-                } else {
-                    reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
-                    return false;
-                }
+//                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
+//                    return true;
+//                } else {
+//                    reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+//                    return false;
+//                }
             }
 
             //check all immediate instruction possibilities
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
                 //immediate without a value is instantly not good
-                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
+                if (lineStatement.getInstruction().getOperand().getTokenType() == TokenType.EMPTY) {
                     reporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                     return false;
                 }
@@ -125,7 +125,7 @@ public class Parser implements IParser {
                 int opSize = getInt(lineStatement.getInstruction().getMnemonic());              //get operator value
                 String temp = lineStatement.getInstruction().getMnemonic().getTokenString();
                 String symbol = temp.substring(temp.indexOf('.') + 1, temp.indexOf('.') + 2);   //get i or u
-                String op = lineStatement.getInstruction().getOffset().getTokenString();        //get operand value (String)
+                String op = lineStatement.getInstruction().getOperand().getTokenString();        //get operand value (String)
                 int opNum = Integer.parseInt(op);                                               //get operand value (int)
 
                 //SIGNED

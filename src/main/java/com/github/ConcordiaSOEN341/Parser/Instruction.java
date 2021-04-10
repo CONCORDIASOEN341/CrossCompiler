@@ -5,14 +5,19 @@ import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
 public class Instruction implements IInstruction {
     private IToken mnemonic;
-    private IToken label;       //one of these two is the operand
-    private IToken offset;      //
+    private IToken operand;
+
+    public Instruction(IToken mnemonic, IToken operand, InstructionType instructionType) {
+        this.mnemonic = mnemonic;
+        this.operand = operand;
+        this.instructionType = instructionType;
+    }
+
     private InstructionType instructionType;
 
     public Instruction() {
         mnemonic = null;
-        label = null;
-        offset = null;
+        operand = null;
         instructionType = null;
     }
 
@@ -24,20 +29,12 @@ public class Instruction implements IInstruction {
         this.mnemonic = mnemonic;
     }
 
-    public IToken getLabel() {
-        return label;
+    public IToken getOperand() {
+        return operand;
     }
 
-    public void setLabel(IToken label) {
-        this.label = label;
-    }
-
-    public IToken getOffset() {
-        return offset;
-    }
-
-    public void setOffset(IToken offset) {
-        this.offset = offset;
+    public void setOperand(IToken operand) {
+        this.operand = operand;
     }
 
     public InstructionType getInstructionType() {

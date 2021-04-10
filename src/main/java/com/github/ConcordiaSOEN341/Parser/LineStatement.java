@@ -12,6 +12,10 @@ public class LineStatement implements ILineStatement {
     private IToken comment;
     private IToken eol;
 
+    public LineStatement(IInstruction instruction) {
+        this.instruction = instruction;
+    }
+
     public LineStatement() {
         this.instruction = null;
         this.directive = null;

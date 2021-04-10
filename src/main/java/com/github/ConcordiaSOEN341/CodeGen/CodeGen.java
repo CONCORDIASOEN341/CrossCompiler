@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class CodeGen implements ICodeGen {
     private SymbolTable symbolTable;
-    private final HashMap<Integer, OpCodeTableElement> opCodeTable = new HashMap<>();
+    private final HashMap<Integer, IOpCodeTableElement> opCodeTable = new HashMap<>();
 
     public CodeGen(SymbolTable sT){
         symbolTable = sT;
@@ -71,10 +71,10 @@ public class CodeGen implements ICodeGen {
             String codeMnemonic = "";
 
             String mnemonic = ir.get(i).getInstruction().toString();
-            offset = ir.get(i).getInstruction().getOffset().getTokenString();
+            offset = ir.get(i).getInstruction().getOperand().getTokenString();
             comment = ir.get(i).getComment().getTokenString();
 
-            if (StringUtils.isNotEmpty(ir.get(i).getInstruction().getOffset().getTokenString())) {
+            if (StringUtils.isNotEmpty(ir.get(i).getInstruction().getOperand().getTokenString())) {
                 codeMnemonic = codeGen.determineOpCode(mnemonic, offset);
             }
 
@@ -85,7 +85,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public void generateOpCodeTable(ArrayList<ILineStatement> ir) {
+    public HashMap<Integer, IOpCodeTableElement> generateOpCodeTable(ArrayList<ILineStatement> ir) {
         int line = 1;
         int address = 0;
 
@@ -115,14 +115,14 @@ public class CodeGen implements ICodeGen {
 
                 // Determine Hex for operand (label or integer)
                 if(lS.getInstruction().getInstructionType() == InstructionType.RELATIVE) {
-                    oTE.setBitSpace(bitSpace(lS.getInstruction())); // Based on mnemonic
+                    oTE.setBitSpace(bitSpace(lS.getInstruction())/4); // Based on mnemonic
                     try{
                         // FIGURE OUT NEGATIVES
-                        int operand = Integer.parseInt(lS.getInstruction().getOffset().getTokenString());
+                        int operand = Integer.parseInt(lS.getInstruction().getOperand().getTokenString());
                         oTE.addOperand(String.format("%0"+oTE.getBitSpace()+"X", operand));
 
                     } catch (NumberFormatException e){
-                        oTE.setLabel(lS.getInstruction().getOffset().getTokenString());
+                        oTE.setLabel(lS.getInstruction().getOperand().getTokenString());
                     }
                     // Inc address for relative operand
                     address += oTE.getBitSpace()/2;
@@ -145,6 +145,8 @@ public class CodeGen implements ICodeGen {
             line++;
         }
 
+        return opCodeTable;
+
     }
 
     private int bitSpace(IInstruction instr){
@@ -153,15 +155,8 @@ public class CodeGen implements ICodeGen {
     }
 
     private String calculateImmediateOpCode(IInstruction instr){
-        // FIGURE OUT HOW TO CALCULATE OpCode for IMMEDIATE INSTRUCTIONS (Account for integers and labels)
-        // SEE: determineOpCode() in symbol table (Vincent code)
-        // SEE: Michel Email (SOEN-341-2204-S: How to generate the opcode byte for an immediate instruction)
-
-        /*Integer.toHexString(
-                Integer.parseInt(symbolTable.getValue(instr.getMnemonic().getTokenString())) +
-                        Integer.parseInt(instr.getOffset().getTokenString()));*/
         String mnemonic = instr.getMnemonic().getTokenString();
-        int offset = Integer.parseInt(instr.getOffset().getTokenString());
+        int offset = Integer.parseInt(instr.getOperand().getTokenString());
         int hexNumber = 0;
 
         //special case for enter.u5, offset do not increase normally
