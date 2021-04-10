@@ -1,16 +1,23 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
-import com.github.ConcordiaSOEN341.Interfaces.ICodeGen;
-import com.github.ConcordiaSOEN341.Interfaces.IErrorReporter;
-import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Parser.InstructionType;
+import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CodeGen implements ICodeGen {
+    private SymbolTable symbolTable;
+    private final HashMap<Integer, OpCodeTableElement> opCodeTable = new HashMap<>();
+
+    public CodeGen(SymbolTable sT){
+        symbolTable = sT;
+    }
 
     public void generateListingFile(String fileName, ArrayList<ILineStatement> ir, IErrorReporter reporter) {
         if (reporter.hasErrors()) {
@@ -71,6 +78,75 @@ public class CodeGen implements ICodeGen {
             listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t " + offset + "\t\t\t\t" + comment + " \t\n");
         }
         return listings;
+    }
+
+    @Override
+    public void generateOpCodeTable(ArrayList<ILineStatement> ir) {
+        int line = 1;
+        int address = 0;
+
+        for(ILineStatement lS : ir){
+            OpCodeTableElement oTE = new OpCodeTableElement();
+
+            // Set Line and Address
+            oTE.setLine(line);
+            oTE.setAddress(String.format("%04X", address));
+
+            // Add Label - Address to symbol table
+            if(lS.getLabel() != null){
+                symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
+            }
+
+
+            if(lS.getInstruction() != null){
+                // Determine opcode of mnemonic if there is an instruction
+                if(lS.getInstruction().getInstructionType() == InstructionType.IMMEDIATE){
+                    oTE.setOpCode(calculateImmediateOpCode(lS.getInstruction()));
+                } else {
+                    oTE.setOpCode(symbolTable.getValue(lS.getInstruction().getMnemonic().getTokenString()));
+                }
+
+                // Determine Hex for operand (label or integer)
+                if(lS.getInstruction().getInstructionType() == InstructionType.RELATIVE) {
+                    try{
+                        int operand = Integer.parseInt(lS.getInstruction().getOffset().getTokenString());
+                        oTE.addOperand(String.format("%X", operand));
+
+                    } catch (NumberFormatException e){
+                        oTE.setLabel(lS.getInstruction().getOffset().getTokenString());
+                    }
+                }
+
+            } else if(lS.getDirective() != null && lS.getDirective().getDirectiveName().equals(".cstring")){
+                String cstring = lS.getDirective().getCString();
+
+                for (char c : cstring.toCharArray()){
+                    if(c != '\"'){
+                        oTE.addOperand(String.format("%02X", (int) c));
+                    }
+                }
+                oTE.addOperand("00");
+            }
+
+
+            line++;
+        }
+
+    }
+
+    private int bitSpace(IInstruction instr){
+        String[] sNum = instr.getMnemonic().getTokenString().split(".((u)|(i))", 2);            //take string after the u or the i (this leaves only the number)
+        return Integer.parseInt(sNum[1]);
+    }
+
+    private String calculateImmediateOpCode(IInstruction instr){
+        // FIGURE OUT HOW TO CALCULATE OpCode for IMMEDIATE INSTRUCTIONS (Account for integers and labels)
+        // SEE: determineOpCode() in symbol table (Vincent code)
+        // SEE: Michel Email (SOEN-341-2204-S: How to generate the opcode byte for an immediate instruction)
+
+        Integer.toHexString(
+                Integer.parseInt(symbolTable.getValue(instr.getMnemonic().getTokenString())) +
+                        Integer.parseInt(instr.getOffset().getTokenString()));
     }
 
 

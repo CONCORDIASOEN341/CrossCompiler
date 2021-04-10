@@ -3,7 +3,7 @@ package com.github.ConcordiaSOEN341.Parser;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.*;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import org.junit.Test;
 
 import java.util.ArrayList;

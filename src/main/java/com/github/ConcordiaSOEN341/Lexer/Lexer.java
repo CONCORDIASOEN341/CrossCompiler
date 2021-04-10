@@ -1,9 +1,8 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 
 import java.util.ArrayList;
 
@@ -12,14 +11,14 @@ public class Lexer implements ILexer {
     private int currentCol = 0;
     private final IReader reader;
     private final SymbolTable symbolTable;
-    private final DFA dfa;
+    private final LexerFSM lexerFSM;
     private final IErrorReporter reporter;
     private int stateID = 0;
     private int temp = 0;
 
-    public Lexer(SymbolTable s, DFA d, IReader r, IErrorReporter e) {
+    public Lexer(SymbolTable s, LexerFSM d, IReader r, IErrorReporter e) {
         symbolTable = s;
-        dfa = d;
+        lexerFSM = d;
         reader = r;
         reporter = e;
     }
@@ -45,7 +44,7 @@ public class Lexer implements ILexer {
         int startCol = 0;
         int line = 0;
 
-        stateID = dfa.getInitialStateID();
+        stateID = lexerFSM.getInitialStateID();
         type = TokenType.START;
         boolean tokenStarted = false;
         int currentChar;
@@ -86,17 +85,17 @@ public class Lexer implements ILexer {
             }
 
             previousStateID = stateID;
-            stateID = dfa.getNextStateID(stateID, currentChar);
-            type = dfa.getStateType(stateID);
+            stateID = lexerFSM.getNextStateID(stateID, currentChar);
+            type = lexerFSM.getStateType(stateID);
 
             // TRACK ERRORS
             if (type == TokenType.ERROR) {
                 stateID = (stateID == 0) ? previousStateID : stateID;
-                reporter.record(new Error(dfa.getErrorType(stateID), new Position(previousLine, previousCol, previousCol + 1)));
-                type = dfa.getStateType(stateID);
+                reporter.record(new Error(lexerFSM.getErrorType(stateID), new Position(previousLine, previousCol, previousCol + 1)));
+                type = lexerFSM.getStateType(stateID);
             }
 
-            if (dfa.isBackTrack(stateID)) {
+            if (lexerFSM.isBackTrack(stateID)) {
                 currentCol = previousCol;
                 currentLine = previousLine;
                 temp = currentChar;

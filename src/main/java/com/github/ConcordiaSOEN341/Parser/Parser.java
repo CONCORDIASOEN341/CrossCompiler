@@ -1,13 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 
 import java.util.ArrayList;
 
@@ -39,8 +38,8 @@ public class Parser implements IParser {
             int currentLine = t.getPosition().getLine();
             if (currentLine > line) {                                     //create new line statement + instruction per line
                 line = currentLine;
-                instruction = new Instruction(new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), InstructionType.EMPTY);
-                lStatement = new LineStatement(instruction, new Token("", new Position(0, 0, 0), TokenType.DIRECTIVE), new Token("", new Position(0, 0, 0), TokenType.OFFSET), new Token("", new Position(0, 0, 0), TokenType.COMMENT), new Token("", new Position(0, 0, 0), TokenType.EOL));
+                instruction = new Instruction();
+                lStatement = new LineStatement();
             }
             if (t.getTokenType() == TokenType.EMPTY) {
                 instruction.setInstructionType(InstructionType.EMPTY);
@@ -59,7 +58,6 @@ public class Parser implements IParser {
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
                 instruction.setOffset(t);
-                lStatement.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
                 lStatement.setDirective(t);
             } else if (t.getTokenType() == TokenType.COMMENT) {

@@ -3,7 +3,6 @@ package com.github.ConcordiaSOEN341.Parser;
 import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
-//For Sprint 2, instruction is only a mnemonic token
 public class Instruction implements IInstruction {
     private IToken mnemonic;
     private IToken label;       //one of these two is the operand
@@ -11,38 +10,10 @@ public class Instruction implements IInstruction {
     private InstructionType instructionType;
 
     public Instruction() {
-        IToken mnemonic = null;
-        IToken label = null;
-        IToken offset = null;
-        InstructionType instructionType = null;
-    }
-
-    public Instruction(IToken mnemonic) {
-        this.mnemonic = mnemonic;
-        IToken label = null;
-        IToken offset = null;
-        InstructionType instructionType = null;
-    }
-
-    public Instruction(IToken mnemonic, InstructionType instructionType) {
-        this.mnemonic = mnemonic;
-        IToken label = null;
-        IToken offset = null;
-        this.instructionType = instructionType;
-    }
-
-    public Instruction(IToken mnemonic, IToken offset, InstructionType is){
-        this.mnemonic = mnemonic;
-        this.label = null;
-        this.offset = offset;
-        this.instructionType = is;
-    }
-
-    public Instruction(IToken mnemonic, IToken label, IToken offset, InstructionType is){
-        this.mnemonic = mnemonic;
-        this.label = label;
-        this.offset = offset;
-        this.instructionType = is;
+        mnemonic = null;
+        label = null;
+        offset = null;
+        instructionType = null;
     }
 
     public IToken getMnemonic() {

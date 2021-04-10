@@ -4,7 +4,7 @@ import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +22,9 @@ public class LexerTest extends TestCase {
     private void init(ArrayList<Character> f){
         IReader rTest = new ReaderMoq(f);
         SymbolTable sTest = new SymbolTable();
-        DFA dfaTest = new DFA(rTest);
+        LexerFSM lexerFSMTest = new LexerFSM(rTest);
         eTest = new ErrorReporter();
-        lTest = new Lexer(sTest, dfaTest, rTest, eTest);
+        lTest = new Lexer(sTest, lexerFSMTest, rTest, eTest);
     }
 
     private ArrayList<IToken> generateTokenList(){
