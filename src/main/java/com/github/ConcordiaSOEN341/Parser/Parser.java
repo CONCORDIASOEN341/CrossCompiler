@@ -81,7 +81,7 @@ public class Parser implements IParser {
             return InstructionType.INHERENT;
         }
         int num = getInt(t);
-        if (num <= 8) {                                                 //less than or equal to 1 byte is immediate
+        if (num < 8) {                                                 //less than or equal to 1 byte is immediate
             return InstructionType.IMMEDIATE;
         } else {
             return InstructionType.RELATIVE;
@@ -117,7 +117,7 @@ public class Parser implements IParser {
             }
 
             //check all immediate instruction possibilities
-            if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
+            if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE || (lineStatement.getInstruction().getInstructionType() == InstructionType.RELATIVE)) {
                 //immediate without a value is instantly not good
                 if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
                     reporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
@@ -187,6 +187,14 @@ public class Parser implements IParser {
                     } else if (opSize == 8) {    //u8
                         if (opNum < 0 || opNum > 255) {
                             reporter.record(new Error(ErrorType.INVALID_UNSIGNED_8BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                    else if (opSize == 16) {    //u16
+                        if (opNum < 0 || opNum > 65535) {
+                            reporter.record(new Error(ErrorType.INVALID_UNSIGNED_16BIT_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                             return false;
                         } else {
                             return true;
