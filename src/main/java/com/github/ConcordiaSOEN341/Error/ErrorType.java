@@ -9,6 +9,7 @@ public enum ErrorType {
     INVALID_UNSIGNED_4BIT_OPERAND("The immediate instruction using '.u4' must have a 4-bit unsigned operand number ranging from 0 to 15."),
     INVALID_UNSIGNED_5BIT_OPERAND("The immediate instruction using '.u5' must have a 5-bit unsigned operand number ranging from 0 to 31."),
     INVALID_UNSIGNED_8BIT_OPERAND("The immediate instruction using '.u8' must have a 8-bit unsigned operand number ranging from 0 to 255."),
+    INVALID_UNSIGNED_16BIT_OPERAND("The immediate instruction using '.u16' must have a 16-bit unsigned operand number ranging from 0 to 65535."),
     INVALID_SIGNED_3BIT_OPERAND("The immediate instruction using '.i3' must have a 3-bit signed operand number ranging from -4 to 3."),
     INVALID_SIGNED_4BIT_OPERAND("The immediate instruction using '.i4' must have a 4-bit signed operand number ranging from -8 to 7."),
     INVALID_SIGNED_5BIT_OPERAND("The immediate instruction using '.i5' must have a 5-bit signed operand number ranging from -16 to 15."),

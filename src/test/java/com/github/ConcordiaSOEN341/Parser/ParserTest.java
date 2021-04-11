@@ -91,6 +91,20 @@ public class ParserTest {
         assertEquals(1, eTest.getNumberOfErrors());
 
     }
+    @Test
+    public void parse_giveError1_expectError(){
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("addv.u16", new Position(1, 0, 4), TokenType.MNEMONIC));
+        tokenList.add(new Token("760000", new Position(1, 0, 4), TokenType.OFFSET));
+        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+
+        init(tokenList);
+        ArrayList<ILineStatement> lineStatements = pTest.parse();
+
+        assertEquals(1, eTest.getNumberOfErrors());
+
+    }
 
     @Test
     public void parse_giveError2_expectError2(){
