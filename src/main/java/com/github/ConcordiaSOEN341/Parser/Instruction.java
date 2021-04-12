@@ -7,6 +7,11 @@ public class Instruction implements IInstruction {
     private IToken mnemonic;
     private IToken operand;
 
+    public Instruction(IToken mnemonic, InstructionType instructionType) {
+        this.mnemonic = mnemonic;
+        this.instructionType = instructionType;
+    }
+
     public Instruction(IToken mnemonic, IToken operand, InstructionType instructionType) {
         this.mnemonic = mnemonic;
         this.operand = operand;

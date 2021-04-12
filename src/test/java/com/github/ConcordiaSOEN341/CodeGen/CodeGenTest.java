@@ -66,25 +66,23 @@ public class CodeGenTest extends TestCase {
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
     }
 
-//    @Test
-//    public void generateOpCodeTable_Inherent() {
-//        // Arrange
-//        irTest = new ArrayList<>();
-//        irTest.add(new LineStatement(new Instruction(new Token("enter.u5"), new Token("16"), InstructionType.IMMEDIATE)));
-//        irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
-//        sTest = new SymbolTable();
-//        codeGenTest = new CodeGen(sTest);
-//
-//        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-//        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "70", 0, null));
-//        expectedOpTable.put(2, new OpCodeTableElement(2, "0001", "92", 0, null));
-//
-//        // Act
-//        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
-//
-//        // Assert
-//        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
-//    }
+    @Test
+    public void generateOpCodeTable_Inherent() {
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("halt"), InstructionType.INHERENT)));
+        sTest = new SymbolTable();
+        codeGenTest = new CodeGen(sTest);
+
+        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
+        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "00", 0, null));
+
+        // Act
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
 
     @Test
     public void generateOpCodeTable_NoInstruction(){
@@ -97,9 +95,9 @@ public class CodeGenTest extends TestCase {
         codeGenTest = new CodeGen(sTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        OpCodeTableElement o = new OpCodeTableElement(1, "0000", null, 0, null);
-        o.addOperand("41"); o.addOperand("31"); o.addOperand("00");
-        expectedOpTable.put(1, o);
+        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", null, 0, null));
+        expectedOpTable.get(1).addOperand("41"); expectedOpTable.get(1).addOperand("31"); expectedOpTable.get(1).addOperand("00");
+
 
         // Act
         HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
@@ -112,7 +110,7 @@ public class CodeGenTest extends TestCase {
     public void generateOpCodeTable_OperandList(){
         // Arrange
         LineStatement l = new LineStatement();
-        l.setComment(new Token(";Hello", new Position(0,0,0), TokenType.COMMENT));
+        l.setComment(new Token(";Hello"));
         irTest = new ArrayList<>();
         irTest.add(l);
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
@@ -129,16 +127,6 @@ public class CodeGenTest extends TestCase {
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
     }
-
-    // Test
-    // Inherent Instr
-
-    // Address incrementing
-    // for correct opcode (if instruction)
-    // when no instruction
-    // bitspace null or not based on relative
-    // label null or not if label in operand
-    // operand list (all there and in hex)
 
 
 //    @Test
