@@ -90,7 +90,7 @@ public class CodeGen implements ICodeGen {
         int address = 0;
 
         for(ILineStatement lS : ir){
-            OpCodeTableElement oTE = new OpCodeTableElement();
+            IOpCodeTableElement oTE = new OpCodeTableElement();
 
             // Set Line and Address
             oTE.setLine(line);
@@ -145,8 +145,24 @@ public class CodeGen implements ICodeGen {
             line++;
         }
 
-        return opCodeTable;
+        // SECOND PASS
+        for(IOpCodeTableElement oTE : opCodeTable.values()){
+            if(oTE.getLabel() != null){
+                String labelAddress = symbolTable.getValue(oTE.getLabel());
+                if(labelAddress != null){
+                    int offset = Integer.parseInt(labelAddress,16) - Integer.parseInt(oTE.getAddress(),16);
+                    if(offset < 0){
+                        String offsetString = String.format("%X", offset);
+                        oTE.addOperand(offsetString.substring(offsetString.length()-oTE.getBitSpace()));
+                    } else {
+                        oTE.addOperand(String.format("%0"+oTE.getBitSpace()+"X", offset));
+                    }
 
+                }
+            }
+        }
+
+        return opCodeTable;
     }
 
     private int bitSpace(IInstruction instr){

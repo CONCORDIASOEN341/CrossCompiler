@@ -26,6 +26,57 @@ public class CodeGenTest extends TestCase {
     ICodeGen codeGenTest;
 
     @Test
+    public void generateOpCodeTable_SecondPassLabels(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        sTest = new SymbolTable();
+        codeGenTest = new CodeGen(sTest);
+
+        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
+        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
+        expectedOpTable.get(1).addOperand("0005");
+        expectedOpTable.put(2, new OpCodeTableElement(2, "0003", "D9", 2, null));
+        expectedOpTable.get(2).addOperand("0C");
+        expectedOpTable.put(3, new OpCodeTableElement(3, "0005", "D9", 2, null));
+        expectedOpTable.get(3).addOperand("0C");
+        // Act
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_FwdAndBwdBranching(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Token("Main"), new Instruction(new Token("br.i8"), new Token("Main"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("br.i8"), new Token("Main"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Token("End"), new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
+        sTest = new SymbolTable();
+        codeGenTest = new CodeGen(sTest);
+
+        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
+        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "E0", 2, "Main"));
+        expectedOpTable.get(1).addOperand("00");
+        expectedOpTable.put(2, new OpCodeTableElement(2, "0002", "E0", 2, "Main"));
+        expectedOpTable.get(2).addOperand("FE");
+        expectedOpTable.put(3, new OpCodeTableElement(3, "0004", "E0", 2, "End"));
+        expectedOpTable.get(3).addOperand("02");
+        expectedOpTable.put(4, new OpCodeTableElement(4, "0006", "E0", 2, "End"));
+        expectedOpTable.get(4).addOperand("00");
+        // Act
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
     public void generateOpCodeTable_Relative(){
         // Arrange
         irTest = new ArrayList<>();
