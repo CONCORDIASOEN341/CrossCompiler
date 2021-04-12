@@ -317,7 +317,7 @@ public class LexerTest extends TestCase {
         init(file);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("enter.u5", new Position(1, 9, 17), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("enter.u5", new Position(1, 9, 17), TokenType.MNEMONIC));
         expectedTList.add(new Token("0", new Position(1, 18, 19), TokenType.OFFSET));
         expectedTList.add(new Token("; OK, number <u5> [0..31].", new Position(1, 28, 54), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 54, 54), TokenType.EOL));
