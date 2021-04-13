@@ -1,13 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 
 import java.util.ArrayList;
 
@@ -39,8 +38,8 @@ public class Parser implements IParser {
             int currentLine = t.getPosition().getLine();
             if (currentLine > line) {                                     //create new line statement + instruction per line
                 line = currentLine;
-                instruction = new Instruction(new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), new Token("", new Position(0, 0, 0), TokenType.EMPTY), InstructionType.EMPTY);
-                lStatement = new LineStatement(instruction, new Token("", new Position(0, 0, 0), TokenType.DIRECTIVE), new Token("", new Position(0, 0, 0), TokenType.OFFSET), new Token("", new Position(0, 0, 0), TokenType.COMMENT), new Token("", new Position(0, 0, 0), TokenType.EOL));
+                instruction = new Instruction();
+                lStatement = new LineStatement();
             }
             if (t.getTokenType() == TokenType.EMPTY) {
                 instruction.setInstructionType(InstructionType.EMPTY);
@@ -55,13 +54,12 @@ public class Parser implements IParser {
                 lStatement.setInstruction(instruction);
 
             } else if (t.getTokenType() == TokenType.LABEL) {
-                instruction.setLabel(t);
+//                instruction.setLabel(t);
                 lStatement.setInstruction(instruction);
             } else if (t.getTokenType() == TokenType.OFFSET) {
-                instruction.setOffset(t);
-                lStatement.setOffset(t);
+//                instruction.setOffset(t);
             } else if (t.getTokenType() == TokenType.CSTRING) {
-                lStatement.setDirective(t);
+//                lStatement.setDirective(t); // ERROR HERE
             } else if (t.getTokenType() == TokenType.COMMENT) {
                 lStatement.setComment(t);
             } else if (t.getTokenType() == EOL) {
@@ -108,18 +106,18 @@ public class Parser implements IParser {
             currentColumn = lineStatement.getInstruction().getMnemonic().getPosition().getStartColumn();
 
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.INHERENT) {
-                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
-                    return true;
-                } else {
-                    reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
-                    return false;
-                }
+//                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
+//                    return true;
+//                } else {
+//                    reporter.record(new Error(ErrorType.EXTRA_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
+//                    return false;
+//                }
             }
 
             //check all immediate instruction possibilities
             if (lineStatement.getInstruction().getInstructionType() == InstructionType.IMMEDIATE || (lineStatement.getInstruction().getInstructionType() == InstructionType.RELATIVE)) {
                 //immediate without a value is instantly not good
-                if (lineStatement.getInstruction().getOffset().getTokenType() == TokenType.EMPTY) {
+                if (lineStatement.getInstruction().getOperand().getTokenType() == TokenType.EMPTY) {
                     reporter.record(new Error(ErrorType.MISSING_OPERAND, new Position(currentLine, currentColumn, currentColumn + 1)));
                     return false;
                 }
@@ -127,7 +125,7 @@ public class Parser implements IParser {
                 int opSize = getInt(lineStatement.getInstruction().getMnemonic());              //get operator value
                 String temp = lineStatement.getInstruction().getMnemonic().getTokenString();
                 String symbol = temp.substring(temp.indexOf('.') + 1, temp.indexOf('.') + 2);   //get i or u
-                String op = lineStatement.getInstruction().getOffset().getTokenString();        //get operand value (String)
+                String op = lineStatement.getInstruction().getOperand().getTokenString();        //get operand value (String)
                 int opNum = Integer.parseInt(op);                                               //get operand value (int)
 
                 //SIGNED

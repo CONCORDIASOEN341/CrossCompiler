@@ -7,7 +7,5 @@ public interface IInstruction {
 
     InstructionType getInstructionType();
 
-    IToken getLabel();
-
-    IToken getOffset();
+    IToken getOperand();
 }

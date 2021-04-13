@@ -4,7 +4,7 @@ import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Maps.SymbolTable;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +22,9 @@ public class LexerTest extends TestCase {
     private void init(ArrayList<Character> f){
         IReader rTest = new ReaderMoq(f);
         SymbolTable sTest = new SymbolTable();
-        DFA dfaTest = new DFA(rTest);
+        LexerFSM lexerFSMTest = new LexerFSM(rTest);
         eTest = new ErrorReporter();
-        lTest = new Lexer(sTest, dfaTest, rTest, eTest);
+        lTest = new Lexer(sTest, lexerFSMTest, rTest, eTest);
     }
 
     private ArrayList<IToken> generateTokenList(){
@@ -317,7 +317,7 @@ public class LexerTest extends TestCase {
         init(file);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("enter.u5", new Position(1, 9, 17), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("enter.u5", new Position(1, 9, 17), TokenType.MNEMONIC));
         expectedTList.add(new Token("0", new Position(1, 18, 19), TokenType.OFFSET));
         expectedTList.add(new Token("; OK, number <u5> [0..31].", new Position(1, 28, 54), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 54, 54), TokenType.EOL));

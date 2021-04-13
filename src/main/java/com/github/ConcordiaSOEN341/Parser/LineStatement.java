@@ -1,58 +1,40 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.Interfaces.IDirective;
 import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 
 public class LineStatement implements ILineStatement {
-    //only an instruction & EOL for sprint 2
+    private IToken label;
     private IInstruction instruction;
-    private IToken directive;
+    private IDirective directive;
     private IToken comment;
     private IToken eol;
-    private IToken offset;
 
-    public LineStatement() {
-        this.instruction = null;
-        this.directive = null;
-        this.comment = null;
-        this.eol = null;
+    public LineStatement(IToken label, IInstruction instruction) {
+        this.label = label;
+        this.instruction = instruction;
     }
 
     public LineStatement(IInstruction instruction) {
         this.instruction = instruction;
+    }
+
+    public LineStatement() {
+        this.label = null;
+        this.instruction = null;
         this.directive = null;
         this.comment = null;
         this.eol = null;
     }
 
-    public LineStatement(IToken eol) {
-        this.instruction = null;
-        this.directive = null;
-        this.comment = null;
-        this.eol = eol;
+    public IToken getLabel() {
+        return label;
     }
 
-    public LineStatement(IInstruction instruction, IToken eol) {
-        this.instruction = instruction;
-        this.directive = null;
-        this.comment = null;
-        this.eol = eol;
-    }
-
-    public LineStatement(IInstruction instruction, IToken eol, IToken comment) {
-        this.instruction = instruction;
-        this.directive = null;
-        this.comment = comment;
-        this.eol = eol;
-    }
-
-    public LineStatement(IInstruction instruction, IToken directive, IToken comment, IToken eol, IToken offset) {
-        this.instruction = instruction;
-        this.directive = directive;
-        this.comment = comment;
-        this.eol = eol;
-        this.offset = offset;
+    public void setLabel(IToken label) {
+        this.label = label;
     }
 
     public IInstruction getInstruction() {
@@ -71,11 +53,11 @@ public class LineStatement implements ILineStatement {
         this.eol = EOL;
     }
 
-    public IToken getDirective() {
+    public IDirective getDirective() {
         return directive;
     }
 
-    public void setDirective(IToken directive) {
+    public void setDirective(IDirective directive) {
         this.directive = directive;
     }
 
@@ -87,16 +69,8 @@ public class LineStatement implements ILineStatement {
         this.comment = comment;
     }
 
-    public IToken getOffset() {
-        return offset;
-    }
-
-    public void setOffset(IToken offset) {
-        this.offset = offset;
-    }
-
     public String toString() {
-        return "["+ instruction.toString() + " | "+ offset.getTokenString()+ "][" + comment.getTokenString() + directive.getTokenString()+ "][" + eol.getTokenType() + "]\n" ;
+        return "[ " + label.getTokenString() + " ] [ "+ instruction.toString() + " | " + directive.toString() + " ] [ " + comment.getTokenString() + " ] " + eol.getTokenType() + " .\n";
     }
 
 }

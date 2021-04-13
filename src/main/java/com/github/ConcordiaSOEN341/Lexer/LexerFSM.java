@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DFA {
+public class LexerFSM {
     private HashMap<Integer, HashMap<Integer,Integer>> transitions;
     private final List<State> states = new ArrayList<>();
     private final IReader reader;
@@ -27,7 +27,7 @@ public class DFA {
     private int space;
     private int endOfFile;
 
-    public DFA(IReader r) {
+    public LexerFSM(IReader r) {
         reader = r;
         initializeAlphabet();
         initializeStates();
