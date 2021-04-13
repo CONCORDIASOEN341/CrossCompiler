@@ -112,6 +112,8 @@ public class Lexer implements ILexer {
         if (type == TokenType.IDENTIFIER) {
             if (symbolTable.getValue(token.getTokenString()) != null) {
                 type = TokenType.MNEMONIC;
+            } else {
+                type = TokenType.LABEL;
             }
         }
 

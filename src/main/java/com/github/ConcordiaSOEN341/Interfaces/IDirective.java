@@ -1,6 +1,7 @@
 package com.github.ConcordiaSOEN341.Interfaces;
 
 public interface IDirective {
-    String getDirectiveName();
-    String getCString();
+    IToken getDir();
+    IToken getCString();
+    void setCString(IToken t);
 }

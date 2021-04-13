@@ -54,7 +54,6 @@ public class CodeGen implements ICodeGen {
     }
 
     public String[] listing(ArrayList<ILineStatement> ir) {
-        SymbolTable codeGen = new SymbolTable();
         String[] listings = new String[ir.size()];
         String hexAddress = "0000";
         String offset = "";
@@ -74,12 +73,12 @@ public class CodeGen implements ICodeGen {
 
             String codeMnemonic = "";
 
-            String mnemonic = ir.get(i).getInstruction().toString();
+            String mnemonic = ir.get(i).getInstruction().getMnemonic().getTokenString();
             offset = ir.get(i).getInstruction().getOperand().getTokenString();
             comment = ir.get(i).getComment().getTokenString();
 
             if (StringUtils.isNotEmpty(ir.get(i).getInstruction().getOperand().getTokenString())) {
-                codeMnemonic = codeGen.determineOpCode(mnemonic, offset);
+                codeMnemonic = symbolTable.determineOpCode(mnemonic, offset);
             }
 
 
@@ -102,12 +101,12 @@ public class CodeGen implements ICodeGen {
             oTE.setAddress(String.format("%04X", address));
 
             // Add Label - Address to symbol table
-            if(lS.getLabel() != null){
+            if(lS.getLabel().getTokenType() != TokenType.ERROR){
                 symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
             }
 
             // Account for Instruction or Directive
-            if(lS.getInstruction() != null){
+            if(lS.getInstruction().getInstructionType() != null){
                 // Determine opcode of mnemonic if there is an instruction
                 if(lS.getInstruction().getInstructionType() == InstructionType.IMMEDIATE){
                     oTE.setOpCode(calculateImmediateOpCode(lS.getInstruction()));
@@ -133,8 +132,8 @@ public class CodeGen implements ICodeGen {
                     address += oTE.getBitSpace()/2;
                 }
 
-            } else if(lS.getDirective() != null && lS.getDirective().getDirectiveName().equals(".cstring")){
-                String cstring = lS.getDirective().getCString();
+            } else if(lS.getDirective().getDir().getTokenType() != TokenType.ERROR && lS.getDirective().getDir().getTokenString().equals(".cstring")){
+                String cstring = lS.getDirective().getCString().getTokenString();
 
                 for (char c : cstring.toCharArray()){
                     if(c != '\"'){
@@ -162,7 +161,6 @@ public class CodeGen implements ICodeGen {
                     } else {
                         oTE.addOperand(String.format("%0"+oTE.getBitSpace()+"X", offset));
                     }
-
                 }
             }
         }

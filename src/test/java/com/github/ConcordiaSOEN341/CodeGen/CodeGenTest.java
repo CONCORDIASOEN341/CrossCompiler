@@ -141,7 +141,7 @@ public class CodeGenTest extends TestCase {
         // Arrange
         irTest = new ArrayList<>();
         LineStatement l = new LineStatement();
-        l.setDirective(new Directive(".cstring","A1"));
+        l.setDirective(new Directive(new Token(".cstring"),new Token("A1")));
         irTest.add(l);
         init(irTest);
 

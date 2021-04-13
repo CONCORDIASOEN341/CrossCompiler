@@ -1,28 +1,45 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Interfaces.IDirective;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Lexer.Token;
 
 public class Directive implements IDirective {
-    private String directive;
-    private String cstring;
+    private IToken directive;
+    private IToken cstring;
 
-    public Directive(String d, String cS){
+    public Directive(){
+        directive = new Token();
+        cstring = new Token();
+    }
+
+    public Directive(IToken d){
+        directive = d;
+        cstring = new Token();
+    }
+
+    public Directive(IToken d, IToken cS){
         directive = d;
         cstring = cS;
     }
 
     @Override
-    public String getDirectiveName() {
+    public IToken getDir() {
         return directive;
     }
 
     @Override
-    public String getCString() {
+    public IToken getCString() {
         return cstring;
     }
 
+    @Override
+    public void setCString(IToken cs) {
+        cstring = cs;
+    }
+
     public String toString(){
-        return directive + " " + cstring;
+        return directive.getTokenString() + " " + cstring.getTokenString();
     }
 
 
