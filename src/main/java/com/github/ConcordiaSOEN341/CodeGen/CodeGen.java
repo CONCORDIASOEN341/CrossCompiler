@@ -16,14 +16,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CodeGen implements ICodeGen {
-    private SymbolTable symbolTable;
+    private final SymbolTable symbolTable;
     private final HashMap<Integer, IOpCodeTableElement> opCodeTable = new HashMap<>();
+    private final ArrayList<ILineStatement> iR;
+    private final IErrorReporter reporter;
 
-    public CodeGen(SymbolTable sT){
+    public CodeGen(SymbolTable sT, ArrayList<ILineStatement> ir, IErrorReporter e){
         symbolTable = sT;
+        iR = ir;
+        reporter = e;
     }
 
-    public void generateListingFile(String fileName, ArrayList<ILineStatement> ir, IErrorReporter reporter) {
+    public void generateListingFile(String fileName) {
         if (reporter.hasErrors()) {
             System.out.println(reporter.report(fileName));
             System.exit(0);
@@ -33,7 +37,7 @@ public class CodeGen implements ICodeGen {
                 FileWriter listingWriter = new FileWriter(listFile);
                 listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t\tComments\n");
 
-                String[] listings = listing(ir);
+                String[] listings = listing(iR);
 
                 for (String listing : listings) {
                     listingWriter.write(listing);
@@ -85,11 +89,12 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public HashMap<Integer, IOpCodeTableElement> generateOpCodeTable(ArrayList<ILineStatement> ir) {
+    public HashMap<Integer, IOpCodeTableElement> generateOpCodeTable() {
         int line = 1;
         int address = 0;
 
-        for(ILineStatement lS : ir){
+        // FIRST PASS
+        for(ILineStatement lS : iR){
             IOpCodeTableElement oTE = new OpCodeTableElement();
 
             // Set Line and Address

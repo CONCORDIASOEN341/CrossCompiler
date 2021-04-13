@@ -19,7 +19,8 @@ public class CrossAssembler implements ICrossAssembler {
 
         IParser parser = new Parser(symbolTable, lexer, reporter);
 
-        ICodeGen cg = new CodeGen(symbolTable);
-        cg.generateListingFile(fileName, parser.parse(), reporter);
+        ICodeGen cg = new CodeGen(symbolTable, parser.parse(), reporter);
+        cg.generateOpCodeTable();
+        cg.generateListingFile(fileName);
     }
 }

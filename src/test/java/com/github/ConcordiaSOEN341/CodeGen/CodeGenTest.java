@@ -1,9 +1,8 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
+import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Lexer.Position;
-import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Lexer.*;
 import com.github.ConcordiaSOEN341.Parser.Directive;
 import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
@@ -24,6 +23,13 @@ public class CodeGenTest extends TestCase {
     ArrayList<ILineStatement> irTest;
     SymbolTable sTest;
     ICodeGen codeGenTest;
+    IErrorReporter eTest;
+
+    private void init(ArrayList<ILineStatement> ir){
+        sTest = new SymbolTable();
+        eTest = new ErrorReporter();
+        codeGenTest = new CodeGen(sTest, ir, eTest);
+    }
 
     @Test
     public void generateOpCodeTable_SecondPassLabels(){
@@ -32,8 +38,7 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
@@ -43,7 +48,7 @@ public class CodeGenTest extends TestCase {
         expectedOpTable.put(3, new OpCodeTableElement(3, "0005", "D9", 2, null));
         expectedOpTable.get(3).addOperand("0C");
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -57,8 +62,7 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Instruction(new Token("br.i8"), new Token("Main"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Token("End"), new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "E0", 2, "Main"));
@@ -70,7 +74,7 @@ public class CodeGenTest extends TestCase {
         expectedOpTable.put(4, new OpCodeTableElement(4, "0006", "E0", 2, "End"));
         expectedOpTable.get(4).addOperand("00");
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -82,8 +86,7 @@ public class CodeGenTest extends TestCase {
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
@@ -91,7 +94,7 @@ public class CodeGenTest extends TestCase {
         expectedOpTable.get(2).addOperand("0C");
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -103,15 +106,14 @@ public class CodeGenTest extends TestCase {
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("enter.u5"), new Token("16"), InstructionType.IMMEDIATE)));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "70", 0, null));
         expectedOpTable.put(2, new OpCodeTableElement(2, "0001", "92", 0, null));
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -122,14 +124,13 @@ public class CodeGenTest extends TestCase {
         // Arrange
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("halt"), InstructionType.INHERENT)));
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "00", 0, null));
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -142,8 +143,7 @@ public class CodeGenTest extends TestCase {
         LineStatement l = new LineStatement();
         l.setDirective(new Directive(".cstring","A1"));
         irTest.add(l);
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", null, 0, null));
@@ -151,7 +151,7 @@ public class CodeGenTest extends TestCase {
 
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -165,15 +165,14 @@ public class CodeGenTest extends TestCase {
         irTest = new ArrayList<>();
         irTest.add(l);
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
-        sTest = new SymbolTable();
-        codeGenTest = new CodeGen(sTest);
+        init(irTest);
 
         HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
         expectedOpTable.put(1, new OpCodeTableElement(1, "0000", null, 0, null));
         expectedOpTable.put(2, new OpCodeTableElement(2, "0000", "92", 0, null));
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable(irTest);
+        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());

@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface ICodeGen {
-    void generateListingFile(String fileName, ArrayList<ILineStatement> ir, IErrorReporter e);
+    void generateListingFile(String fileName);
 
     String[] listing(ArrayList<ILineStatement> ir);
 
-    HashMap<Integer, IOpCodeTableElement> generateOpCodeTable(ArrayList<ILineStatement> ir);
+    HashMap<Integer, IOpCodeTableElement> generateOpCodeTable();
 }
