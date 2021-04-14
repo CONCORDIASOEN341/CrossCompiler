@@ -53,8 +53,9 @@ public class Parser2 implements IParser {
                 }
 
                 if(parserFSM.getNextStateID(stateID, t.getTokenType()) == 0){
-                    temp = t;
+                    temp = (t.getTokenType() != TokenType.OFFSET && t.getTokenType() != TokenType.LABEL)? t : null;
                     reporter.record(new Error(parserFSM.getErrorType(stateID), t.getPosition()));
+                    stateID = 1;
                 } else {
                     switch (t.getTokenType()) {
                         case LABEL:
@@ -93,9 +94,10 @@ public class Parser2 implements IParser {
                         default:
                             break;
                     }
+                    stateID = parserFSM.getNextStateID(stateID, t.getTokenType());
                 }
 
-                stateID = parserFSM.getNextStateID(stateID, t.getTokenType());
+
             } while (stateID != 7);
 
             intermediateRep.add(lStatement);

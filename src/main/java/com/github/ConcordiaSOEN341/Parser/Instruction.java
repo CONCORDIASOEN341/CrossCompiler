@@ -12,6 +12,7 @@ public class Instruction implements IInstruction {
     public Instruction(IToken mnemonic, InstructionType instructionType) {
         this.mnemonic = mnemonic;
         this.instructionType = instructionType;
+        this.operand = new Token();
     }
 
     public Instruction(IToken mnemonic, IToken operand, InstructionType instructionType) {
