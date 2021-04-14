@@ -92,6 +92,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>cma</finalName>
     </build>
     <!-- End SonarQube -->
 </project>

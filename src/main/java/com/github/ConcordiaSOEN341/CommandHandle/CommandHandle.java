@@ -33,9 +33,11 @@ public class CommandHandle {
                 exit(0);
             }
             if(arg.equals("-l")){
+                //TODO: Toggle Listing File
                 isListing = true;
             }
             if(arg.equals("-v")){
+                //TODO: Toggle Verbose
                 isVerbose = true;
             }
             if(arg.contains(".asm")){
