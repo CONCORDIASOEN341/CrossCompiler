@@ -16,12 +16,15 @@ public class Reader implements IReader {
 
         try {
             inputStream = new FileInputStream(file);
-        } catch(FileNotFoundException e) {
-            System.out.println("[Error]: File not found");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
             System.exit(0);
         }
     }
-    public final int getEof() { return EOF; }
+
+    public final int getEof() {
+        return EOF;
+    }
 
     public int read() {
         try {

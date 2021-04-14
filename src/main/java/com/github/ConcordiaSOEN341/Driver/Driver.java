@@ -10,6 +10,8 @@ import com.github.ConcordiaSOEN341.Reader.Reader;
 
 public class Driver {
     public static void main(String[] args) {
+//        String fileName = "src/TestInherentMnemonics.asm";
+//        new CrossAssembler().assemble(fileName);
 
         CommandHandle commandHandle = new CommandHandle(args);
         String fileName = commandHandle.getFile();
@@ -18,6 +20,7 @@ public class Driver {
         ICodeGen cg = new CodeGen();
         cg.generateListingFile(fileName, parser.parse());
         commandHandle.delete();
+        System.out.println(String.format("%04x", (int) 'A'));
     }
 
 }

@@ -11,9 +11,11 @@ public class ReaderMoq implements IReader {
 
     public ReaderMoq(ArrayList<Character> file) {
         it = file.iterator();
-
     }
-    public int getEof() { return EOF; }
+
+    public int getEof() {
+        return EOF;
+    }
 
     public int read() {
         return it.next();

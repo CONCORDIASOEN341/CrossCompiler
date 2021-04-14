@@ -4,4 +4,5 @@ public enum InstructionType {
     INHERENT,
     IMMEDIATE,
     RELATIVE,
+    EMPTY
 }

@@ -1,15 +1,9 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
-import com.github.ConcordiaSOEN341.Interfaces.IParser;
-import com.github.ConcordiaSOEN341.Interfaces.IPosition;
-import com.github.ConcordiaSOEN341.Interfaces.IToken;
-import com.github.ConcordiaSOEN341.Lexer.LexerMoq;
-import com.github.ConcordiaSOEN341.Lexer.Position;
-import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
-
+import com.github.ConcordiaSOEN341.Error.ErrorReporter;
+import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Lexer.*;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -17,117 +11,234 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class ParserTest {
-    private IParser parser;
+
     private ArrayList<IToken> tokenList;
+    private IParser pTest;
+    private IErrorReporter eTest;
 
-    @Test
-    public void getAddressingMode_giveToken_expectAddressingModeIsInherent() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("add", new Position(0, 1, "add".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame(InstructionType.INHERENT, lineStatements.get(0).getInstruction().getInstructionType());
+    private void init(ArrayList<IToken> input){
+        SymbolTable sTest = new SymbolTable();
+        eTest = new ErrorReporter();
+        ILexer lTest = new LexerMoqForParser(input);
+        pTest = new Parser(sTest, lTest, eTest);
     }
 
     @Test
-    public void getAddressingMode_giveToken_expectAddressingModeIsImmediate() {
+    public void parse_giveEmpty_expectEmpty(){
         tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.u3", new Position(0, 1, "addv.u3".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
+        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame(InstructionType.IMMEDIATE, lineStatements.get(0).getInstruction().getInstructionType());
-    }
-
-    @Test
-    public void getAddressingMode_giveToken_expectAddressingModeIsRelative() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i16", new Position(0, 1, "addv.i16".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame(InstructionType.RELATIVE, lineStatements.get(0).getInstruction().getInstructionType());
-    }
-
-    @Test
-    public void getLabel_giveArrayList_expectTheSameLabel() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("loop", new Position(0, 2, "loop".length()), TokenType.LABEL));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame("loop", lineStatements.get(0).getInstruction().getLabel().getTokenString());
-    }
-
-    @Test
-    public void getOffset_giveArrayList_expectTheSameOffset() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i32", new Position(0, 1, "addv.i32".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("50", new Position(0, 2, "50".length()), TokenType.OFFSET));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame("50", lineStatements.get(0).getInstruction().getOffset().getTokenString());
-    }
-
-    @Test
-    public void getDirective_giveArrayList_expectTheSameDirective() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i8", new Position(0, 1, "addv.i8".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("5", new Position(0, 2, "5".length()), TokenType.OFFSET));
-        tokenList.add(new Token("ABCD", new Position(0, 2, "5".length()), TokenType.CSTRING));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame("ABCD", lineStatements.get(0).getDirective().getTokenString());
-    }
-
-    @Test
-    public void getComment_giveArrayList_expectTheSameComment() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.i8", new Position(0, 1, "addv.i8".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("5", new Position(0, 2, "5".length()), TokenType.OFFSET));
-        tokenList.add(new Token("ABCD", new Position(0, 2, "5".length()), TokenType.CSTRING));
-        tokenList.add(new Token("A comment", new Position(0, 2, "5".length()), TokenType.COMMENT));
-        tokenList.add(new Token("~", new Position(0, 3, "halt".length()+1), TokenType.EOL));
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-        assertSame("A comment", lineStatements.get(0).getComment().getTokenString());
-    }
-
-
-    @Test
-    public void generateIR_whenTokenListSize2_expect1LineStatement() {
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("halt", new Position(0, 1, "halt".length()), TokenType.MNEMONIC));
-        tokenList.add(new Token("~", new Position(0, 2, "halt".length() + 1), TokenType.EOL));
-
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
-
-        assertEquals(1, lineStatements.size());
-        assertEquals(tokenList.get(0).getTokenString(), lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
-    }
-
-
-
-    @Test
-    public void generateIR_whenTokenListEmpty_expectEmptyLineStatementArrayList() {
-        tokenList = new ArrayList<>();
-        parser = new Parser(new LexerMoq(tokenList));
-
-        ArrayList<ILineStatement> lineStatements = parser.parse();
+        init(tokenList);
+        ArrayList<ILineStatement> lineStatements = pTest.parse();
 
         assertEquals(0, lineStatements.size());
+
     }
+    @Test
+    public void parse_giveAdd_expectAdd(){
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("add", new Position(1, 0, 4), TokenType.MNEMONIC));
+        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+
+        init(tokenList);
+        ArrayList<ILineStatement> lineStatements = pTest.parse();
+
+        assertEquals(lineStatements.get(0).getInstruction().getMnemonic().getTokenString(), "add");
+
+    }
+
+    @Test
+    public void parse_giveInherentInstructionType_expectInherentInstructionType(){
+        tokenList = new ArrayList<>();
+        tokenList.add(new Token("pop", new Position(1, 0, 4), TokenType.MNEMONIC));
+        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+
+        init(tokenList);
+        ArrayList<ILineStatement> lineStatements = pTest.parse();
+
+        assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.INHERENT);
+
+    }
+
+//    @Test
+//    public void parse_giveImmediateInstructionType_expectImmediateInstructionType(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("addv.u3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.IMMEDIATE);
+//
+//    }
+//
+//    @Test
+//    public void parse_giveError_expectError(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("add.i3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("76", new Position(1, 0, 4), TokenType.OFFSET));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(1, eTest.getNumberOfErrors());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveError2_expectError2(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("addv.u3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(1, eTest.getNumberOfErrors());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveValid_expectNoError(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("add.i3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(0, eTest.getNumberOfErrors());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveListWithDirective_expectSameDirective(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("ABCD1", new Position(1, 0, 4), TokenType.CSTRING));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals("ABCD1", lineStatements.get(0).getDirective().getDirectiveName());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveListWithComment_expectSameComment(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("A comment", new Position(1, 0, 4), TokenType.COMMENT));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals("A comment", lineStatements.get(0).getComment().getTokenString());
+//
+////    }
+//
+//
+//        assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.IMMEDIATE);
+//
+//    }
+
+//    @Test
+//    public void parse_giveError_expectError(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("add.i3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("76", new Position(1, 0, 4), TokenType.OFFSET));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(1, eTest.getNumberOfErrors());
+//
+//    }
+//    @Test
+//    public void parse_giveError1_expectError(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("addv.u16", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("760000", new Position(1, 0, 4), TokenType.OFFSET));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(1, eTest.getNumberOfErrors());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveError2_expectError2(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("addv.u3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(1, eTest.getNumberOfErrors());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveValid_expectNoError(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("add.i3", new Position(1, 0, 4), TokenType.MNEMONIC));
+//        tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals(0, eTest.getNumberOfErrors());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveListWithDirective_expectSameDirective(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("ABCD1", new Position(1, 0, 4), TokenType.CSTRING));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals("ABCD1", lineStatements.get(0).getDirective().getCString());
+//
+//    }
+//
+//    @Test
+//    public void parse_giveListWithComment_expectSameComment(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("A comment", new Position(1, 0, 4), TokenType.COMMENT));
+//        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+//        tokenList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.parse();
+//
+//        assertEquals("A comment", lineStatements.get(0).getComment().getTokenString());
+//
+//    }
+
+
 }
