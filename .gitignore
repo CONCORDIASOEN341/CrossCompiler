@@ -140,3 +140,5 @@ modules.xml
 
 target/
 # End of https://www.toptal.com/developers/gitignore/api/intellij
+
+Examples_relative/rela03.exe

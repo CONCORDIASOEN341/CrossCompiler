@@ -5,7 +5,7 @@ import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 
 public class Logger implements ILogger {
     public void log(String message) {
-        if ( CommandHandle.getInstance() != null && CommandHandle.getInstance().isListing()) {
+        if ( CommandHandle.getInstance() != null && CommandHandle.getInstance().isVerbose()) {
             System.out.println(message);
         }
     }

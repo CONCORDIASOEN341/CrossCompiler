@@ -1,11 +1,11 @@
 package com.github.ConcordiaSOEN341.Logger;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILogger;
+public class ParserLogger extends Logger {
 
-public class ParserLogger implements ILogger {
-    static String prefix = LoggerColor.ANSI_WHITE + "[PARSER] " + LoggerColor.ANSI_RESET;
 
+    static String prefix = LoggerColor.ANSI_GREEN+ "[PARSER] " + LoggerColor.ANSI_RESET;
+    @Override
     public void log(String message) {
-        System.out.println(prefix + message);
+        super.log(prefix + message);
     }
 }
