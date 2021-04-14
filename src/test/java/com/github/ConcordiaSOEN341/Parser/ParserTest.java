@@ -26,17 +26,18 @@ public class ParserTest {
         pTest = new Parser2(pFSMTest, lTest, cgTest, eTest);
     }
 
-    @Test
-    public void parse_giveEmpty_expectEmpty(){
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
-
-        init(tokenList);
-        ArrayList<ILineStatement> lineStatements = pTest.generateIR();
-
-        assertEquals(0, lineStatements.size());
-
-    }
+//    @Test
+//    public void parse_giveEmpty_expectEmpty(){
+//        tokenList = new ArrayList<>();
+//        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+//
+//        init(tokenList);
+//        ArrayList<ILineStatement> lineStatements = pTest.generateIR();
+//
+//        assertEquals(0, lineStatements.size());
+//
+//    }
+//
     @Test
     public void parse_giveAdd_expectAdd(){
         tokenList = new ArrayList<>();
