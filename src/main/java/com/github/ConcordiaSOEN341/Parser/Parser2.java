@@ -30,8 +30,8 @@ public class Parser2 implements IParser {
         generator.setIR(intermediateRep);
         generator.generateOpCodeTable();
 
-//        generator.generateExe(fileName);
-//        generator.generateListingFile(fileName);
+        generator.generateExe(fileName);
+        generator.generateListingFile(fileName);
     }
 
     public ArrayList<ILineStatement> generateIR() {
