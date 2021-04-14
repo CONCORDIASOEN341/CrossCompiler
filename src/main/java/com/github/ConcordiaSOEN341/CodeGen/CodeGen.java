@@ -196,6 +196,8 @@ public class CodeGen implements ICodeGen {
             hexNumber = Integer.parseInt(symbolTable.getValue(mnemonic), 16) + offset;
         }
 
+        System.out.println("fuck me this is a commit");
+
         return String.format("%02X", hexNumber);
     }
     //For testing purposes
