@@ -11,4 +11,14 @@ public interface ILineStatement {
     IDirective getDirective();
 
     IToken getComment();
+
+    void setLabel(IToken label);
+
+    void setInstruction(IInstruction instruction);
+
+    void setEOL(IToken EOL);
+
+    void setDirective(IDirective directive);
+
+    void setComment(IToken comment);
 }

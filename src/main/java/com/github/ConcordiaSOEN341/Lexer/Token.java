@@ -8,6 +8,12 @@ public class Token implements IToken {
     private String tokenString;
     private TokenType tokenType;
 
+    public Token(){
+        this.tokenString = "";
+        this.position = new Position();
+        this.tokenType = TokenType.ERROR;
+    }
+
     public Token(IPosition position) {
         this.tokenString = "";
         this.position = position;

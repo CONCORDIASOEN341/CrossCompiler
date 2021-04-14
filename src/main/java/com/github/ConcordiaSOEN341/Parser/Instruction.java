@@ -2,10 +2,12 @@ package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Lexer.Token;
 
 public class Instruction implements IInstruction {
     private IToken mnemonic;
     private IToken operand;
+    private InstructionType instructionType;
 
     public Instruction(IToken mnemonic, InstructionType instructionType) {
         this.mnemonic = mnemonic;
@@ -18,11 +20,9 @@ public class Instruction implements IInstruction {
         this.instructionType = instructionType;
     }
 
-    private InstructionType instructionType;
-
     public Instruction() {
-        mnemonic = null;
-        operand = null;
+        mnemonic = new Token();
+        operand = new Token();
         instructionType = null;
     }
 
@@ -50,7 +50,7 @@ public class Instruction implements IInstruction {
         this.instructionType = instructionType;
     }
 
-    public String toString() { return mnemonic.getTokenString();}
+    public String toString() { return mnemonic.getTokenString() + " " + operand.getTokenString();}
 
 
 }
