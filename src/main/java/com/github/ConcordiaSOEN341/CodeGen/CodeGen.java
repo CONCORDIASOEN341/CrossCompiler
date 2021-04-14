@@ -59,40 +59,74 @@ public class CodeGen implements ICodeGen {
     }
 
     public String[] listing() {
-        int a = 5;
+        int maxOpSpace = 0;
+        int maxOperandSpace = 0;
         String[] listings = new String[iR.size() - 1];
+
+        for(int i = 0; i < iR.size() - 1; i++){
+            maxOpSpace = Math.max(opCodeTable.get(i).getOperands().size(),maxOpSpace);
+            maxOperandSpace = Math.max(iR.get(i).getInstruction().getOperand().getTokenString().length(),maxOperandSpace);
+            maxOperandSpace = Math.max(iR.get(i).getDirective().getCString().getTokenString().length(),maxOperandSpace);
+        }
+
         for (int i = 0; i < iR.size() - 1; i++) {
+            StringBuilder lstSB = new StringBuilder();
+            StringBuilder opSB = new StringBuilder();
+            String addTabs;
+            int numAddTabs = 0;
 
-            StringBuilder sb = new StringBuilder();
+            // Start Building listing string
+            lstSB.append(i + 1).append("\t ").append(opCodeTable.get(i).getAddress()).append(" ");
 
-            int b = 0;
+            if(opCodeTable.get(i).getOpCode().length() > 0){
+                lstSB.append(opCodeTable.get(i).getOpCode()).append(" ");
+            } else {
+                numAddTabs += 2;
+            }
+
+            // Determine Tabs after hex operands
+            int opElements = opCodeTable.get(i).getOperands().size();
 
             for (String op : opCodeTable.get(i).getOperands()) {
-
-                b++;
-                sb.append(op).append(" ");
-                //String operands = opCodeTable.get(i).getOperands().toString();
-
-            }
-            b = a - b;
-
-            StringBuilder operands = new StringBuilder();
-
-            if (sb.length() > 0) {
-                operands = new StringBuilder(sb.substring(0, sb.length() - 1));
+                opSB.append(op).append(" ");
             }
 
-            operands.append("\t".repeat(Math.max(0, b)));
+            numAddTabs += maxOpSpace - opElements - ((opCodeTable.get(i).getOperands().isEmpty())? 0 : 1);
+
+            addTabs = "\t".repeat(numAddTabs);
+
+            lstSB.append(opSB).append(addTabs);
+
+            // /\/\/\ OP CODE TABLE DATA
+            // ---------------------
+            // \/\/\/ IR DATA
+
+            opElements = Math.max(iR.get(i).getInstruction().getOperand().getTokenString().length(),iR.get(i).getDirective().getCString().getTokenString().length()) ;
+            maxOperandSpace = maxOperandSpace - maxOperandSpace%4;
+            opElements = opElements - opElements%4;
+
+            numAddTabs = (maxOperandSpace - opElements)/4 + 2;
+
+            addTabs = "\t".repeat(numAddTabs);
+
+
+            if(iR.get(i).getLabel().getTokenString().length() > 0){
+                lstSB.append(iR.get(i).getLabel().getTokenString());
+            } else {
+                lstSB.append("\t");
+            }
+
+            lstSB.append("\t\t  ");
 
             if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
-                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i).getAddress() +
-                        " " + ((opCodeTable.get(i).getOpCode().length() > 0) ? opCodeTable.get(i).getOpCode() + " " : "") + operands + " " +
-                        iR.get(i).getLabel().getTokenString() + "\t\t  " + iR.get(i).getDirective().getDir().getTokenString() + "\t " + iR.get(i).getDirective().getCString().getTokenString() + "\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
+                lstSB.append(iR.get(i).getDirective().getDir().getTokenString()).append("\t").append(iR.get(i).getDirective().getCString().getTokenString());
             } else {
-                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i).getAddress() +
-                        " " + ((opCodeTable.get(i).getOpCode().length() > 0) ? opCodeTable.get(i).getOpCode() + " " : "") + operands + "\t\t" +
-                        iR.get(i).getLabel().getTokenString() + "\t\t  " + iR.get(i).getInstruction().getMnemonic().getTokenString() + "\t" + iR.get(i).getInstruction().getOperand().getTokenString() + "\t\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
+                lstSB.append(iR.get(i).getInstruction().getMnemonic().getTokenString()).append("\t").append(iR.get(i).getInstruction().getOperand().getTokenString());
             }
+
+            lstSB.append(addTabs).append(iR.get(i).getComment().getTokenString()).append("\t\n");
+
+            listings[i] = lstSB.toString();
         }
         return listings;
     }
