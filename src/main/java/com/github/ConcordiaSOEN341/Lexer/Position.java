@@ -10,20 +10,16 @@ public class Position implements IPosition {
     private int startColumn;
     private int endColumn;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
-
     public Position(){
         this.line = 0;
         this.startColumn = 0;
         this.endColumn = 0;
-        logger.log("Position created: " + this);
     }
 
     public Position(int line, int startColumn, int endColumn) {
         this.line = line;
         this.startColumn = startColumn;
         this.endColumn = endColumn;
-        logger.log("Position created: " + this);
     }
 
     public String toString() {

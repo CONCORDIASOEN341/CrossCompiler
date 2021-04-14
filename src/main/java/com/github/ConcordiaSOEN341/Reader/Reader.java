@@ -33,7 +33,7 @@ public class Reader implements IReader {
     }
 
     public int read() {
-        logger.log("Reading file...");
+        logger.log("Reading file stream...");
         try {
             return inputStream.read();
         } catch (IOException e) {

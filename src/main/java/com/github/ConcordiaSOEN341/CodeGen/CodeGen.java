@@ -50,8 +50,7 @@ public class CodeGen implements ICodeGen {
             for (String listing : listings) {
                 listingWriter.write(listing);
             }
-
-            System.out.println(generateByteCode());
+            
 
             listingWriter.close();
         } catch (IOException e) {

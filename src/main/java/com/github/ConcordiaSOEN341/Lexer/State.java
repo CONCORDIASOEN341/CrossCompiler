@@ -13,15 +13,12 @@ public class State implements IState {
     private ErrorType errorType;
     private boolean backtrack;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
-
 
     public State(int id, TokenType t, boolean bt){
         stateID = id;
         type = t;
         errorType = ErrorType.getDefault();
         backtrack = bt;
-        logger.log("State Created: " + this);
     }
 
     public State(int id, TokenType t, boolean bt, ErrorType e){
@@ -29,7 +26,6 @@ public class State implements IState {
         type = t;
         errorType = e;
         backtrack = bt;
-        logger.log("State Created: " + this);
     }
 
     public int getStateID() {

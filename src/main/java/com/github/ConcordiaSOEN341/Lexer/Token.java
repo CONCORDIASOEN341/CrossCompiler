@@ -11,32 +11,26 @@ public class Token implements IToken {
     private String tokenString;
     private TokenType tokenType;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
-
     public Token(){
         this.tokenString = "";
         this.position = new Position();
         this.tokenType = TokenType.ERROR;
-        logger.log("Token created " + this);
     }
 
     public Token(IPosition position) {
         this.tokenString = "";
         this.position = position;
         this.tokenType = TokenType.ERROR;
-        logger.log("Token created " + this);
     }
 
     public Token(String tokenString) {
         this.tokenString = tokenString;
-        logger.log("Token created " + this);
     }
 
     public Token(String tokenString, IPosition position, TokenType tokenType) {
         this.tokenString = tokenString;
         this.position = position;
         this.tokenType = tokenType;
-        logger.log("Token created " + this);
     }
 
     public String toString() {
