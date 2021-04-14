@@ -55,10 +55,42 @@ public class CodeGen implements ICodeGen {
     }
 
     public String[] listing() {
+        int a = 5;
         String[] listings = new String[iR.size() - 1];
         for (int i = 0; i < iR.size() - 1; i++) {
 
-            listings[i] = ((i + 1) + "\t " + opCodeTable.get(i + 1).getAddress() + " " + opCodeTable.get(i + 1).getOpCode() + " \t\t\t  \t\t\t  " + iR.get(i).getInstruction().getMnemonic().getTokenString() + " \t " + iR.get(i).getInstruction().getOperand().getTokenString() + "\t\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
+            StringBuilder sb = new StringBuilder();
+
+            int b = 0;
+
+            for (String op : opCodeTable.get(i + 1).getOperands()) {
+
+                b++;
+                sb.append(op).append(" ");
+                //String operands = opCodeTable.get(i + 1).getOperands().toString();
+
+            }
+            b = a - b;
+
+            StringBuilder operands = new StringBuilder();
+
+            if (sb.length() > 0) {
+                operands = new StringBuilder(sb.substring(0, sb.length() - 1));
+            }
+
+            for (int j = 0; j < b; j++) {
+                operands.append("\t");
+            }
+
+            if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
+                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i + 1).getAddress() +
+                        " " + ((opCodeTable.get(i + 1).getOpCode().length() > 0) ? opCodeTable.get(i + 1).getOpCode() + " " : "") + operands + " " +
+                        iR.get(i).getLabel().getTokenString() + "\t\t  " + iR.get(i).getDirective().getDir().getTokenString() + "\t " + iR.get(i).getDirective().getCString().getTokenString() + "\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
+            } else {
+                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i + 1).getAddress() +
+                        " " + ((opCodeTable.get(i + 1).getOpCode().length() > 0) ? opCodeTable.get(i + 1).getOpCode() + " " : "") + operands + "\t\t" +
+                        iR.get(i).getLabel().getTokenString() +"\t\t  "+ iR.get(i).getInstruction().getMnemonic().getTokenString() + "\t" + iR.get(i).getInstruction().getOperand().getTokenString() + "\t\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
+            }
         }
         return listings;
     }
