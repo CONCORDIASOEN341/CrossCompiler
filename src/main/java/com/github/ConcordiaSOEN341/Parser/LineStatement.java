@@ -16,10 +16,17 @@ public class LineStatement implements ILineStatement {
     public LineStatement(IToken label, IInstruction instruction) {
         this.label = label;
         this.instruction = instruction;
+        this.directive = new Directive();
+        this.comment = new Token();
+        this.eol = new Token();
     }
 
     public LineStatement(IInstruction instruction) {
+        this.label = new Token();
         this.instruction = instruction;
+        this.directive = new Directive();
+        this.comment = new Token();
+        this.eol = new Token();
     }
 
     public LineStatement() {

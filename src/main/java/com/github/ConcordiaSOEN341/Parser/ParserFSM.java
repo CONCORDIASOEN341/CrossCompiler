@@ -6,15 +6,16 @@ import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import java.util.HashMap;
 
 public class ParserFSM {
-    private HashMap<Integer, HashMap<TokenType,Integer>> transitions;
+    private HashMap<Integer, HashMap<TokenType, Integer>> transitions;
     private HashMap<Integer, ErrorType> parserErrorTable;
 
-    public ParserFSM(){
+    public ParserFSM() {
         initializeErrorTable();
         initializeMap();
     }
 
-    private void initializeErrorTable(){
+    private void initializeErrorTable() {
+        parserErrorTable = new HashMap<>();
         parserErrorTable.put(4, ErrorType.EXTRA_OPERAND);
         parserErrorTable.put(3, ErrorType.MISSING_OPERAND);
         parserErrorTable.put(10, ErrorType.INVALID_SIGNED_3BIT_OPERAND);
@@ -30,7 +31,7 @@ public class ParserFSM {
 //        parserErrorTable.put(97, ErrorType.INVALID_SIGNED_32BIT_OPERAND);
     }
 
-    private void initializeMap(){
+    private void initializeMap() {
         transitions = new HashMap<>();
 
         transitions.put(1, new HashMap<>());
@@ -83,15 +84,15 @@ public class ParserFSM {
         transitions.get(9).put(TokenType.EOF, 7);
     }
 
-    public int getNextStateID(int id, TokenType type){
-        return transitions.get(id).getOrDefault(type,0);
+    public int getNextStateID(int id, TokenType type) {
+        return transitions.get(id).getOrDefault(type, 0);
     }
 
-    public int getInitialStateID(){
+    public int getInitialStateID() {
         return (int) transitions.keySet().toArray()[0];
     }
 
-    public ErrorType getErrorType(int id){
+    public ErrorType getErrorType(int id) {
         return parserErrorTable.get(id);
     }
 
