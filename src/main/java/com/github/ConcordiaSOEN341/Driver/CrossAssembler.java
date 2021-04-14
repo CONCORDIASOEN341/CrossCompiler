@@ -14,6 +14,7 @@ import com.github.ConcordiaSOEN341.Reader.Reader;
 public class CrossAssembler implements ICrossAssembler {
     public void assemble(String[] args){
         CommandHandle commandHandle = new CommandHandle(args);
+
         IReader reader = new Reader(commandHandle.getFile());
         SymbolTable symbolTable = new SymbolTable();
         LexerFSM lexerFSM = new LexerFSM(reader);
