@@ -30,7 +30,7 @@ public class Parser2 implements IParser {
             lStatement = new LineStatement();
 
             do {
-                if(temp != null){
+                if(temp == null){
                     t = lexer.getNextToken();
                 } else {
                     t = temp;
