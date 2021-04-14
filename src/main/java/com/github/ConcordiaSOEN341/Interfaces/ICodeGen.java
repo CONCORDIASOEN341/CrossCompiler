@@ -8,7 +8,9 @@ import java.util.HashMap;
 public interface ICodeGen {
     void generateListingFile(String fileName);
 
-    String[] listing(ArrayList<ILineStatement> ir);
+    void generateExe(String fileName);
+
+    String[] listing();
 
     HashMap<Integer, IOpCodeTableElement> generateOpCodeTable();
 }

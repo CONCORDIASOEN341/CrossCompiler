@@ -87,10 +87,6 @@ public class Parser2 implements IParser {
 
         } while (t.getTokenType() != TokenType.EOF);
 
-        for (ILineStatement l : intermediateRep){
-            System.out.println(l);
-        }
-
         return intermediateRep;
     }
 

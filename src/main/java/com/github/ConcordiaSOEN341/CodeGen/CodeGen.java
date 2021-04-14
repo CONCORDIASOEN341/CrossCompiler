@@ -10,8 +10,7 @@ import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -37,11 +36,13 @@ public class CodeGen implements ICodeGen {
                 FileWriter listingWriter = new FileWriter(listFile);
                 listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t\tComments\n");
 
-                String[] listings = revisedListing();
+                String[] listings = listing();
 
                 for (String listing : listings) {
                     listingWriter.write(listing);
                 }
+
+                System.out.println(generateByteCode());
 
                 listingWriter.close();
             } catch (IOException e) {
@@ -53,42 +54,7 @@ public class CodeGen implements ICodeGen {
         }
     }
 
-    public String[] listing(ArrayList<ILineStatement> ir) {
-        String[] listings = new String[ir.size()];
-        String hexAddress = "0000";
-        String offset = "";
-        String comment = "";
-        int skips = 0;
-
-        for (int i = 0; i < ir.size(); i++) {
-
-            if (StringUtils.isEmpty(ir.get(i).getInstruction().toString()) && i > 2) {
-                skips++;
-                hexAddress = String.format("%04X", i + 1 - skips);
-            } else if (StringUtils.isEmpty(ir.get(i).getInstruction().toString())) {
-                skips++;
-            } else {
-                hexAddress = String.format("%04X", i - skips);
-            }
-
-            String codeMnemonic = "";
-
-            String mnemonic = ir.get(i).getInstruction().getMnemonic().getTokenString();
-            offset = ir.get(i).getInstruction().getOperand().getTokenString();
-            comment = ir.get(i).getComment().getTokenString();
-
-            if (StringUtils.isNotEmpty(ir.get(i).getInstruction().getOperand().getTokenString())) {
-                codeMnemonic = symbolTable.determineOpCode(mnemonic, offset);
-            }
-
-
-            listings[i] = ((i + 1) + "\t " + hexAddress + " " + codeMnemonic + " \t\t\t  \t\t\t  " + mnemonic + " \t " + offset + "\t\t\t\t" + comment + " \t\n");
-        }
-        return listings;
-    }
-
-
-    public String[] revisedListing() {
+    public String[] listing() {
         String[] listings = new String[iR.size() - 1];
         for (int i = 0; i < iR.size() - 1; i++) {
 
@@ -97,6 +63,58 @@ public class CodeGen implements ICodeGen {
         return listings;
     }
 
+    public void generateExe(String fileName) {
+        if (reporter.hasErrors()) {
+            System.out.println(reporter.report(fileName));
+            System.exit(0);
+        } else {
+            String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
+            try {
+                //FileWriter listingWriter = new FileWriter(listFile);
+                FileOutputStream fStream = new FileOutputStream(listFile);
+                DataOutputStream data = new DataOutputStream(fStream);
+
+                data.writeBytes(generateByteCode());
+
+
+                fStream.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("An error occurred");
+                System.out.println("The program will terminate.");
+                e.printStackTrace();
+                System.exit(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public String generateByteCode() {
+        //String
+        StringBuilder sb = new StringBuilder();
+        for (IOpCodeTableElement oTE : opCodeTable.values()) {
+            if (oTE.getOpCode().length() > 0) {
+                sb.append(oTE.getOpCode());
+                sb.append(" ");
+            }
+            for (String oP : oTE.getOperands()) {
+                if (oP.length() > 0) {
+                    if (oP.length() == 4) {
+                        sb.append(oP.substring(0, 2));
+                        sb.append(" ");
+                        sb.append(oP.substring(2, 4));
+                        sb.append(" ");
+                    } else {
+                        sb.append(oP);
+                        sb.append(" ");
+                    }
+                }
+            }
+        }
+
+        return sb.toString();
+    }
 
     @Override
     public HashMap<Integer, IOpCodeTableElement> generateOpCodeTable() {

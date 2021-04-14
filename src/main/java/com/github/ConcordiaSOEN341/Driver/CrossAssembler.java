@@ -25,6 +25,7 @@ public class CrossAssembler implements ICrossAssembler {
 
         ICodeGen cg = new CodeGen(symbolTable, p2.parse(), reporter);
         cg.generateOpCodeTable();
+        cg.generateExe(fileName);
         cg.generateListingFile(fileName);
     }
 }
