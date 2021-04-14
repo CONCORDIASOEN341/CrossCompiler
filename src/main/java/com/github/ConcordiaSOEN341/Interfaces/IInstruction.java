@@ -8,4 +8,6 @@ public interface IInstruction {
     InstructionType getInstructionType();
 
     IToken getOperand();
+
+    void setOperand(IToken operand);
 }

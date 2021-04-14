@@ -1,14 +1,18 @@
 package com.github.ConcordiaSOEN341.Interfaces;
 
-import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface ICodeGen {
+
+    void setIR(ArrayList<ILineStatement> ir);
+
     void generateListingFile(String fileName);
 
-    String[] listing(ArrayList<ILineStatement> ir);
+    void generateExe(String fileName);
 
-    HashMap<Integer, IOpCodeTableElement> generateOpCodeTable();
+    String[] listing();
+
+    String generateByteCode();
+
+    ArrayList<IOpCodeTableElement> generateOpCodeTable();
 }

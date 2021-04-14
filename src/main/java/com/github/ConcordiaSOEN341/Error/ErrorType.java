@@ -14,7 +14,9 @@ public enum ErrorType {
     INVALID_SIGNED_4BIT_OPERAND("The immediate instruction using '.i4' must have a 4-bit signed operand number ranging from -8 to 7."),
     INVALID_SIGNED_5BIT_OPERAND("The immediate instruction using '.i5' must have a 5-bit signed operand number ranging from -16 to 15."),
     INVALID_SIGNED_8BIT_OPERAND("The immediate instruction using '.i8' must have a 8-bit signed operand number ranging from -128 to 127."),
-    INVALID_UNSIGNED_3BIT_OPERAND("The immediate instruction using '.u3' must have a 3-bit unsigned operand number ranging from 0 to 7.");
+    INVALID_UNSIGNED_3BIT_OPERAND("The immediate instruction using '.u3' must have a 3-bit unsigned operand number ranging from 0 to 7."),
+    NOCSTRINGFOUND("Directive used without cstring operand.");
+
 
     private final String description;
 

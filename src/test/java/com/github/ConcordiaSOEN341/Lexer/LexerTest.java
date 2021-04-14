@@ -109,7 +109,7 @@ public class LexerTest extends TestCase {
         init(file);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("abc", new Position(1, 0, 3), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("abc", new Position(1, 0, 3), TokenType.LABEL));
         expectedTList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
         //Act
@@ -390,7 +390,7 @@ public class LexerTest extends TestCase {
         init(file);
 
         ArrayList<Token> expectedTList = new ArrayList<>();
-        expectedTList.add(new Token("hello", new Position(1, 0, 5), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("hello", new Position(1, 0, 5), TokenType.LABEL));
         expectedTList.add(new Token(";", new Position(1, 5, 6), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 6, 6), TokenType.EOF));
 
@@ -451,7 +451,7 @@ public class LexerTest extends TestCase {
         ArrayList<Token> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";hello", new Position(1, 0, 6), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 6, 6), TokenType.EOL));
-        expectedTList.add(new Token("abc", new Position(2, 0, 3), TokenType.IDENTIFIER));
+        expectedTList.add(new Token("abc", new Position(2, 0, 3), TokenType.LABEL));
         expectedTList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
 
         //Act

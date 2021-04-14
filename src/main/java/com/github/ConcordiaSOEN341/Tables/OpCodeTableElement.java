@@ -14,6 +14,7 @@ public class OpCodeTableElement implements IOpCodeTableElement {
 
     public OpCodeTableElement(){
         operands = new ArrayList<>();
+        opCode = "";
     }
 
     public OpCodeTableElement(int line, String address, String opCode, int bitSpace, String label) {

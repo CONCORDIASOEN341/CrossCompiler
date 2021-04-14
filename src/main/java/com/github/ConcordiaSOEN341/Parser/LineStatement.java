@@ -4,6 +4,7 @@ import com.github.ConcordiaSOEN341.Interfaces.IDirective;
 import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
 import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Lexer.Token;
 
 public class LineStatement implements ILineStatement {
     private IToken label;
@@ -15,18 +16,25 @@ public class LineStatement implements ILineStatement {
     public LineStatement(IToken label, IInstruction instruction) {
         this.label = label;
         this.instruction = instruction;
+        this.directive = new Directive();
+        this.comment = new Token();
+        this.eol = new Token();
     }
 
     public LineStatement(IInstruction instruction) {
+        this.label = new Token();
         this.instruction = instruction;
+        this.directive = new Directive();
+        this.comment = new Token();
+        this.eol = new Token();
     }
 
     public LineStatement() {
-        this.label = null;
-        this.instruction = null;
-        this.directive = null;
-        this.comment = null;
-        this.eol = null;
+        this.label = new Token();
+        this.instruction = new Instruction();
+        this.directive = new Directive();
+        this.comment = new Token();
+        this.eol = new Token();
     }
 
     public IToken getLabel() {
@@ -70,7 +78,7 @@ public class LineStatement implements ILineStatement {
     }
 
     public String toString() {
-        return "[ " + label.getTokenString() + " ] [ "+ instruction.toString() + " | " + directive.toString() + " ] [ " + comment.getTokenString() + " ] " + eol.getTokenType() + " .\n";
+        return "[ " + label.getTokenString() + " ] [ "+ instruction + " | " + directive + " ] [ " + comment.getTokenString() + " ] " + eol.getTokenString() + " .\n";
     }
 
 }
