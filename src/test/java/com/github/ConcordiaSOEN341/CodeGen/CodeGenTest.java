@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CodeGenTest extends TestCase {
@@ -28,7 +27,7 @@ public class CodeGenTest extends TestCase {
     private void init(ArrayList<ILineStatement> ir){
         sTest = new SymbolTable();
         eTest = new ErrorReporter();
-        codeGenTest = new CodeGen(sTest, ir, eTest);
+        codeGenTest = new CodeGen(ir, sTest, eTest);
     }
 
     @Test
@@ -40,18 +39,18 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
         expectedOpTable.get(1).addOperand("0005");
-        expectedOpTable.put(2, new OpCodeTableElement(2, "0003", "D9", 2, null));
+        expectedOpTable.add(new OpCodeTableElement(2, "0003", "D9", 2, null));
         expectedOpTable.get(2).addOperand("0C");
-        expectedOpTable.put(3, new OpCodeTableElement(3, "0005", "D9", 2, null));
+        expectedOpTable.add(new OpCodeTableElement(3, "0005", "D9", 2, null));
         expectedOpTable.get(3).addOperand("0C");
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
-        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+        assertEquals(expectedOpTable, actualOpTable);
     }
 
     @Test
@@ -64,17 +63,17 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Token("End"), new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "E0", 2, "Main"));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "E0", 2, "Main"));
         expectedOpTable.get(1).addOperand("00");
-        expectedOpTable.put(2, new OpCodeTableElement(2, "0002", "E0", 2, "Main"));
+        expectedOpTable.add(new OpCodeTableElement(2, "0002", "E0", 2, "Main"));
         expectedOpTable.get(2).addOperand("FE");
-        expectedOpTable.put(3, new OpCodeTableElement(3, "0004", "E0", 2, "End"));
+        expectedOpTable.add(new OpCodeTableElement(3, "0004", "E0", 2, "End"));
         expectedOpTable.get(3).addOperand("02");
-        expectedOpTable.put(4, new OpCodeTableElement(4, "0006", "E0", 2, "End"));
+        expectedOpTable.add(new OpCodeTableElement(4, "0006", "E0", 2, "End"));
         expectedOpTable.get(4).addOperand("00");
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -88,13 +87,13 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
-        expectedOpTable.put(2, new OpCodeTableElement(2, "0003", "D9", 2, null));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
+        expectedOpTable.add(new OpCodeTableElement(2, "0003", "D9", 2, null));
         expectedOpTable.get(2).addOperand("0C");
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -108,12 +107,12 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "70", 0, null));
-        expectedOpTable.put(2, new OpCodeTableElement(2, "0001", "92", 0, null));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "70", 0, null));
+        expectedOpTable.add(new OpCodeTableElement(2, "0001", "92", 0, null));
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -126,11 +125,11 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Instruction(new Token("halt"), InstructionType.INHERENT)));
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", "00", 0, null));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "00", 0, null));
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -145,13 +144,13 @@ public class CodeGenTest extends TestCase {
         irTest.add(l);
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", null, 0, null));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", null, 0, null));
         expectedOpTable.get(1).addOperand("41"); expectedOpTable.get(1).addOperand("31"); expectedOpTable.get(1).addOperand("00");
 
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
@@ -167,12 +166,12 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
         init(irTest);
 
-        HashMap<Integer, IOpCodeTableElement> expectedOpTable = new HashMap<>();
-        expectedOpTable.put(1, new OpCodeTableElement(1, "0000", null, 0, null));
-        expectedOpTable.put(2, new OpCodeTableElement(2, "0000", "92", 0, null));
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", null, 0, null));
+        expectedOpTable.add(new OpCodeTableElement(2, "0000", "92", 0, null));
 
         // Act
-        HashMap<Integer, IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
+        ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());

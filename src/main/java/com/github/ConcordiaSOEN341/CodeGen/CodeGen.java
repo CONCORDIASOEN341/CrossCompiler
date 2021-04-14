@@ -15,15 +15,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CodeGen implements ICodeGen {
+    private ArrayList<ILineStatement> iR = new ArrayList<>();
+    private final ArrayList<IOpCodeTableElement> opCodeTable = new ArrayList<>();
     private final SymbolTable symbolTable;
-    private final HashMap<Integer, IOpCodeTableElement> opCodeTable = new HashMap<>();
-    private final ArrayList<ILineStatement> iR;
     private final IErrorReporter reporter;
 
-    public CodeGen(SymbolTable sT, ArrayList<ILineStatement> ir, IErrorReporter e) {
-        symbolTable = sT;
+    public CodeGen(ArrayList<ILineStatement> ir,  SymbolTable sT, IErrorReporter e) {
         iR = ir;
+        symbolTable = sT;
         reporter = e;
+    }
+
+    public CodeGen(SymbolTable sT, IErrorReporter e) {
+        symbolTable = sT;
+        reporter = e;
+    }
+
+    public void setIR(ArrayList<ILineStatement> ir){
+        iR = ir;
     }
 
     public void generateListingFile(String fileName) {
@@ -63,11 +72,11 @@ public class CodeGen implements ICodeGen {
 
             int b = 0;
 
-            for (String op : opCodeTable.get(i + 1).getOperands()) {
+            for (String op : opCodeTable.get(i).getOperands()) {
 
                 b++;
                 sb.append(op).append(" ");
-                //String operands = opCodeTable.get(i + 1).getOperands().toString();
+                //String operands = opCodeTable.get(i).getOperands().toString();
 
             }
             b = a - b;
@@ -78,17 +87,15 @@ public class CodeGen implements ICodeGen {
                 operands = new StringBuilder(sb.substring(0, sb.length() - 1));
             }
 
-            for (int j = 0; j < b; j++) {
-                operands.append("\t");
-            }
+            operands.append("\t".repeat(Math.max(0, b)));
 
             if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
-                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i + 1).getAddress() +
-                        " " + ((opCodeTable.get(i + 1).getOpCode().length() > 0) ? opCodeTable.get(i + 1).getOpCode() + " " : "") + operands + " " +
+                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i).getAddress() +
+                        " " + ((opCodeTable.get(i).getOpCode().length() > 0) ? opCodeTable.get(i).getOpCode() + " " : "") + operands + " " +
                         iR.get(i).getLabel().getTokenString() + "\t\t  " + iR.get(i).getDirective().getDir().getTokenString() + "\t " + iR.get(i).getDirective().getCString().getTokenString() + "\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
             } else {
-                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i + 1).getAddress() +
-                        " " + ((opCodeTable.get(i + 1).getOpCode().length() > 0) ? opCodeTable.get(i + 1).getOpCode() + " " : "") + operands + "\t\t" +
+                listings[i] = ((i + 1) + "\t " + opCodeTable.get(i).getAddress() +
+                        " " + ((opCodeTable.get(i).getOpCode().length() > 0) ? opCodeTable.get(i).getOpCode() + " " : "") + operands + "\t\t" +
                         iR.get(i).getLabel().getTokenString() +"\t\t  "+ iR.get(i).getInstruction().getMnemonic().getTokenString() + "\t" + iR.get(i).getInstruction().getOperand().getTokenString() + "\t\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
             }
         }
@@ -102,7 +109,6 @@ public class CodeGen implements ICodeGen {
         } else {
             String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
             try {
-                //FileWriter listingWriter = new FileWriter(listFile);
                 FileOutputStream fStream = new FileOutputStream(listFile);
                 DataOutputStream data = new DataOutputStream(fStream);
 
@@ -125,7 +131,7 @@ public class CodeGen implements ICodeGen {
     public String generateByteCode() {
         //String
         StringBuilder sb = new StringBuilder();
-        for (IOpCodeTableElement oTE : opCodeTable.values()) {
+        for (IOpCodeTableElement oTE : opCodeTable) {
             if (oTE.getOpCode().length() > 0) {
                 sb.append(oTE.getOpCode());
                 sb.append(" ");
@@ -133,9 +139,9 @@ public class CodeGen implements ICodeGen {
             for (String oP : oTE.getOperands()) {
                 if (oP.length() > 0) {
                     if (oP.length() == 4) {
-                        sb.append(oP.substring(0, 2));
+                        sb.append(oP, 0, 2);
                         sb.append(" ");
-                        sb.append(oP.substring(2, 4));
+                        sb.append(oP, 2, 4);
                         sb.append(" ");
                     } else {
                         sb.append(oP);
@@ -149,7 +155,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public HashMap<Integer, IOpCodeTableElement> generateOpCodeTable() {
+    public ArrayList<IOpCodeTableElement> generateOpCodeTable() {
         int line = 1;
         int address = 0;
 
@@ -206,12 +212,12 @@ public class CodeGen implements ICodeGen {
                 address++;
             }
 
-            opCodeTable.put(line, oTE);
+            opCodeTable.add(oTE);
             line++;
         }
 
         // SECOND PASS
-        for (IOpCodeTableElement oTE : opCodeTable.values()) {
+        for (IOpCodeTableElement oTE : opCodeTable) {
             if (oTE.getLabel() != null) {
                 String labelAddress = symbolTable.getValue(oTE.getLabel());
                 if (labelAddress != null) {

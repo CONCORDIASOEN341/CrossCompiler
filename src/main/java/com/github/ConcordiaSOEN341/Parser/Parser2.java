@@ -7,19 +7,30 @@ import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import java.util.ArrayList;
 
 public class Parser2 implements IParser {
-    private final ArrayList<ILineStatement> intermediateRep;
+    private final ArrayList<ILineStatement> intermediateRep = new ArrayList<>();;
     private final ILexer lexer;
     private final ParserFSM parserFSM;
     private final IErrorReporter reporter;
+    private final ICodeGen generator;
 
-    public Parser2(ParserFSM p, ILexer l, IErrorReporter e) {
+    public Parser2(ParserFSM p, ILexer l, ICodeGen g, IErrorReporter e) {
         parserFSM = p;
         lexer = l;
         reporter = e;
-        intermediateRep = new ArrayList<>();
+        generator = g;
     }
 
-    public ArrayList<ILineStatement> parse() {
+    public void parse(String fileName){
+        // ORCHESTRATE
+        generateIR();
+        generator.setIR(intermediateRep);
+        generator.generateOpCodeTable();
+
+        generator.generateExe(fileName);
+        generator.generateListingFile(fileName);
+    }
+
+    public ArrayList<ILineStatement> generateIR() {
         ILineStatement lStatement;
         IToken t;
         IToken temp = null;
