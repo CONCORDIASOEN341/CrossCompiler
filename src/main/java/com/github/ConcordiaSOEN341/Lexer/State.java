@@ -1,7 +1,10 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.ErrorType;
+import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 import com.github.ConcordiaSOEN341.Interfaces.IState;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 public class State implements IState {
 
@@ -10,12 +13,15 @@ public class State implements IState {
     private ErrorType errorType;
     private boolean backtrack;
 
+    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
+
 
     public State(int id, TokenType t, boolean bt){
         stateID = id;
         type = t;
         errorType = ErrorType.getDefault();
         backtrack = bt;
+        logger.log("State Created: " + this);
     }
 
     public State(int id, TokenType t, boolean bt, ErrorType e){
@@ -23,6 +29,7 @@ public class State implements IState {
         type = t;
         errorType = e;
         backtrack = bt;
+        logger.log("State Created: " + this);
     }
 
     public int getStateID() {

@@ -4,6 +4,8 @@ import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Logger.LoggerType;
 import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
 import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
@@ -19,6 +21,7 @@ public class CodeGen implements ICodeGen {
     private final ArrayList<IOpCodeTableElement> opCodeTable = new ArrayList<>();
     private final SymbolTable symbolTable;
     private final IErrorReporter reporter;
+    private final ILogger logger = LoggerFactory.getLogger(LoggerType.CODEGEN);
 
     public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, IErrorReporter e) {
         iR = ir;
@@ -37,6 +40,7 @@ public class CodeGen implements ICodeGen {
 
     public void generateListingFile(String fileName) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
+        logger.log("creating listing file \"" + listFile + "\"");
         try {
             FileWriter listingWriter = new FileWriter(listFile);
             listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t\tComments\n");
@@ -51,6 +55,8 @@ public class CodeGen implements ICodeGen {
 
             listingWriter.close();
         } catch (IOException e) {
+            //TODO: USE ERROR REPORTER HERE
+            // THEN LOG ERROR IN ERROR REPORTER
             System.out.println("An error occurred");
             System.out.println("The program will terminate.");
             e.printStackTrace();
@@ -99,6 +105,7 @@ public class CodeGen implements ICodeGen {
 
     public void generateExe(String fileName) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
+        logger.log("Generating Executable file \"" + listFile + "\"");
         try {
             FileOutputStream fStream = new FileOutputStream(listFile);
             DataOutputStream data = new DataOutputStream(fStream);
@@ -119,6 +126,7 @@ public class CodeGen implements ICodeGen {
 
     public String generateByteCode() {
         //String
+        logger.log("Generating byte code...");
         StringBuilder sb = new StringBuilder();
         for (IOpCodeTableElement oTE : opCodeTable) {
             if (oTE.getOpCode().length() > 0) {
@@ -134,7 +142,7 @@ public class CodeGen implements ICodeGen {
                 }
             }
         }
-
+        logger.log("Byte code generated " + sb);
         return sb.toString();
     }
 
@@ -142,7 +150,8 @@ public class CodeGen implements ICodeGen {
     public ArrayList<IOpCodeTableElement> generateOpCodeTable() {
         int line = 1;
         int address = 0;
-
+        logger.log("Generating OpCodeTable");
+        logger.log("Starting First Pass now...");
         // FIRST PASS
         for (ILineStatement lS : iR) {
             IOpCodeTableElement oTE = new OpCodeTableElement();
@@ -199,7 +208,8 @@ public class CodeGen implements ICodeGen {
             opCodeTable.add(oTE);
             line++;
         }
-
+        logger.log("Completed First Pass");
+        logger.log("Starting Second Pass now...");
         // SECOND PASS
         for (IOpCodeTableElement oTE : opCodeTable) {
             if (oTE.getLabel() != null) {
@@ -215,7 +225,7 @@ public class CodeGen implements ICodeGen {
                 }
             }
         }
-
+        logger.log("Completed Second Pass...");
         return opCodeTable;
     }
 
