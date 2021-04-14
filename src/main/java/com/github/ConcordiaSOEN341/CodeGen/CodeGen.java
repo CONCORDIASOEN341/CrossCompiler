@@ -20,7 +20,7 @@ public class CodeGen implements ICodeGen {
     private final SymbolTable symbolTable;
     private final IErrorReporter reporter;
 
-    public CodeGen(ArrayList<ILineStatement> ir,  SymbolTable sT, IErrorReporter e) {
+    public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, IErrorReporter e) {
         iR = ir;
         symbolTable = sT;
         reporter = e;
@@ -31,7 +31,7 @@ public class CodeGen implements ICodeGen {
         reporter = e;
     }
 
-    public void setIR(ArrayList<ILineStatement> ir){
+    public void setIR(ArrayList<ILineStatement> ir) {
         iR = ir;
     }
 
@@ -91,7 +91,7 @@ public class CodeGen implements ICodeGen {
             } else {
                 listings[i] = ((i + 1) + "\t " + opCodeTable.get(i).getAddress() +
                         " " + ((opCodeTable.get(i).getOpCode().length() > 0) ? opCodeTable.get(i).getOpCode() + " " : "") + operands + "\t\t" +
-                        iR.get(i).getLabel().getTokenString() +"\t\t  "+ iR.get(i).getInstruction().getMnemonic().getTokenString() + "\t" + iR.get(i).getInstruction().getOperand().getTokenString() + "\t\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
+                        iR.get(i).getLabel().getTokenString() + "\t\t  " + iR.get(i).getInstruction().getMnemonic().getTokenString() + "\t" + iR.get(i).getInstruction().getOperand().getTokenString() + "\t\t\t\t" + iR.get(i).getComment().getTokenString() + " \t\n");
             }
         }
         return listings;
@@ -104,7 +104,7 @@ public class CodeGen implements ICodeGen {
             DataOutputStream data = new DataOutputStream(fStream);
 
             data.writeBytes(generateByteCode());
-            
+
             fStream.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred");
@@ -215,8 +215,6 @@ public class CodeGen implements ICodeGen {
                 }
             }
         }
-
-        System.out.println(generateByteCode());
 
         return opCodeTable;
     }
