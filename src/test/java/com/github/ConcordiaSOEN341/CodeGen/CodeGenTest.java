@@ -41,16 +41,16 @@ public class CodeGenTest extends TestCase {
 
         ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
         expectedOpTable.add(new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
-        expectedOpTable.get(1).addOperand("0005");
+        expectedOpTable.get(0).addOperand("0005");
         expectedOpTable.add(new OpCodeTableElement(2, "0003", "D9", 2, null));
-        expectedOpTable.get(2).addOperand("0C");
+        expectedOpTable.get(1).addOperand("0C");
         expectedOpTable.add(new OpCodeTableElement(3, "0005", "D9", 2, null));
-        expectedOpTable.get(3).addOperand("0C");
+        expectedOpTable.get(2).addOperand("0C");
         // Act
         ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
         // Assert
-        assertEquals(expectedOpTable, actualOpTable);
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
     }
 
     @Test
@@ -65,13 +65,13 @@ public class CodeGenTest extends TestCase {
 
         ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
         expectedOpTable.add(new OpCodeTableElement(1, "0000", "E0", 2, "Main"));
-        expectedOpTable.get(1).addOperand("00");
+        expectedOpTable.get(0).addOperand("00");
         expectedOpTable.add(new OpCodeTableElement(2, "0002", "E0", 2, "Main"));
-        expectedOpTable.get(2).addOperand("FE");
+        expectedOpTable.get(1).addOperand("FE");
         expectedOpTable.add(new OpCodeTableElement(3, "0004", "E0", 2, "End"));
-        expectedOpTable.get(3).addOperand("02");
+        expectedOpTable.get(2).addOperand("02");
         expectedOpTable.add(new OpCodeTableElement(4, "0006", "E0", 2, "End"));
-        expectedOpTable.get(4).addOperand("00");
+        expectedOpTable.get(3).addOperand("00");
         // Act
         ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
 
@@ -90,7 +90,7 @@ public class CodeGenTest extends TestCase {
         ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
         expectedOpTable.add(new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
         expectedOpTable.add(new OpCodeTableElement(2, "0003", "D9", 2, null));
-        expectedOpTable.get(2).addOperand("0C");
+        expectedOpTable.get(1).addOperand("0C");
 
         // Act
         ArrayList<IOpCodeTableElement> actualOpTable = codeGenTest.generateOpCodeTable();
@@ -145,8 +145,8 @@ public class CodeGenTest extends TestCase {
         init(irTest);
 
         ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
-        expectedOpTable.add(new OpCodeTableElement(1, "0000", null, 0, null));
-        expectedOpTable.get(1).addOperand("41"); expectedOpTable.get(1).addOperand("31"); expectedOpTable.get(1).addOperand("00");
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "", 0, null));
+        expectedOpTable.get(0).addOperand("41"); expectedOpTable.get(0).addOperand("31"); expectedOpTable.get(0).addOperand("00");
 
 
         // Act
@@ -167,7 +167,7 @@ public class CodeGenTest extends TestCase {
         init(irTest);
 
         ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
-        expectedOpTable.add(new OpCodeTableElement(1, "0000", null, 0, null));
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "", 0, null));
         expectedOpTable.add(new OpCodeTableElement(2, "0000", "92", 0, null));
 
         // Act

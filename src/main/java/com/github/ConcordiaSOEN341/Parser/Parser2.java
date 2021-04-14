@@ -23,11 +23,15 @@ public class Parser2 implements IParser {
     public void parse(String fileName){
         // ORCHESTRATE
         generateIR();
+        if(reporter.hasErrors()){
+            System.out.println(reporter.report(fileName));
+            System.exit(0);
+        }
         generator.setIR(intermediateRep);
         generator.generateOpCodeTable();
 
-        generator.generateExe(fileName);
-        generator.generateListingFile(fileName);
+//        generator.generateExe(fileName);
+//        generator.generateListingFile(fileName);
     }
 
     public ArrayList<ILineStatement> generateIR() {

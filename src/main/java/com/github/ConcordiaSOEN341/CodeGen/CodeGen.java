@@ -36,30 +36,25 @@ public class CodeGen implements ICodeGen {
     }
 
     public void generateListingFile(String fileName) {
-        if (reporter.hasErrors()) {
-            System.out.println(reporter.report(fileName));
-            System.exit(0);
-        } else {
-            String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
-            try {
-                FileWriter listingWriter = new FileWriter(listFile);
-                listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t\tComments\n");
+        String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
+        try {
+            FileWriter listingWriter = new FileWriter(listFile);
+            listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t\tComments\n");
 
-                String[] listings = listing();
+            String[] listings = listing();
 
-                for (String listing : listings) {
-                    listingWriter.write(listing);
-                }
-
-                System.out.println(generateByteCode());
-
-                listingWriter.close();
-            } catch (IOException e) {
-                System.out.println("An error occurred");
-                System.out.println("The program will terminate.");
-                e.printStackTrace();
-                System.exit(0);
+            for (String listing : listings) {
+                listingWriter.write(listing);
             }
+
+            System.out.println(generateByteCode());
+
+            listingWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred");
+            System.out.println("The program will terminate.");
+            e.printStackTrace();
+            System.exit(0);
         }
     }
 
@@ -103,27 +98,21 @@ public class CodeGen implements ICodeGen {
     }
 
     public void generateExe(String fileName) {
-        if (reporter.hasErrors()) {
-            System.out.println(reporter.report(fileName));
+        String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
+        try {
+            FileOutputStream fStream = new FileOutputStream(listFile);
+            DataOutputStream data = new DataOutputStream(fStream);
+
+            data.writeBytes(generateByteCode());
+            
+            fStream.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred");
+            System.out.println("The program will terminate.");
+            e.printStackTrace();
             System.exit(0);
-        } else {
-            String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
-            try {
-                FileOutputStream fStream = new FileOutputStream(listFile);
-                DataOutputStream data = new DataOutputStream(fStream);
-
-                data.writeBytes(generateByteCode());
-
-
-                fStream.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An error occurred");
-                System.out.println("The program will terminate.");
-                e.printStackTrace();
-                System.exit(0);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -137,16 +126,11 @@ public class CodeGen implements ICodeGen {
                 sb.append(" ");
             }
             for (String oP : oTE.getOperands()) {
-                if (oP.length() > 0) {
-                    if (oP.length() == 4) {
-                        sb.append(oP, 0, 2);
-                        sb.append(" ");
-                        sb.append(oP, 2, 4);
-                        sb.append(" ");
-                    } else {
-                        sb.append(oP);
-                        sb.append(" ");
-                    }
+                sb.append(oP, 0, 2);
+                sb.append(" ");
+                if (oP.length() == 4) {
+                    sb.append(oP, 2, 4);
+                    sb.append(" ");
                 }
             }
         }
@@ -168,7 +152,7 @@ public class CodeGen implements ICodeGen {
             oTE.setAddress(String.format("%04X", address));
 
             // Add Label - Address to symbol table
-            if (lS.getLabel().getTokenType() != TokenType.ERROR) {
+            if (lS.getLabel().getTokenType() != TokenType.ERROR || lS.getLabel() != null) {
                 symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
             }
 
@@ -231,6 +215,8 @@ public class CodeGen implements ICodeGen {
                 }
             }
         }
+
+        System.out.println(generateByteCode());
 
         return opCodeTable;
     }
