@@ -1,9 +1,10 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandle;
+import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.*;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Parser.Directive;
 import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
@@ -19,16 +20,17 @@ import java.util.ArrayList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CodeGenTest extends TestCase {
-
+    ICodeGen codeGenTest;
     ArrayList<ILineStatement> irTest;
     SymbolTable sTest;
-    ICodeGen codeGenTest;
     IErrorReporter eTest;
+    LoggerFactory lFTest;
 
     private void init(ArrayList<ILineStatement> ir){
+        lFTest = new LoggerFactory(new CommandHandler());
         sTest = new SymbolTable();
-        eTest = new ErrorReporter();
-        codeGenTest = new CodeGen(ir, sTest, eTest);
+        eTest = new ErrorReporter(lFTest);
+        codeGenTest = new CodeGen(ir, sTest, lFTest, eTest);
     }
 
     @Test

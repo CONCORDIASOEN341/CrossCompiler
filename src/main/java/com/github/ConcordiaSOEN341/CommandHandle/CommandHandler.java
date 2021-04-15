@@ -2,24 +2,22 @@ package com.github.ConcordiaSOEN341.CommandHandle;
 
 import static java.lang.System.exit;
 
-public class CommandHandle {
-
-    private static CommandHandle commandHandle;
-    public String[] args;
+public class CommandHandler {
+    private final String[] args;
     private boolean isListing;
     private boolean isVerbose;
     private String file;
 
-    public CommandHandle(String[] args){
-        this.args = args;
-        parseArgs();
-        if(commandHandle == null){
-            commandHandle = this;
-        }
+    public CommandHandler(){
+        args = new String[0];
+        isListing = false;
+        isVerbose = false;
+        file = "";
     }
 
-    public static CommandHandle getInstance(){
-        return commandHandle;
+    public CommandHandler(String[] args){
+        this.args = args;
+        parseArgs();
     }
 
     private void parseArgs(){
@@ -54,10 +52,5 @@ public class CommandHandle {
 
     public boolean isListing() {
         return isListing;
-    }
-
-    public void delete()
-    {
-        commandHandle = null;
     }
 }

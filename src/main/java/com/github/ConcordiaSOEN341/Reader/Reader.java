@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Reader implements IReader {
     private final static int EOF = -1;
     private FileInputStream inputStream;
+    private final ILogger logger;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.READER);
-
-    public Reader(String fileName) {
+    public Reader(String fileName, LoggerFactory lf) {
         File file = new File(fileName);
+        logger = lf.getLogger(LoggerType.READER);
 
         try {
             inputStream = new FileInputStream(file);

@@ -1,7 +1,13 @@
 package com.github.ConcordiaSOEN341.Logger;
 
+import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+
 public class ErrorLogger extends Logger {
-    static String prefix = LoggerColor.ANSI_RED + "[ERROR] ";
+    String prefix = LoggerColor.ANSI_RED + "[ERROR] ";
+
+    public ErrorLogger(CommandHandler cmdH) {
+        super(cmdH);
+    }
 
     @Override
     public void log(String message) {

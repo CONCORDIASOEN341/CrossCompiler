@@ -13,7 +13,11 @@ public class ErrorReporter implements IErrorReporter {
     private final ArrayList<IError> errors = new ArrayList<>();
     private final Comparator<IError> ascLines = Comparator.comparingInt(e -> e.getPosition().getLine());
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.ERROR);
+    private final ILogger logger;
+
+    public ErrorReporter(LoggerFactory lf){
+        logger = lf.getLogger(LoggerType.ERROR);
+    }
 
     public void record(IError error) {
         logger.log("Error Recorded: " + error.toString());

@@ -30,9 +30,10 @@ public class LexerFSM {
     private int space;
     private int endOfFile;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
+    private final ILogger logger;
 
-    public LexerFSM(IReader r) {
+    public LexerFSM(IReader r, LoggerFactory lf) {
+        logger = lf.getLogger(LoggerType.READER);
         logger.log("Initializing Lexer Finite State Machine...");
         reader = r;
         initializeAlphabet();

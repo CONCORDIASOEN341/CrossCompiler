@@ -1,7 +1,13 @@
 package com.github.ConcordiaSOEN341.Logger;
 
+import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+
 public class CodeGenLogger extends Logger {
-    static String prefix = LoggerColor.ANSI_PURPLE + "[CODEGEN] " + LoggerColor.ANSI_RESET;
+    String prefix = LoggerColor.ANSI_PURPLE + "[CODEGEN] " + LoggerColor.ANSI_RESET;
+
+    public CodeGenLogger(CommandHandler cmdH) {
+        super(cmdH);
+    }
 
     @Override
     public void log(String message) {

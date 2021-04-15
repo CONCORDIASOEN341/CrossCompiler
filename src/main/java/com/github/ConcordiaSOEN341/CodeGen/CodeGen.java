@@ -4,7 +4,6 @@ import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
 import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
@@ -17,16 +16,18 @@ public class CodeGen implements ICodeGen {
     private final ArrayList<IOpCodeTableElement> opCodeTable = new ArrayList<>();
     private final SymbolTable symbolTable;
     private final IErrorReporter reporter;
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.CODEGEN);
+    private final ILogger logger;
 
-    public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, IErrorReporter e) {
+    public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
         iR = ir;
         symbolTable = sT;
+        logger = lf.getLogger(LoggerType.CODEGEN);
         reporter = e;
     }
 
-    public CodeGen(SymbolTable sT, IErrorReporter e) {
+    public CodeGen(SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
         symbolTable = sT;
+        logger = lf.getLogger(LoggerType.CODEGEN);
         reporter = e;
     }
 

@@ -1,7 +1,13 @@
 package com.github.ConcordiaSOEN341.Logger;
 
+import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+
 public class ReaderLogger extends Logger {
-    static String prefix = LoggerColor.ANSI_YELLOW + "[READER] " + LoggerColor.ANSI_RESET;
+    String prefix = LoggerColor.ANSI_YELLOW + "[READER] " + LoggerColor.ANSI_RESET;
+
+    public ReaderLogger(CommandHandler cmdH) {
+        super(cmdH);
+    }
 
     @Override
     public void log(String message) {

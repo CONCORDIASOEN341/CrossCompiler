@@ -76,42 +76,4 @@ public class SymbolTable implements ICompilerMap<String, String> {
     public boolean keyExists(String mnemonic) {
         return symbolTable.containsKey(mnemonic);
     }
-
-    public String determineOpCode(String mnemonic, String offsetString) {
-
-        int hexNumber = 0;
-        int offset = Integer.parseInt(offsetString);
-
-        if (keyExists(mnemonic)) {
-            if (mnemonic.equals("br.i5")) {
-                hexNumber = Integer.parseInt("30", 16) + offset;
-            } else if (mnemonic.equals("brf.i5")) {
-                hexNumber = Integer.parseInt("50", 16) + offset;
-            } else if (mnemonic.equals("enter.u5")) {
-                if (offset <= 15) {
-                    hexNumber = Integer.parseInt("80", 16) + offset;
-                } else {
-                    hexNumber = Integer.parseInt("60", 16) + offset;
-                }
-            } else if (mnemonic.equals("ldc.i3")) {
-                if (offset >= 0) {
-                    hexNumber = Integer.parseInt("90", 16) + offset;
-                } else {
-                    String bin = Integer.toBinaryString(offset).substring(29);
-                    offset = Integer.parseInt(bin, 2);
-                    hexNumber = Integer.parseInt("90", 16) + offset;
-                }
-            } else if (mnemonic.equals("addv.u3")) {
-                hexNumber = Integer.parseInt("98", 16) + offset;
-            } else if (mnemonic.equals("ldv.u3")) {
-                hexNumber = Integer.parseInt("A0", 16) + offset;
-            } else if (mnemonic.equals("stv.u3")) {
-                hexNumber = Integer.parseInt("A8", 16) + offset;
-            }
-        } else {
-            return getValue(mnemonic);
-        }
-
-        return String.format("%2X", hexNumber);
-    }
 }
