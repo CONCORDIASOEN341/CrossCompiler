@@ -23,7 +23,7 @@ public class ParserTest {
         eTest = new ErrorReporter();
         ILexer lTest = new LexerMoqForParser(input);
         ICodeGen cgTest = new CodeGen(sTest, eTest);
-        pTest = new Parser2(pFSMTest, lTest, cgTest, eTest);
+        pTest = new Parser(pFSMTest, lTest, cgTest, eTest);
     }
 
 //    @Test
