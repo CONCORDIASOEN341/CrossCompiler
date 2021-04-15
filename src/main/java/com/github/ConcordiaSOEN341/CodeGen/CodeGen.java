@@ -1,18 +1,13 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Lexer.Position;
-import com.github.ConcordiaSOEN341.Lexer.Token;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
 import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CodeGen implements ICodeGen {
     private ArrayList<ILineStatement> iR = new ArrayList<>();
@@ -31,23 +26,29 @@ public class CodeGen implements ICodeGen {
         reporter = e;
     }
 
+    @Override
     public void setIR(ArrayList<ILineStatement> ir) {
         iR = ir;
     }
 
+    @Override
     public void generateListingFile(String fileName) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
         try {
             FileWriter listingWriter = new FileWriter(listFile);
-            listingWriter.write("Line Addr Code \t\t\tLabel \t\t  Mne \t\tOperand \t\tComments\n");
+            String[] byteCode = listingOP();
+            String[] label = listingIRLabel();
+            String[] mne = listingIRMne();
+            String[] operands = listingIROps();
+            String[] comments = listingIRComments();
 
-            String[] listings = listing();
-
-            for (String listing : listings) {
-                listingWriter.write(listing);
+            for (int i = 0; i < iR.size(); i++) {
+                listingWriter.write(byteCode[i]);
+                listingWriter.write(label[i]);
+                listingWriter.write(mne[i]);
+                listingWriter.write(operands[i]);
+                listingWriter.write(comments[i]);
             }
-
-            System.out.println(generateByteCode());
 
             listingWriter.close();
         } catch (IOException e) {
@@ -58,79 +59,162 @@ public class CodeGen implements ICodeGen {
         }
     }
 
-    public String[] listing() {
-        int maxOpSpace = 0;
-        int maxOperandSpace = 0;
-        String[] listings = new String[iR.size() - 1];
+    @Override
+    public String[] listingOP() {
+        String[] arr = new String[iR.size()];
+        StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
-        for(int i = 0; i < iR.size() - 1; i++){
-            maxOpSpace = Math.max(opCodeTable.get(i).getOperands().size(),maxOpSpace);
-            maxOperandSpace = Math.max(iR.get(i).getInstruction().getOperand().getTokenString().length(),maxOperandSpace);
-            maxOperandSpace = Math.max(iR.get(i).getDirective().getCString().getTokenString().length(),maxOperandSpace);
-        }
+        // Init Header
+        sbLines[0] = new StringBuilder();
+        sbLines[0].append("Line Addr Code");
+        int realHeaderLength = sbLines[0].length() - 2;
+        int maxLineLength = realHeaderLength;
 
         for (int i = 0; i < iR.size() - 1; i++) {
-            StringBuilder lstSB = new StringBuilder();
-            StringBuilder opSB = new StringBuilder();
-            String addTabs;
-            int numAddTabs = 0;
+            StringBuilder sb = new StringBuilder();
 
-            // Start Building listing string
-            lstSB.append(i + 1).append("\t ").append(opCodeTable.get(i).getAddress()).append(" ");
+            sb.append(i + 1).append("\t ").append(opCodeTable.get(i).getAddress()).append(" ");
 
-            if(opCodeTable.get(i).getOpCode().length() > 0){
-                lstSB.append(opCodeTable.get(i).getOpCode()).append(" ");
-            } else {
-                numAddTabs += 2;
+            if (opCodeTable.get(i).getOpCode().length() > 0) {
+                sb.append(opCodeTable.get(i).getOpCode()).append(" ");
             }
-
-            // Determine Tabs after hex operands
-            int opElements = opCodeTable.get(i).getOperands().size();
 
             for (String op : opCodeTable.get(i).getOperands()) {
-                opSB.append(op).append(" ");
+                sb.append(op).append(" ");
             }
 
-            numAddTabs += maxOpSpace - opElements - ((opCodeTable.get(i).getOperands().isEmpty())? 0 : 1);
-
-            addTabs = "\t".repeat(numAddTabs);
-
-            lstSB.append(opSB).append(addTabs);
-
-            // /\/\/\ OP CODE TABLE DATA
-            // ---------------------
-            // \/\/\/ IR DATA
-
-            opElements = Math.max(iR.get(i).getInstruction().getOperand().getTokenString().length(),iR.get(i).getDirective().getCString().getTokenString().length()) ;
-            maxOperandSpace = maxOperandSpace - maxOperandSpace%4;
-            opElements = opElements - opElements%4;
-
-            numAddTabs = (maxOperandSpace - opElements)/4 + 2;
-
-            addTabs = "\t".repeat(numAddTabs);
-
-
-            if(iR.get(i).getLabel().getTokenString().length() > 0){
-                lstSB.append(iR.get(i).getLabel().getTokenString());
-            } else {
-                lstSB.append("\t");
-            }
-
-            lstSB.append("\t\t  ");
-
-            if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
-                lstSB.append(iR.get(i).getDirective().getDir().getTokenString()).append("\t").append(iR.get(i).getDirective().getCString().getTokenString());
-            } else {
-                lstSB.append(iR.get(i).getInstruction().getMnemonic().getTokenString()).append("\t").append(iR.get(i).getInstruction().getOperand().getTokenString());
-            }
-
-            lstSB.append(addTabs).append(iR.get(i).getComment().getTokenString()).append("\t\n");
-
-            listings[i] = lstSB.toString();
+            maxLineLength = Math.max(maxLineLength, sb.length());
+            sbLines[i + 1] = sb;
         }
-        return listings;
+
+        sbLines[0].append(" ".repeat(maxLineLength - realHeaderLength)).append("\t");
+        arr[0] = sbLines[0].toString();
+
+        for (int i = 1; i < iR.size(); i++) {
+            sbLines[i].append(" ".repeat(maxLineLength - sbLines[i].length())).append("\t");
+            arr[i] = sbLines[i].toString();
+        }
+
+        return arr;
     }
 
+    @Override
+    public String[] listingIRLabel() {
+        String[] arr = new String[iR.size()];
+        StringBuilder[] sbLines = new StringBuilder[iR.size()];
+
+        // Init Header
+        sbLines[0] = new StringBuilder();
+        sbLines[0].append("Label");
+        int maxLabelLength = sbLines[0].length();
+
+        for (int i = 0; i < iR.size() - 1; i++) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(iR.get(i).getLabel().getTokenString());
+
+            maxLabelLength = Math.max(maxLabelLength, sb.length());
+            sbLines[i + 1] = sb;
+        }
+
+        for (int i = 0; i < iR.size(); i++) {
+            sbLines[i].append(" ".repeat(maxLabelLength - sbLines[i].length())).append("\t\t");
+            arr[i] = sbLines[i].toString();
+        }
+
+        return arr;
+
+    }
+
+    @Override
+    public String[] listingIRMne() {
+        String[] arr = new String[iR.size()];
+        StringBuilder[] sbLines = new StringBuilder[iR.size()];
+
+        // Init Header
+        sbLines[0] = new StringBuilder();
+        sbLines[0].append("Mne");
+        int maxCoreLength = sbLines[0].length();
+
+        for (int i = 0; i < iR.size() - 1; i++) {
+            StringBuilder sb = new StringBuilder();
+
+            if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
+                sb.append(iR.get(i).getDirective().getDir().getTokenString());
+            } else {
+                sb.append(iR.get(i).getInstruction().getMnemonic().getTokenString());
+            }
+
+            maxCoreLength = Math.max(maxCoreLength, sb.length());
+            sbLines[i + 1] = sb;
+        }
+
+        for (int i = 0; i < iR.size(); i++) {
+            sbLines[i].append(" ".repeat(maxCoreLength - sbLines[i].length())).append("  ");
+            arr[i] = sbLines[i].toString();
+        }
+
+        return arr;
+    }
+
+    @Override
+    public String[] listingIROps() {
+        String[] arr = new String[iR.size()];
+        StringBuilder[] sbLines = new StringBuilder[iR.size()];
+
+        // Init Header
+        sbLines[0] = new StringBuilder();
+        sbLines[0].append("Operand");
+        int maxCoreLength = sbLines[0].length();
+
+        for (int i = 0; i < iR.size() - 1; i++) {
+            StringBuilder sb = new StringBuilder();
+
+            if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
+                sb.append(iR.get(i).getDirective().getCString().getTokenString());
+            } else {
+                sb.append(iR.get(i).getInstruction().getOperand().getTokenString());
+            }
+
+            maxCoreLength = Math.max(maxCoreLength, sb.length());
+            sbLines[i + 1] = sb;
+        }
+
+        for (int i = 0; i < iR.size(); i++) {
+            sbLines[i].append(" ".repeat(maxCoreLength - sbLines[i].length())).append("\t\t");
+            arr[i] = sbLines[i].toString();
+        }
+
+        return arr;
+    }
+
+    @Override
+    public String[] listingIRComments() {
+        String[] arr = new String[iR.size()];
+        StringBuilder[] sbLines = new StringBuilder[iR.size()];
+
+        // Init Header
+        sbLines[0] = new StringBuilder();
+        sbLines[0].append("Comments");
+        int maxCommentLength = sbLines[0].length();
+
+        for (int i = 0; i < iR.size() - 1; i++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(iR.get(i).getComment().getTokenString());
+
+            maxCommentLength = Math.max(maxCommentLength, sb.length());
+            sbLines[i + 1] = sb;
+        }
+
+        for (int i = 0; i < iR.size(); i++) {
+            sbLines[i].append(" ".repeat(maxCommentLength - sbLines[i].length())).append("\t\n");
+            arr[i] = sbLines[i].toString();
+        }
+
+        return arr;
+    }
+
+    @Override
     public void generateExe(String fileName) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
         try {
@@ -150,7 +234,7 @@ public class CodeGen implements ICodeGen {
         }
     }
 
-
+    @Override
     public String generateByteCode() {
         //String
         StringBuilder sb = new StringBuilder();
@@ -283,14 +367,4 @@ public class CodeGen implements ICodeGen {
 
         return String.format("%02X", hexNumber);
     }
-    //For testing purposes
-//    public static void main(String[] args) {
-//        SymbolTable s = new SymbolTable();
-//        CodeGen c = new CodeGen(s);
-//        Instruction i = new Instruction();
-//        i.setMnemonic(new Token( "br.i5", new Position(1,1,1), TokenType.MNEMONIC));
-//        i.setOffset(new Token( "-2", new Position(1,1,1), TokenType.OFFSET));
-//        System.out.print(c.calculateImmediateOpCode(i));
-    //System.out.print(c.bitSpace(i));
-//    }
 }

@@ -8,9 +8,14 @@ public interface ICodeGen {
 
     void generateListingFile(String fileName);
 
-    void generateExe(String fileName);
+    String[] listingOP();
+    String[] listingIRLabel();
+    String[] listingIRMne();
+    String[] listingIROps();
+    String[] listingIRComments();
 
-    String[] listing();
+
+    void generateExe(String fileName);
 
     String generateByteCode();
 
