@@ -3,35 +3,53 @@ package com.github.ConcordiaSOEN341.Parser;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 import java.util.ArrayList;
 
 public class Parser implements IParser {
-    private final ArrayList<ILineStatement> intermediateRep = new ArrayList<>();;
+    private final ArrayList<ILineStatement> intermediateRep = new ArrayList<>();
     private final ILexer lexer;
     private final ParserFSM parserFSM;
     private final IErrorReporter reporter;
     private final ICodeGen generator;
+    private final ILogger logger = LoggerFactory.getLogger(LoggerType.PARSER);
 
     public Parser(ParserFSM p, ILexer l, ICodeGen g, IErrorReporter e) {
+        logger.log("Initializing Parser");
         parserFSM = p;
         lexer = l;
         reporter = e;
         generator = g;
     }
 
-    public void parse(String fileName){
+    public void parse(String fileName) {
+        logger.log("Orchestration has started");
         // ORCHESTRATE
         generateIR();
-        if(reporter.hasErrors()){
+
+        logger.log("Orchestration - Checking with reporter for errors...");
+        if (reporter.hasErrors()) {
             System.out.println(reporter.report(fileName));
             System.exit(0);
         }
-        generator.setIR(intermediateRep);
-        generator.generateOpCodeTable();
 
+        logger.log("Orchestration - Setting IR to intermediate representation...");
+        generator.setIR(intermediateRep);
+        logger.log("Orchestration - IR has been set to intermediate representation");
+
+        logger.log("Orchestration - generating opcode table...");
+        generator.generateOpCodeTable();
+        logger.log("Orchestration - opcode table generated");
+
+        logger.log("Orchestration - generating executable...");
         generator.generateExe(fileName);
+        logger.log("Orchestration - executable has been generated");
+
+        logger.log("Orchestration - generating listing file...");
         generator.generateListingFile(fileName);
+        logger.log("Orchestration - listing file has been generated");
     }
 
     public ArrayList<ILineStatement> generateIR() {
@@ -45,7 +63,7 @@ public class Parser implements IParser {
             lStatement = new LineStatement();
 
             do {
-                if(temp == null){
+                if (temp == null) {
                     t = lexer.getNextToken();
                 } else {
                     t = temp;
@@ -67,7 +85,7 @@ public class Parser implements IParser {
                             break;
                         case MNEMONIC:
                             lStatement.setInstruction(new Instruction(t, getAddressingMode(t)));
-                            if(lStatement.getInstruction().getInstructionType() == InstructionType.INHERENT){
+                            if (lStatement.getInstruction().getInstructionType() == InstructionType.INHERENT) {
                                 stateID = 4;
                                 continue;
                             }
@@ -97,6 +115,7 @@ public class Parser implements IParser {
                     stateID = parserFSM.getNextStateID(stateID, t.getTokenType());
                 }
 
+
             } while (stateID != 7);
 
             intermediateRep.add(lStatement);
@@ -106,34 +125,37 @@ public class Parser implements IParser {
         return intermediateRep;
     }
 
-    private void checkInstructionSpace(IInstruction in, IToken t){
-        char sign = in.getMnemonic().getTokenString().charAt(in.getMnemonic().getTokenString().indexOf('.')+1);
+    private void checkInstructionSpace(IInstruction in, IToken t) {
+        char sign = in.getMnemonic().getTokenString().charAt(in.getMnemonic().getTokenString().indexOf('.') + 1);
         int bitSpace = getSymbolValue(in.getMnemonic());
         int operand;
-        try{
+        try {
             operand = Integer.parseInt(t.getTokenString());
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return;
         }
-        if(sign == 'i' && (-Math.pow(2,bitSpace-1) > operand || operand >= Math.pow(2,bitSpace-1))){
-            reporter.record(new Error(parserFSM.getErrorType((bitSpace*3)+1), t.getPosition()));
+        if (sign == 'i' && (-Math.pow(2, bitSpace - 1) > operand || operand >= Math.pow(2, bitSpace - 1))) {
+            reporter.record(new Error(parserFSM.getErrorType((bitSpace * 3) + 1), t.getPosition()));
 
         }
-        if(sign == 'u' && (operand < 0 || operand >= Math.pow(2,bitSpace))){
-            reporter.record(new Error(parserFSM.getErrorType((bitSpace*3)+2), t.getPosition()));
+        if (sign == 'u' && (operand < 0 || operand >= Math.pow(2, bitSpace))) {
+            reporter.record(new Error(parserFSM.getErrorType((bitSpace * 3) + 2), t.getPosition()));
         }
     }
 
-    private int getSymbolValue(IToken token){
-        return Integer.parseInt(token.getTokenString().split(".((u)|(i))", 2)[1]);
+    private int getSymbolValue(IToken token) {
+        int value = Integer.parseInt(token.getTokenString().split(".((u)|(i))", 2)[1]);
+        logger.log("Getting symbol value " + value);
+        return value;
     }
 
-    private InstructionType getAddressingMode(IToken token){
+    private InstructionType getAddressingMode(IToken token) {
+        logger.log("Getting addressing mode");
         if (!(token.getTokenString().contains("."))) {                      //no dot it's definitely inherent
             return InstructionType.INHERENT;
         }
         //take string after the u or the i (this leaves only the number)
         //less than or equal to 1 byte is immediate
-        return (getSymbolValue(token) < 8)? InstructionType.IMMEDIATE : InstructionType.RELATIVE;
+        return (getSymbolValue(token) < 8) ? InstructionType.IMMEDIATE : InstructionType.RELATIVE;
     }
 }
