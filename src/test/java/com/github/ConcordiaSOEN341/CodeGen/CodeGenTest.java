@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.*;

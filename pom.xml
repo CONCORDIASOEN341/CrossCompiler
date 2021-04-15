@@ -74,7 +74,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.ConcordiaSOEN341.Driver.Driver</mainClass>
+                            <mainClass>com.github.ConcordiaSOEN341.CrossAssembler.Driver</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

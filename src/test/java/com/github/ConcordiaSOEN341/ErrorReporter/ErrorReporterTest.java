@@ -1,24 +1,17 @@
 package com.github.ConcordiaSOEN341.ErrorReporter;
 
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.IError;
 import com.github.ConcordiaSOEN341.Interfaces.IErrorReporter;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
-import com.github.ConcordiaSOEN341.Lexer.Lexer;
-import com.github.ConcordiaSOEN341.Lexer.LexerFSM;
 import com.github.ConcordiaSOEN341.Lexer.Position;
-import com.github.ConcordiaSOEN341.Lexer.ReaderMoq;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.ArrayList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorReporterTest extends TestCase {

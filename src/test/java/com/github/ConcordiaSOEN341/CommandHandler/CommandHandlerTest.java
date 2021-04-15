@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.CommandHandle;
+package com.github.ConcordiaSOEN341.CommandHandler;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +12,6 @@ public class CommandHandlerTest {
         Assert.assertTrue(commandHandler.isListing());
         Assert.assertFalse(commandHandler.isVerbose());
         Assert.assertNull(commandHandler.getFile());
-        commandHandler.delete();
     }
 
     @Test
@@ -22,7 +21,6 @@ public class CommandHandlerTest {
         Assert.assertFalse(commandHandler.isListing());
         Assert.assertTrue(commandHandler.isVerbose());
         Assert.assertNull(commandHandler.getFile());
-        commandHandler.delete();
     }
 
     @Test
@@ -32,7 +30,6 @@ public class CommandHandlerTest {
         Assert.assertTrue(commandHandler.isListing());
         Assert.assertTrue(commandHandler.isVerbose());
         Assert.assertEquals(commandHandler.getFile(), "program.asm");
-        commandHandler.delete();
     }
 
     // Test not needed

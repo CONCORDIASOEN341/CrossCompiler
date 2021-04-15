@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.CommandHandle;
+package com.github.ConcordiaSOEN341.CommandHandler;
 
 import static java.lang.System.exit;
 

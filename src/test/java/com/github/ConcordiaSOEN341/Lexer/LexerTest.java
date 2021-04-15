@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
@@ -27,7 +27,7 @@ public class LexerTest extends TestCase {
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
         LexerFSM lexerFSMTest = new LexerFSM(rTest, lFTest);
         eTest = new ErrorReporter(lFTest);
-        lTest = new Lexer(sTest, lexerFSMTest, rTest, eTest);
+        lTest = new Lexer(sTest, lexerFSMTest, rTest, lFTest, eTest);
     }
 
     private ArrayList<IToken> generateTokenList(){

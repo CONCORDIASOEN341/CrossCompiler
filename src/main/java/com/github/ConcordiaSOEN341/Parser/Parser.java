@@ -14,9 +14,10 @@ public class Parser implements IParser {
     private final ParserFSM parserFSM;
     private final IErrorReporter reporter;
     private final ICodeGen generator;
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.PARSER);
+    private final ILogger logger;
 
-    public Parser(ParserFSM p, ILexer l, ICodeGen g, IErrorReporter e) {
+    public Parser(ParserFSM p, ILexer l, ICodeGen g, LoggerFactory lf, IErrorReporter e) {
+        logger = lf.getLogger(LoggerType.PARSER);
         logger.log("Initializing Parser");
         parserFSM = p;
         lexer = l;
@@ -95,6 +96,7 @@ public class Parser implements IParser {
                             lStatement.getInstruction().setOperand(t);
                             break;
                         case DIRECTIVE:
+                            // logger.log("Directive created: " + this);
                             lStatement.setDirective(new Directive(t));
                             break;
                         case CSTRING:

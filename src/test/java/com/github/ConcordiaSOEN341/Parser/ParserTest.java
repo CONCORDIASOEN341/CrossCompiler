@@ -1,7 +1,7 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.*;
@@ -20,12 +20,12 @@ public class ParserTest {
 
     private void init(ArrayList<IToken> input){
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
-        ParserFSM pFSMTest = new ParserFSM();
+        ParserFSM pFSMTest = new ParserFSM(lFTest);
         SymbolTable sTest = new SymbolTable();
         IErrorReporter eTest = new ErrorReporter(lFTest);
         ILexer lTest = new LexerMoqForParser(input);
         ICodeGen cgTest = new CodeGen(sTest, lFTest, eTest);
-        pTest = new Parser(pFSMTest, lTest, cgTest, eTest);
+        pTest = new Parser(pFSMTest, lTest, cgTest, lFTest, eTest);
     }
 
     // UHM, even though we just have an end of file, it is still gonna add an empty LineStatement, what is the purpose of this test?

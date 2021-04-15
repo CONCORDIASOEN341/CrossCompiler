@@ -1,7 +1,7 @@
-package com.github.ConcordiaSOEN341.Driver;
+package com.github.ConcordiaSOEN341.CrossAssembler;
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.LexerFSM;
@@ -21,12 +21,13 @@ public class CrossAssembler implements ICrossAssembler {
         IReader reader = new Reader(commandHandler.getFile(), loggerFactory);
         SymbolTable symbolTable = new SymbolTable();
         LexerFSM lexerFSM = new LexerFSM(reader, loggerFactory);
+        ParserFSM parserFSM = new ParserFSM(loggerFactory);
+
         IErrorReporter reporter = new ErrorReporter(loggerFactory);
-        ILexer lexer = new Lexer(symbolTable, lexerFSM, reader, reporter);
+        ILexer lexer = new Lexer(symbolTable, lexerFSM, reader, loggerFactory, reporter);
         ICodeGen generator = new CodeGen(symbolTable, loggerFactory, reporter);
 
-        ParserFSM parserFSM = new ParserFSM();
-        IParser p = new Parser(parserFSM, lexer, generator, reporter);
+        IParser p = new Parser(parserFSM, lexer, generator, loggerFactory, reporter);
         p.parse(commandHandler.getFile());
     }
 }

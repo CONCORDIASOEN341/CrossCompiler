@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.Logger;
 
-import com.github.ConcordiaSOEN341.CommandHandle.CommandHandler;
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 
 public class FileLogger extends Logger {
     String prefix = LoggerColor.ANSI_GREEN + "[FILE] " + LoggerColor.ANSI_RESET;
