@@ -1,7 +1,10 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Error.ErrorType;
+import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 import java.util.HashMap;
 
@@ -9,12 +12,15 @@ public class ParserFSM {
     private HashMap<Integer, HashMap<TokenType, Integer>> transitions;
     private HashMap<Integer, ErrorType> parserErrorTable;
 
+    private final ILogger logger = LoggerFactory.getLogger(LoggerType.PARSER);
+
     public ParserFSM() {
         initializeErrorTable();
         initializeMap();
     }
 
     private void initializeErrorTable() {
+        logger.log("Parser Finite State Machine initializing error table...");
         parserErrorTable = new HashMap<>();
         parserErrorTable.put(4, ErrorType.EXTRA_OPERAND);
         parserErrorTable.put(3, ErrorType.MISSING_OPERAND);
@@ -29,9 +35,11 @@ public class ParserFSM {
         // Missing Errors
 //        parserErrorTable.put(49, ErrorType.INVALID_SIGNED_16BIT_OPERAND);
 //        parserErrorTable.put(97, ErrorType.INVALID_SIGNED_32BIT_OPERAND);
+        logger.log("Parser Finite State Machine error table initialized");
     }
 
     private void initializeMap() {
+        logger.log("Parser Finite State Machine initializing map...");
         transitions = new HashMap<>();
 
         transitions.put(1, new HashMap<>());
@@ -82,6 +90,7 @@ public class ParserFSM {
         transitions.get(9).put(TokenType.COMMENT, 6);
         transitions.get(9).put(TokenType.EOL, 7);
         transitions.get(9).put(TokenType.EOF, 7);
+        logger.log("Parser Finite State Machine map initialized");
     }
 
     public int getNextStateID(int id, TokenType type) {

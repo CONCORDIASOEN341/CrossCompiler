@@ -2,6 +2,8 @@ package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Logger.LoggerType;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class Lexer implements ILexer {
     private int stateID = 0;
     private int temp = 0;
 
+    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
+
     public Lexer(SymbolTable s, LexerFSM d, IReader r, IErrorReporter e) {
         symbolTable = s;
         lexerFSM = d;
@@ -25,6 +29,7 @@ public class Lexer implements ILexer {
 
     @Deprecated
     public ArrayList<IToken> generateTokenList() {
+        logger.log("Generating Token List");
         ArrayList<IToken> tokenList = new ArrayList<>();
         IToken t;
 
@@ -33,6 +38,8 @@ public class Lexer implements ILexer {
             tokenList.add(t);
 
         } while (t.getTokenType() != TokenType.EOF);
+
+        logger.log("Token List Generation Completed");
 
         return tokenList;
     }
@@ -51,6 +58,8 @@ public class Lexer implements ILexer {
         int previousCol;
         int previousLine;
         int previousStateID;
+
+        logger.log("Getting Next Token");
 
         // loop till we have read a token
         while (type == TokenType.START) {
@@ -118,6 +127,7 @@ public class Lexer implements ILexer {
         }
 
         token.setTokenType(type);
+        logger.log("Token found setting type " + type.toString());
 
         return token;
 

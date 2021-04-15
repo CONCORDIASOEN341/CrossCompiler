@@ -1,7 +1,10 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
+import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 import com.github.ConcordiaSOEN341.Interfaces.IPosition;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 public class Token implements IToken {
     private IPosition position;
