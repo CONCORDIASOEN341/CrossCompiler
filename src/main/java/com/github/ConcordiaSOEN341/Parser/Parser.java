@@ -96,7 +96,7 @@ public class Parser implements IParser {
                     }
                     stateID = parserFSM.getNextStateID(stateID, t.getTokenType());
                 }
-                
+
             } while (stateID != 7);
 
             intermediateRep.add(lStatement);
