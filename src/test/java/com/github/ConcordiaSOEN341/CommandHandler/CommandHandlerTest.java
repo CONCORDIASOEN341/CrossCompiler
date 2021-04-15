@@ -31,14 +31,4 @@ public class CommandHandlerTest {
         Assert.assertTrue(commandHandler.isVerbose());
         Assert.assertEquals(commandHandler.getFile(), "program.asm");
     }
-
-    // Test not needed
-//    @Test
-//    public void getInstance_WhenCreatingSecondCommandHandler_expectSameInstanceAsFirst(){
-//        String[] args = {"Test.asm", "-l"};
-//        CommandHandle commandHandle1 = new CommandHandle(args);
-//
-//        Assert.assertSame(CommandHandle.getInstance(), commandHandle1);
-//        commandHandle1.delete();
-//    }
 }

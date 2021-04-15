@@ -15,7 +15,7 @@ public class ErrorReporter implements IErrorReporter {
 
     private final ILogger logger;
 
-    public ErrorReporter(LoggerFactory lf){
+    public ErrorReporter(LoggerFactory lf) {
         logger = lf.getLogger(LoggerType.ERROR);
     }
 
@@ -27,7 +27,7 @@ public class ErrorReporter implements IErrorReporter {
     public String report(String fileName) {
         logger.log("Error Report Generated: ");
         if (fileName.contains("/")) {
-            fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
         }
         errors.sort(ascLines);
         StringBuilder output = new StringBuilder();
@@ -45,10 +45,12 @@ public class ErrorReporter implements IErrorReporter {
         return errors.size();
     }
 
-    public void clearErrors(){
+    public void clearErrors() {
         errors.clear();
     }
 
-    public ArrayList<IError> getErrors() { return errors; }
+    public ArrayList<IError> getErrors() {
+        return errors;
+    }
 
 }

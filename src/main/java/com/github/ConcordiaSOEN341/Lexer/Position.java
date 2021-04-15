@@ -1,16 +1,13 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 import com.github.ConcordiaSOEN341.Interfaces.IPosition;
-import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 public class Position implements IPosition {
     private int line;
     private int startColumn;
     private int endColumn;
 
-    public Position(){
+    public Position() {
         this.line = 0;
         this.startColumn = 0;
         this.endColumn = 0;

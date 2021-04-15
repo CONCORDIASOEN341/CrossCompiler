@@ -4,17 +4,17 @@ import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
 import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Lexer.LexerFSM;
 import com.github.ConcordiaSOEN341.Lexer.Lexer;
+import com.github.ConcordiaSOEN341.Lexer.LexerFSM;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Parser.Parser;
 import com.github.ConcordiaSOEN341.Parser.ParserFSM;
-import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import com.github.ConcordiaSOEN341.Reader.Reader;
+import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 
 
 public class CrossAssembler implements ICrossAssembler {
-    public void assemble(String[] args){
+    public void assemble(String[] args) {
         CommandHandler commandHandler = new CommandHandler(args);
         LoggerFactory loggerFactory = new LoggerFactory(commandHandler);
 

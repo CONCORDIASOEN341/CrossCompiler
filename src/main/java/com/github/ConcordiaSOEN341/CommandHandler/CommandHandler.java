@@ -8,35 +8,35 @@ public class CommandHandler {
     private boolean isVerbose;
     private String file;
 
-    public CommandHandler(){
+    public CommandHandler() {
         args = new String[0];
         isListing = false;
         isVerbose = false;
         file = "";
     }
 
-    public CommandHandler(String[] args){
+    public CommandHandler(String[] args) {
         this.args = args;
         parseArgs();
     }
 
-    private void parseArgs(){
-        if(args.length == 0){
+    private void parseArgs() {
+        if (args.length == 0) {
             System.out.println("Intended usage: cma [-h] [-l] [-v] File.asm");
             exit(0);
         }
-        for(String arg : args){
-            if(arg.equals("-h")){
+        for (String arg : args) {
+            if (arg.equals("-h")) {
                 System.out.println("cma [-h] [-l] [-v] File.asm");
                 exit(0);
             }
-            if(arg.equals("-l")){
+            if (arg.equals("-l")) {
                 isListing = true;
             }
-            if(arg.equals("-v")){
+            if (arg.equals("-v")) {
                 isVerbose = true;
             }
-            if(arg.contains(".asm")){
+            if (arg.contains(".asm")) {
                 file = arg;
             }
         }

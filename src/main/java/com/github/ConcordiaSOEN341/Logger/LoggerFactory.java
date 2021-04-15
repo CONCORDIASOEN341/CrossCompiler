@@ -6,7 +6,7 @@ import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 public class LoggerFactory {
     private final CommandHandler handler;
 
-    public LoggerFactory(CommandHandler cmdH){
+    public LoggerFactory(CommandHandler cmdH) {
         handler = cmdH;
     }
 

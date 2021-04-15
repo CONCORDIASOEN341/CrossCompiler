@@ -42,7 +42,7 @@ public class SymbolTable implements ICompilerMap<String, String> {
         // Immediate Base
         symbolTable.put("br.i5", "30");
         symbolTable.put("brf.i5", "50");
-        symbolTable.put("enter.u5","80");
+        symbolTable.put("enter.u5", "80");
         symbolTable.put("ldc.i3", "90");
         symbolTable.put("addv.u3", "98");
         symbolTable.put("ldv.u3", "A0");
@@ -65,8 +65,8 @@ public class SymbolTable implements ICompilerMap<String, String> {
         symbolTable.put("trap", "FF");
     }
 
-    public void addEntry(String k, String v){
-        symbolTable.put(k,v);
+    public void addEntry(String k, String v) {
+        symbolTable.put(k, v);
     }
 
     public String getValue(String mnemonic) {

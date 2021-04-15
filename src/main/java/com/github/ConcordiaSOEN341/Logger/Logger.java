@@ -6,7 +6,7 @@ import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 public class Logger implements ILogger {
     private final CommandHandler handler;
 
-    public Logger(CommandHandler cmdH){
+    public Logger(CommandHandler cmdH) {
         handler = cmdH;
     }
 

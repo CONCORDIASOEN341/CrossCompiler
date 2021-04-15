@@ -71,8 +71,8 @@ public class Parser implements IParser {
                     temp = null;
                 }
 
-                if(parserFSM.getNextStateID(stateID, t.getTokenType()) == 0){
-                    temp = (t.getTokenType() != TokenType.OFFSET && t.getTokenType() != TokenType.LABEL)? t : null;
+                if (parserFSM.getNextStateID(stateID, t.getTokenType()) == 0) {
+                    temp = (t.getTokenType() != TokenType.OFFSET && t.getTokenType() != TokenType.LABEL) ? t : null;
                     reporter.record(new Error(parserFSM.getErrorType(stateID), t.getPosition()));
                     stateID = 1;
                 } else {

@@ -55,7 +55,7 @@ public class CodeGen implements ICodeGen {
                 listingWriter.write(operands[i]);
                 listingWriter.write(comments[i]);
             }
-            
+
 
             listingWriter.close();
         } catch (IOException e) {
