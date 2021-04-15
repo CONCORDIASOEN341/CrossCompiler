@@ -4,4 +4,6 @@ public interface IReader {
     int getEof();
 
     int read();
+
+    void closeStream();
 }

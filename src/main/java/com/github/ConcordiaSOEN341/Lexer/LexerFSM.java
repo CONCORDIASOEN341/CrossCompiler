@@ -34,7 +34,7 @@ public class LexerFSM {
     private final ILogger logger;
 
     public LexerFSM(IReader r, LoggerFactory lf) {
-        logger = lf.getLogger(LoggerType.READER);
+        logger = lf.getLogger(LoggerType.LEXER);
         logger.log("Initializing Lexer Finite State Machine...");
         reader = r;
         initializeAlphabet();

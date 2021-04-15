@@ -96,7 +96,6 @@ public class Parser implements IParser {
                             lStatement.getInstruction().setOperand(t);
                             break;
                         case DIRECTIVE:
-                            // logger.log("Directive created: " + this);
                             lStatement.setDirective(new Directive(t));
                             break;
                         case CSTRING:
@@ -124,6 +123,7 @@ public class Parser implements IParser {
 
         } while (t.getTokenType() != TokenType.EOF);
 
+        lexer.closeReader();
         return intermediateRep;
     }
 

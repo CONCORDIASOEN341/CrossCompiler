@@ -13,11 +13,18 @@ public class ReaderMoq implements IReader {
         it = file.iterator();
     }
 
+    @Override
     public int getEof() {
         return EOF;
     }
 
+    @Override
     public int read() {
         return it.next();
+    }
+
+    @Override
+    public void closeStream() {
+
     }
 }

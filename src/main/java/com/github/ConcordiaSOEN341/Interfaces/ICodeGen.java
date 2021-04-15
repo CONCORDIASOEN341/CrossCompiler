@@ -18,10 +18,7 @@ public interface ICodeGen {
 
     String[] listingIRComments();
 
-
     void generateExe(String fileName);
-
-    String generateByteCode();
 
     ArrayList<IOpCodeTableElement> generateOpCodeTable();
 }

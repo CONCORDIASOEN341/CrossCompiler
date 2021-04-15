@@ -134,6 +134,10 @@ public class Lexer implements ILexer {
 
     }
 
+    public void closeReader(){
+        reader.closeStream();
+    }
+
     private boolean hasNoChar(int character) {
         return character == reader.getEof() || character == '\n';
     }

@@ -37,6 +37,40 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
+    public void generateExe(String fileName) {
+        String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
+        logger.log("Generating Executable file \"" + listFile + "\"");
+        try {
+            FileOutputStream fStream = new FileOutputStream(listFile);
+            DataOutputStream data = new DataOutputStream(fStream);
+
+            logger.log("Generating byte code...");
+            for (IOpCodeTableElement oTE : opCodeTable) {
+                if (oTE.getOpCode().length() > 0) {
+                    data.writeBytes(oTE.getOpCode());
+                }
+                for (String oP : oTE.getOperands()) {
+                    data.writeBytes(oP.substring(0,2));
+                    if (oP.length() == 4) {
+                        data.writeBytes(oP.substring(2,4));
+                    }
+                }
+            }
+
+            logger.log("Byte code generated");
+
+            fStream.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred");
+            System.out.println("The program will terminate.");
+            e.printStackTrace();
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void generateListingFile(String fileName) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
         logger.log("creating listing file \"" + listFile + "\"");
@@ -221,50 +255,6 @@ public class CodeGen implements ICodeGen {
         }
 
         return arr;
-    }
-
-    @Override
-    public void generateExe(String fileName) {
-        String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
-        logger.log("Generating Executable file \"" + listFile + "\"");
-        try {
-            FileOutputStream fStream = new FileOutputStream(listFile);
-            DataOutputStream data = new DataOutputStream(fStream);
-
-            data.writeBytes(generateByteCode());
-
-            fStream.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred");
-            System.out.println("The program will terminate.");
-            e.printStackTrace();
-            System.exit(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String generateByteCode() {
-        //String
-        logger.log("Generating byte code...");
-        StringBuilder sb = new StringBuilder();
-        for (IOpCodeTableElement oTE : opCodeTable) {
-            if (oTE.getOpCode().length() > 0) {
-                sb.append(oTE.getOpCode());
-                sb.append(" ");
-            }
-            for (String oP : oTE.getOperands()) {
-                sb.append(oP, 0, 2);
-                sb.append(" ");
-                if (oP.length() == 4) {
-                    sb.append(oP, 2, 4);
-                    sb.append(" ");
-                }
-            }
-        }
-        logger.log("Byte code generated " + sb);
-        return sb.toString();
     }
 
     @Override

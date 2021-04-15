@@ -11,11 +11,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Reader implements IReader {
-    private final static int EOF = -1;
+    private final int EOF = -1;
+    private final String fileName;
     private FileInputStream inputStream;
     private final ILogger logger;
 
-    public Reader(String fileName, LoggerFactory lf) {
+    public Reader(String f, LoggerFactory lf) {
+        fileName = f;
         File file = new File(fileName);
         logger = lf.getLogger(LoggerType.READER);
 
@@ -32,8 +34,18 @@ public class Reader implements IReader {
         return EOF;
     }
 
+    public void closeStream(){
+        try{
+            inputStream.close();
+            logger.log("Closed file \"" + fileName + "\"");
+        } catch (IOException e){
+            System.out.println("Error closing file stream.");
+            System.exit(0);
+        }
+
+    }
+
     public int read() {
-        logger.log("Reading file stream...");
         try {
             return inputStream.read();
         } catch (IOException e) {
