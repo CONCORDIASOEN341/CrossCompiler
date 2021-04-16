@@ -4,7 +4,6 @@ import com.github.ConcordiaSOEN341.Interfaces.*;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
 import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
@@ -17,22 +16,58 @@ public class CodeGen implements ICodeGen {
     private final ArrayList<IOpCodeTableElement> opCodeTable = new ArrayList<>();
     private final SymbolTable symbolTable;
     private final IErrorReporter reporter;
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.CODEGEN);
+    private final ILogger logger;
 
-    public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, IErrorReporter e) {
+    public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
         iR = ir;
         symbolTable = sT;
+        logger = lf.getLogger(LoggerType.CODEGEN);
         reporter = e;
     }
 
-    public CodeGen(SymbolTable sT, IErrorReporter e) {
+    public CodeGen(SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
         symbolTable = sT;
+        logger = lf.getLogger(LoggerType.CODEGEN);
         reporter = e;
     }
 
     @Override
     public void setIR(ArrayList<ILineStatement> ir) {
         iR = ir;
+    }
+
+    @Override
+    public void generateExe(String fileName) {
+        String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
+        logger.log("Generating Executable file \"" + listFile + "\"");
+        try {
+            FileOutputStream fStream = new FileOutputStream(listFile);
+            DataOutputStream data = new DataOutputStream(fStream);
+
+            logger.log("Generating byte code...");
+            for (IOpCodeTableElement oTE : opCodeTable) {
+                if (oTE.getOpCode().length() > 0) {
+                    data.writeBytes(oTE.getOpCode());
+                }
+                for (String oP : oTE.getOperands()) {
+                    data.writeBytes(oP.substring(0,2));
+                    if (oP.length() == 4) {
+                        data.writeBytes(oP.substring(2,4));
+                    }
+                }
+            }
+
+            logger.log("Byte code generated");
+
+            fStream.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred");
+            System.out.println("The program will terminate.");
+            e.printStackTrace();
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -54,7 +89,7 @@ public class CodeGen implements ICodeGen {
                 listingWriter.write(operands[i]);
                 listingWriter.write(comments[i]);
             }
-            
+
 
             listingWriter.close();
         } catch (IOException e) {
@@ -220,50 +255,6 @@ public class CodeGen implements ICodeGen {
         }
 
         return arr;
-    }
-
-    @Override
-    public void generateExe(String fileName) {
-        String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
-        logger.log("Generating Executable file \"" + listFile + "\"");
-        try {
-            FileOutputStream fStream = new FileOutputStream(listFile);
-            DataOutputStream data = new DataOutputStream(fStream);
-
-            data.writeBytes(generateByteCode());
-
-            fStream.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred");
-            System.out.println("The program will terminate.");
-            e.printStackTrace();
-            System.exit(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String generateByteCode() {
-        //String
-        logger.log("Generating byte code...");
-        StringBuilder sb = new StringBuilder();
-        for (IOpCodeTableElement oTE : opCodeTable) {
-            if (oTE.getOpCode().length() > 0) {
-                sb.append(oTE.getOpCode());
-                sb.append(" ");
-            }
-            for (String oP : oTE.getOperands()) {
-                sb.append(oP, 0, 2);
-                sb.append(" ");
-                if (oP.length() == 4) {
-                    sb.append(oP, 2, 4);
-                    sb.append(" ");
-                }
-            }
-        }
-        logger.log("Byte code generated " + sb);
-        return sb.toString();
     }
 
     @Override

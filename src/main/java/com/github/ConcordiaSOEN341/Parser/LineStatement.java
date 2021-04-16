@@ -1,9 +1,10 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Interfaces.IDirective;
+import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
+import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
+import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 public class LineStatement implements ILineStatement {
     private IToken label;
@@ -77,7 +78,7 @@ public class LineStatement implements ILineStatement {
     }
 
     public String toString() {
-        return "[ " + label.getTokenString() + " ] [ "+ instruction + " | " + directive + " ] [ " + comment.getTokenString() + " ] " + eol.getTokenString() + " .\n";
+        return "[ " + label.getTokenString() + " ] [ " + instruction + " | " + directive + " ] [ " + comment.getTokenString() + " ] " + eol.getTokenString() + " .\n";
     }
 
 }

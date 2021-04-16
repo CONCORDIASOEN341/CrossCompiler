@@ -12,9 +12,10 @@ public class ParserFSM {
     private HashMap<Integer, HashMap<TokenType, Integer>> transitions;
     private HashMap<Integer, ErrorType> parserErrorTable;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.PARSER);
+    private final ILogger logger;
 
-    public ParserFSM() {
+    public ParserFSM(LoggerFactory lf) {
+        logger = lf.getLogger(LoggerType.PARSER);
         initializeErrorTable();
         initializeMap();
     }

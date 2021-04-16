@@ -1,11 +1,8 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
-import com.github.ConcordiaSOEN341.Interfaces.ILogger;
 import com.github.ConcordiaSOEN341.Interfaces.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.Logger.LoggerType;
 
 public class Instruction implements IInstruction {
     private IToken mnemonic;
@@ -54,7 +51,9 @@ public class Instruction implements IInstruction {
         this.instructionType = instructionType;
     }
 
-    public String toString() { return mnemonic.getTokenString() + " " + operand.getTokenString();}
+    public String toString() {
+        return mnemonic.getTokenString() + " " + operand.getTokenString();
+    }
 
 
 }

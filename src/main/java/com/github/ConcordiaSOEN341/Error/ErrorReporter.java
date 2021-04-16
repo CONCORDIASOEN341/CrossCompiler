@@ -13,7 +13,11 @@ public class ErrorReporter implements IErrorReporter {
     private final ArrayList<IError> errors = new ArrayList<>();
     private final Comparator<IError> ascLines = Comparator.comparingInt(e -> e.getPosition().getLine());
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.ERROR);
+    private final ILogger logger;
+
+    public ErrorReporter(LoggerFactory lf) {
+        logger = lf.getLogger(LoggerType.ERROR);
+    }
 
     public void record(IError error) {
         logger.log("Error Recorded: " + error.toString());
@@ -23,7 +27,7 @@ public class ErrorReporter implements IErrorReporter {
     public String report(String fileName) {
         logger.log("Error Report Generated: ");
         if (fileName.contains("/")) {
-            fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
         }
         errors.sort(ascLines);
         StringBuilder output = new StringBuilder();
@@ -41,10 +45,12 @@ public class ErrorReporter implements IErrorReporter {
         return errors.size();
     }
 
-    public void clearErrors(){
+    public void clearErrors() {
         errors.clear();
     }
 
-    public ArrayList<IError> getErrors() { return errors; }
+    public ArrayList<IError> getErrors() {
+        return errors;
+    }
 
 }

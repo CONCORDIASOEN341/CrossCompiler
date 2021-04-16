@@ -18,12 +18,13 @@ public class Lexer implements ILexer {
     private int stateID = 0;
     private int temp = 0;
 
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.LEXER);
+    private final ILogger logger;
 
-    public Lexer(SymbolTable s, LexerFSM d, IReader r, IErrorReporter e) {
+    public Lexer(SymbolTable s, LexerFSM d, IReader r, LoggerFactory lf, IErrorReporter e) {
         symbolTable = s;
         lexerFSM = d;
         reader = r;
+        logger = lf.getLogger(LoggerType.LEXER);
         reporter = e;
     }
 
@@ -131,6 +132,10 @@ public class Lexer implements ILexer {
 
         return token;
 
+    }
+
+    public void closeReader(){
+        reader.closeStream();
     }
 
     private boolean hasNoChar(int character) {

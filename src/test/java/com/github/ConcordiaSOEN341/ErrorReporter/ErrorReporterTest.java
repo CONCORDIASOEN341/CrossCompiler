@@ -1,11 +1,13 @@
 package com.github.ConcordiaSOEN341.ErrorReporter;
 
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.IError;
 import com.github.ConcordiaSOEN341.Interfaces.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.Position;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +17,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class ErrorReporterTest extends TestCase {
     private IErrorReporter eTest;
 
+    private void init(){
+        LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
+        eTest = new ErrorReporter(lFTest);
+    }
+
     @Test
     public void ErrorReporter_RecordErrorAndReport() {
         //Arrange
-        eTest = new ErrorReporter();
+        init();
         IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
         String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.\n";
@@ -37,7 +44,7 @@ public class ErrorReporterTest extends TestCase {
     @Test
     public void ErrorReporter_HasErrors() {
         //Arrange
-        eTest = new ErrorReporter();
+        init();
         IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
         String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.";
@@ -47,7 +54,7 @@ public class ErrorReporterTest extends TestCase {
         boolean hasErrors = eTest.hasErrors();
 
         //Assert
-        assertEquals(true, hasErrors);
+        assertTrue(hasErrors);
 
         eTest.clearErrors();
     }
@@ -55,7 +62,7 @@ public class ErrorReporterTest extends TestCase {
     @Test
     public void ErrorReporter_ClearErrors() {
         //Arrange
-        eTest = new ErrorReporter();
+        init();
         IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
         String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.";
@@ -65,7 +72,7 @@ public class ErrorReporterTest extends TestCase {
         eTest.clearErrors();
 
         //Assert
-        assertEquals(false, eTest.hasErrors());
+        assertFalse(eTest.hasErrors());
 
     }
 }

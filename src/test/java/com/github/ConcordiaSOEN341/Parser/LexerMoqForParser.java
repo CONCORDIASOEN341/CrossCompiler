@@ -18,4 +18,11 @@ public class LexerMoqForParser implements ILexer {
     public IToken getNextToken(){
         return tokenList.next();
     }
+
+    @Override
+    public void closeReader() {
+
+    }
+
+
 }

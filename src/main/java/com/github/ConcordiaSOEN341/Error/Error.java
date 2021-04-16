@@ -21,5 +21,7 @@ public class Error implements IError {
     }
 
     @Override
-    public String toString() {return "Error:line " + position.getLine() + ": " + errorType; }
+    public String toString() {
+        return "Error:line " + position.getLine() + ": " + errorType;
+    }
 }

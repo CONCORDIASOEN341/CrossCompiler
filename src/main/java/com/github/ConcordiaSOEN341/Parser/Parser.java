@@ -14,9 +14,10 @@ public class Parser implements IParser {
     private final ParserFSM parserFSM;
     private final IErrorReporter reporter;
     private final ICodeGen generator;
-    private final ILogger logger = LoggerFactory.getLogger(LoggerType.PARSER);
+    private final ILogger logger;
 
-    public Parser(ParserFSM p, ILexer l, ICodeGen g, IErrorReporter e) {
+    public Parser(ParserFSM p, ILexer l, ICodeGen g, LoggerFactory lf, IErrorReporter e) {
+        logger = lf.getLogger(LoggerType.PARSER);
         logger.log("Initializing Parser");
         parserFSM = p;
         lexer = l;
@@ -70,8 +71,8 @@ public class Parser implements IParser {
                     temp = null;
                 }
 
-                if(parserFSM.getNextStateID(stateID, t.getTokenType()) == 0){
-                    temp = (t.getTokenType() != TokenType.OFFSET && t.getTokenType() != TokenType.LABEL)? t : null;
+                if (parserFSM.getNextStateID(stateID, t.getTokenType()) == 0) {
+                    temp = (t.getTokenType() != TokenType.OFFSET && t.getTokenType() != TokenType.LABEL) ? t : null;
                     reporter.record(new Error(parserFSM.getErrorType(stateID), t.getPosition()));
                     stateID = 1;
                 } else {
@@ -122,6 +123,7 @@ public class Parser implements IParser {
 
         } while (t.getTokenType() != TokenType.EOF);
 
+        lexer.closeReader();
         return intermediateRep;
     }
 

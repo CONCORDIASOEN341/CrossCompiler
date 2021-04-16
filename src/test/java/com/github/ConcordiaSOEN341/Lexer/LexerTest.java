@@ -1,9 +1,11 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
+import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -22,9 +24,10 @@ public class LexerTest extends TestCase {
     private void init(ArrayList<Character> f){
         IReader rTest = new ReaderMoq(f);
         SymbolTable sTest = new SymbolTable();
-        LexerFSM lexerFSMTest = new LexerFSM(rTest);
-        eTest = new ErrorReporter();
-        lTest = new Lexer(sTest, lexerFSMTest, rTest, eTest);
+        LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
+        LexerFSM lexerFSMTest = new LexerFSM(rTest, lFTest);
+        eTest = new ErrorReporter(lFTest);
+        lTest = new Lexer(sTest, lexerFSMTest, rTest, lFTest, eTest);
     }
 
     private ArrayList<IToken> generateTokenList(){
