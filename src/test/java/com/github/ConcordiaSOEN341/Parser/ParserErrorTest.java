@@ -2,16 +2,13 @@ package com.github.ConcordiaSOEN341.Parser;
 
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
+import com.github.ConcordiaSOEN341.CodeGen.ICodeGen;
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
+import com.github.ConcordiaSOEN341.Error.*;
 import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Interfaces.*;
-import com.github.ConcordiaSOEN341.Lexer.Position;
-import com.github.ConcordiaSOEN341.Lexer.Token;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Lexer.*;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.Tables.SymbolTable;
+import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.mockito.junit.MockitoJUnitRunner;

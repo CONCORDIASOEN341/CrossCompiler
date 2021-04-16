@@ -1,8 +1,7 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILexer;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
-import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Lexer.ILexer;
+import com.github.ConcordiaSOEN341.Lexer.IToken;
 
 import java.util.ArrayList;
 import java.util.Iterator;

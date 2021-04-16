@@ -1,12 +1,13 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
+import com.github.ConcordiaSOEN341.Parser.IInstruction;
+import com.github.ConcordiaSOEN341.Parser.ILineStatement;
 import com.github.ConcordiaSOEN341.Parser.InstructionType;
-import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
-import com.github.ConcordiaSOEN341.Tables.SymbolTable;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -1,9 +1,6 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Interfaces.IDirective;
-import com.github.ConcordiaSOEN341.Interfaces.IInstruction;
-import com.github.ConcordiaSOEN341.Interfaces.ILineStatement;
-import com.github.ConcordiaSOEN341.Interfaces.IToken;
+import com.github.ConcordiaSOEN341.Lexer.IToken;
 import com.github.ConcordiaSOEN341.Lexer.Token;
 
 public class LineStatement implements ILineStatement {

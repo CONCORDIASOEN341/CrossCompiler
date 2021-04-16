@@ -1,16 +1,11 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
-import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.*;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.Parser.Directive;
-import com.github.ConcordiaSOEN341.Parser.Instruction;
-import com.github.ConcordiaSOEN341.Parser.InstructionType;
-import com.github.ConcordiaSOEN341.Parser.LineStatement;
-import com.github.ConcordiaSOEN341.Tables.OpCodeTableElement;
-import com.github.ConcordiaSOEN341.Tables.SymbolTable;
+import com.github.ConcordiaSOEN341.Parser.*;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;

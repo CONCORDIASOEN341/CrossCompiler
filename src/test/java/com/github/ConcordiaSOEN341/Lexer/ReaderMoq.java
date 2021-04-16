@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
+import com.github.ConcordiaSOEN341.Reader.IReader;
 
 import java.util.ArrayList;
 import java.util.Iterator;

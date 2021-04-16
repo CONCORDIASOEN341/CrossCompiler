@@ -1,7 +1,6 @@
 package com.github.ConcordiaSOEN341.Reader;
 
-import com.github.ConcordiaSOEN341.Interfaces.ILogger;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
+import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
 

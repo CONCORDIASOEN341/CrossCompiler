@@ -1,11 +1,11 @@
 package com.github.ConcordiaSOEN341.ErrorReporter;
 
-import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Interfaces.IError;
-import com.github.ConcordiaSOEN341.Interfaces.IErrorReporter;
+import com.github.ConcordiaSOEN341.Error.IError;
+import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import junit.framework.TestCase;

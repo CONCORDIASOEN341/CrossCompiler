@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.CommandHandler;
+package com.github.ConcordiaSOEN341.CrossAssembler;
 
 import static java.lang.System.exit;
 

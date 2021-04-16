@@ -1,7 +1,6 @@
 package com.github.ConcordiaSOEN341.Error;
 
-import com.github.ConcordiaSOEN341.Interfaces.IError;
-import com.github.ConcordiaSOEN341.Interfaces.IPosition;
+import com.github.ConcordiaSOEN341.Lexer.IPosition;
 
 public class Error implements IError {
     private final ErrorType errorType;

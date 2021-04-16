@@ -1,6 +1,6 @@
-package com.github.ConcordiaSOEN341.Interfaces;
+package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.Parser.InstructionType;
+import com.github.ConcordiaSOEN341.Lexer.IToken;
 
 public interface IInstruction {
     IToken getMnemonic();

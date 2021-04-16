@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.Interfaces;
+package com.github.ConcordiaSOEN341.CodeGen;
 
 import java.util.ArrayList;
 
