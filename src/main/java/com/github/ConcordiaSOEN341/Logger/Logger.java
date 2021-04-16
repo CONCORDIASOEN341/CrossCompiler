@@ -14,4 +14,8 @@ public class Logger implements ILogger {
             System.out.println(message);
         }
     }
+
+    public CommandHandler getHandler(){
+        return handler;
+    }
 }

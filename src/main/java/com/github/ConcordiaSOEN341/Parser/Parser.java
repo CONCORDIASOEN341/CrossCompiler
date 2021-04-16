@@ -52,9 +52,11 @@ public class Parser implements IParser {
         generator.generateExe(fileName);
         logger.log("Orchestration - executable has been generated");
 
-        logger.log("Orchestration - generating listing file...");
-        generator.generateListingFile(fileName);
-        logger.log("Orchestration - listing file has been generated");
+        if(logger.getHandler().isListing()) {
+            logger.log("Orchestration - generating listing file...");
+            generator.generateListingFile(fileName);
+            logger.log("Orchestration - listing file has been generated");
+        }
     }
 
     public ArrayList<ILineStatement> generateIR() {
