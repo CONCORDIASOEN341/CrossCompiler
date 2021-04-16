@@ -17,13 +17,12 @@ public class Reader implements IReader {
 
     public Reader(String f, LoggerFactory lf) {
         fileName = f;
-        File file = new File(fileName);
         logger = lf.getLogger(LoggerType.READER);
-
         try {
+            File file = new File(fileName);
             inputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+        } catch (FileNotFoundException | NullPointerException e) {
+            System.out.println("FATAL ERROR: File not found");
             System.exit(0);
         }
         logger.log("Created file \"" + fileName + "\"");
