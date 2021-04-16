@@ -1,6 +1,4 @@
-package com.github.ConcordiaSOEN341.Tables;
-
-import com.github.ConcordiaSOEN341.Interfaces.IOpCodeTableElement;
+package com.github.ConcordiaSOEN341.CodeGen;
 
 import java.util.ArrayList;
 

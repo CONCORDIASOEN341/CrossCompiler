@@ -1,8 +1,12 @@
 package com.github.ConcordiaSOEN341.Parser;
 
+import com.github.ConcordiaSOEN341.CodeGen.ICodeGen;
 import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Interfaces.*;
+import com.github.ConcordiaSOEN341.Error.IErrorReporter;
+import com.github.ConcordiaSOEN341.Lexer.ILexer;
+import com.github.ConcordiaSOEN341.Lexer.IToken;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
+import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
 

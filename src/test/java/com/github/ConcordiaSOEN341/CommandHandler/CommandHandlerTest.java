@@ -1,5 +1,6 @@
 package com.github.ConcordiaSOEN341.CommandHandler;
 
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,4 +1,6 @@
-package com.github.ConcordiaSOEN341.Interfaces;
+package com.github.ConcordiaSOEN341.Error;
+
+import com.github.ConcordiaSOEN341.Error.IError;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.Interfaces;
+package com.github.ConcordiaSOEN341.Lexer;
 
 public interface IPosition {
     int getLine();

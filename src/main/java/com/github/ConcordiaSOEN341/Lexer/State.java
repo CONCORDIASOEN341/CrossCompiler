@@ -1,7 +1,6 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Interfaces.IState;
 
 public class State implements IState {
 

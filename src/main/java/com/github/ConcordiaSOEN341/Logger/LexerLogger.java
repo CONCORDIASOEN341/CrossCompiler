@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.Logger;
 
-import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 
 public class LexerLogger extends Logger {
     String prefix = LoggerColor.ANSI_BLUE + "[LEXER] " + LoggerColor.ANSI_RESET;

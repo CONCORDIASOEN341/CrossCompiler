@@ -1,8 +1,8 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
 import com.github.ConcordiaSOEN341.Error.ErrorType;
-import com.github.ConcordiaSOEN341.Interfaces.ILogger;
-import com.github.ConcordiaSOEN341.Interfaces.IReader;
+import com.github.ConcordiaSOEN341.Logger.ILogger;
+import com.github.ConcordiaSOEN341.Reader.IReader;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
 

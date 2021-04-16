@@ -1,7 +1,6 @@
 package com.github.ConcordiaSOEN341.Logger;
 
-import com.github.ConcordiaSOEN341.CommandHandler.CommandHandler;
-import com.github.ConcordiaSOEN341.Interfaces.ILogger;
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 
 public class LoggerFactory {
     private final CommandHandler handler;

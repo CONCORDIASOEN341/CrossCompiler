@@ -1,10 +1,8 @@
-package com.github.ConcordiaSOEN341.Tables;
-
-import com.github.ConcordiaSOEN341.Interfaces.ICompilerMap;
+package com.github.ConcordiaSOEN341.CodeGen;
 
 import java.util.HashMap;
 
-public class SymbolTable implements ICompilerMap<String, String> {
+public class SymbolTable {
     private HashMap<String, String> symbolTable;
 
     public SymbolTable() {
