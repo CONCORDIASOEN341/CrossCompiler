@@ -1,32 +1,40 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.CodeGen.ICodeGen;
+import com.github.ConcordiaSOEN341.CodeGen.IOpCodeTableElement;
+import com.github.ConcordiaSOEN341.CodeGen.OpCodeTableElement;
+import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.*;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ParserTest {
 
     private ArrayList<IToken> tokenList;
+    ArrayList<ILineStatement> irTest;
     private IParser pTest;
 
-    private void init(ArrayList<IToken> input){
+    private void initIR(ArrayList<IToken> input){
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
-        ParserFSM pFSMTest = new ParserFSM(lFTest);
         SymbolTable sTest = new SymbolTable();
         IErrorReporter eTest = new ErrorReporter(lFTest);
+        ParserFSM pFSMTest = new ParserFSM(lFTest);
         ILexer lTest = new LexerMoqForParser(input);
-        ICodeGen cgTest = new CodeGen(sTest, lFTest, eTest);
-        pTest = new Parser(pFSMTest, lTest, cgTest, lFTest, eTest);
+        pTest = new Parser(pFSMTest, lTest, sTest, lFTest, eTest);
+    }
+
+    private void initOpCodeTable(ArrayList<ILineStatement> ir){
+        LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
+        SymbolTable sTest = new SymbolTable();
+        IErrorReporter eTest = new ErrorReporter(lFTest);
+        pTest = new Parser(sTest, lFTest, eTest);
+        pTest.setIR(ir);
     }
 
     // UHM, even though we just have an end of file, it is still gonna add an empty LineStatement, what is the purpose of this test?
@@ -35,7 +43,7 @@ public class ParserTest {
         tokenList = new ArrayList<>();
         tokenList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(1, lineStatements.size());
@@ -49,7 +57,7 @@ public class ParserTest {
         tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.INHERENT);
@@ -64,7 +72,7 @@ public class ParserTest {
         tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.IMMEDIATE);
@@ -79,7 +87,7 @@ public class ParserTest {
         tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.RELATIVE);
@@ -93,7 +101,7 @@ public class ParserTest {
         tokenList.add(new Token("", new Position(1, 9, 9), TokenType.EOL));
         tokenList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals("Msg1", lineStatements.get(0).getLabel().getTokenString());
@@ -108,7 +116,7 @@ public class ParserTest {
         tokenList.add(new Token("", new Position(1, 9, 9), TokenType.EOL));
         tokenList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals("ABCD1", lineStatements.get(0).getDirective().getCString().getTokenString());
@@ -122,10 +130,157 @@ public class ParserTest {
         tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         tokenList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
 
-        init(tokenList);
+        initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals("A comment", lineStatements.get(0).getComment().getTokenString());
 
+    }
+
+    @Test
+    public void generateOpCodeTable_SecondPassLabels(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
+        expectedOpTable.get(0).addOperand("0005");
+        expectedOpTable.add(new OpCodeTableElement(2, "0003", "D9", 2, null));
+        expectedOpTable.get(1).addOperand("0C");
+        expectedOpTable.add(new OpCodeTableElement(3, "0005", "D9", 2, null));
+        expectedOpTable.get(2).addOperand("0C");
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_FwdAndBwdBranching(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Token("Main"), new Instruction(new Token("br.i8"), new Token("Main"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("br.i8"), new Token("Main"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Token("End"), new Instruction(new Token("br.i8"), new Token("End"), InstructionType.RELATIVE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "E0", 2, "Main"));
+        expectedOpTable.get(0).addOperand("00");
+        expectedOpTable.add(new OpCodeTableElement(2, "0002", "E0", 2, "Main"));
+        expectedOpTable.get(1).addOperand("FE");
+        expectedOpTable.add(new OpCodeTableElement(3, "0004", "E0", 2, "End"));
+        expectedOpTable.get(2).addOperand("02");
+        expectedOpTable.add(new OpCodeTableElement(4, "0006", "E0", 2, "End"));
+        expectedOpTable.get(3).addOperand("00");
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_Relative(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "D5", 4, "Msg1"));
+        expectedOpTable.add(new OpCodeTableElement(2, "0003", "D9", 2, null));
+        expectedOpTable.get(1).addOperand("0C");
+
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_Immediate(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("enter.u5"), new Token("16"), InstructionType.IMMEDIATE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "70", 0, null));
+        expectedOpTable.add(new OpCodeTableElement(2, "0001", "92", 0, null));
+
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_Inherent() {
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("halt"), InstructionType.INHERENT)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "00", 0, null));
+
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_NoInstruction(){
+        // Arrange
+        irTest = new ArrayList<>();
+        LineStatement l = new LineStatement();
+        l.setDirective(new Directive(new Token(".cstring"),new Token("A1")));
+        irTest.add(l);
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "", 0, null));
+        expectedOpTable.get(0).addOperand("41"); expectedOpTable.get(0).addOperand("31"); expectedOpTable.get(0).addOperand("00");
+
+
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_OperandList(){
+        // Arrange
+        LineStatement l = new LineStatement();
+        l.setComment(new Token(";Hello"));
+        irTest = new ArrayList<>();
+        irTest.add(l);
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "", 0, null));
+        expectedOpTable.add(new OpCodeTableElement(2, "0000", "92", 0, null));
+
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
     }
 }

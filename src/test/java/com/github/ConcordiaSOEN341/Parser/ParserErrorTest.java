@@ -1,17 +1,13 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 
-import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
-import com.github.ConcordiaSOEN341.CodeGen.ICodeGen;
+import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
-import com.github.ConcordiaSOEN341.Error.*;
 import com.github.ConcordiaSOEN341.Error.Error;
+import com.github.ConcordiaSOEN341.Error.*;
 import com.github.ConcordiaSOEN341.Lexer.*;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
-import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
@@ -26,12 +22,11 @@ public class ParserErrorTest  {
 
     private void init(ArrayList<IToken> input){
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
-        ParserFSM pFSMTest = new ParserFSM(lFTest);
         SymbolTable sTest = new SymbolTable();
         eTest = new ErrorReporter(lFTest);
+        ParserFSM pFSMTest = new ParserFSM(lFTest);
         ILexer lTest = new LexerMoqForParser(input);
-        ICodeGen cgTest = new CodeGen(sTest, lFTest, eTest);
-        pTest = new Parser(pFSMTest, lTest, cgTest, lFTest, eTest);
+        pTest = new Parser(pFSMTest, lTest, sTest, lFTest, eTest);
     }
 
     @Test

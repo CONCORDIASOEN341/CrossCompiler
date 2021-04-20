@@ -2,6 +2,7 @@ package com.github.ConcordiaSOEN341.CrossAssembler;
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
 import com.github.ConcordiaSOEN341.CodeGen.ICodeGen;
+import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.ILexer;
@@ -13,7 +14,6 @@ import com.github.ConcordiaSOEN341.Parser.Parser;
 import com.github.ConcordiaSOEN341.Parser.ParserFSM;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 import com.github.ConcordiaSOEN341.Reader.Reader;
-import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 
 
 public class CrossAssembler implements ICrossAssembler {
@@ -28,9 +28,11 @@ public class CrossAssembler implements ICrossAssembler {
 
         IErrorReporter reporter = new ErrorReporter(loggerFactory);
         ILexer lexer = new Lexer(symbolTable, lexerFSM, reader, loggerFactory, reporter);
-        ICodeGen generator = new CodeGen(symbolTable, loggerFactory, reporter);
 
-        IParser p = new Parser(parserFSM, lexer, generator, loggerFactory, reporter);
-        p.parse(commandHandler.getFile());
+        IParser p = new Parser(parserFSM, lexer, symbolTable, loggerFactory, reporter);
+        p.parse();
+
+        ICodeGen generator = new CodeGen(loggerFactory, reporter);
+        generator.generateCode(commandHandler.getFile(), p.getIR(), p.getOpCodeTable());
     }
 }

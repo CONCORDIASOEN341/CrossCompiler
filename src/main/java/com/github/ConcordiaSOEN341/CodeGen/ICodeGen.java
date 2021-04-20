@@ -6,21 +6,19 @@ import java.util.ArrayList;
 
 public interface ICodeGen {
 
-    void setIR(ArrayList<ILineStatement> ir);
+    void generateListingFile(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    void generateListingFile(String fileName);
+    void generateCode(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    String[] listingOP();
+    String[] listingOP(ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    String[] listingIRLabel();
+    String[] listingIRLabel(ArrayList<ILineStatement> iR);
 
-    String[] listingIRMne();
+    String[] listingIRMne(ArrayList<ILineStatement> iR);
 
-    String[] listingIROps();
+    String[] listingIROps(ArrayList<ILineStatement> iR);
 
-    String[] listingIRComments();
+    String[] listingIRComments(ArrayList<ILineStatement> iR);
 
-    void generateExe(String fileName);
-
-    ArrayList<IOpCodeTableElement> generateOpCodeTable();
+    void generateExe(String fileName, ArrayList<IOpCodeTableElement> opCodeTable);
 }
