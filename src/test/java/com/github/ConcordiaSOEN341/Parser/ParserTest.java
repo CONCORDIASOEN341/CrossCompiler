@@ -40,13 +40,15 @@ public class ParserTest {
     // UHM, even though we just have an end of file, it is still gonna add an empty LineStatement, what is the purpose of this test?
     @Test
     public void parse_giveEmpty_expectEmpty(){
+        // Arrange
         tokenList = new ArrayList<>();
-        tokenList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
-
+        tokenList.add(new Token("", new Position(1, 1, 1), TokenType.EOL));
+        tokenList.add(new Token("", new Position(2, 1, 1), TokenType.EOF));
+        // Act
         initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
-
-        assertEquals(1, lineStatements.size());
+        // Assert
+        assertEquals("", lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
 
     }
 
