@@ -1,44 +1,45 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;
-import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
-import com.github.ConcordiaSOEN341.Parser.IInstruction;
 import com.github.ConcordiaSOEN341.Parser.ILineStatement;
-import com.github.ConcordiaSOEN341.Parser.InstructionType;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class CodeGen implements ICodeGen {
-    private ArrayList<ILineStatement> iR = new ArrayList<>();
-    private final ArrayList<IOpCodeTableElement> opCodeTable = new ArrayList<>();
-    private final SymbolTable symbolTable;
-    private final IErrorReporter reporter;
     private final ILogger logger;
+    private final IErrorReporter reporter;
 
-    public CodeGen(ArrayList<ILineStatement> ir, SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
-        iR = ir;
-        symbolTable = sT;
-        logger = lf.getLogger(LoggerType.CODEGEN);
-        reporter = e;
-    }
-
-    public CodeGen(SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
-        symbolTable = sT;
+    public CodeGen(LoggerFactory lf, IErrorReporter e) {
         logger = lf.getLogger(LoggerType.CODEGEN);
         reporter = e;
     }
 
     @Override
-    public void setIR(ArrayList<ILineStatement> ir) {
-        iR = ir;
+    public void generateCode(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable){
+        logger.log("Checking with reporter for errors...");
+        if (reporter.hasErrors()) {
+            System.out.println(reporter.report(fileName));
+            System.exit(0);
+        } else {
+            logger.log("Generating executable...");
+            generateExe(fileName, opCodeTable);
+            logger.log("Executable has been generated");
+
+            if(logger.getHandler().isListing()) {
+                logger.log("Generating listing file...");
+                generateListingFile(fileName, iR, opCodeTable);
+                logger.log("Listing file has been generated");
+            }
+        }
+
     }
 
     @Override
-    public void generateExe(String fileName) {
+    public void generateExe(String fileName, ArrayList<IOpCodeTableElement> opCodeTable) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".exe";
         logger.log("Generating Executable file \"" + listFile + "\"");
         try {
@@ -46,17 +47,8 @@ public class CodeGen implements ICodeGen {
             DataOutputStream data = new DataOutputStream(fStream);
 
             logger.log("Generating byte code...");
-            for (IOpCodeTableElement oTE : opCodeTable) {
-                if (oTE.getOpCode().length() > 0) {
-                    data.writeBytes(oTE.getOpCode());
-                }
-                for (String oP : oTE.getOperands()) {
-                    data.writeBytes(oP.substring(0,2));
-                    if (oP.length() == 4) {
-                        data.writeBytes(oP.substring(2,4));
-                    }
-                }
-            }
+
+            data.writeBytes(generateByteCode(opCodeTable));
 
             logger.log("Byte code generated");
 
@@ -72,16 +64,35 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public void generateListingFile(String fileName) {
+    public String generateByteCode(ArrayList<IOpCodeTableElement> opCodeTable) {
+        StringBuilder sb = new StringBuilder();
+
+        for (IOpCodeTableElement oTE : opCodeTable) {
+            if (oTE.getOpCode().length() > 0) {
+                sb.append(oTE.getOpCode());
+            }
+            for (String oP : oTE.getOperands()) {
+                sb.append(oP, 0, 2);
+                if (oP.length() == 4) {
+                    sb.append(oP, 2, 4);
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public void generateListingFile(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable) {
         String listFile = fileName.substring(0, fileName.length() - 4) + ".lst";
-        logger.log("creating listing file \"" + listFile + "\"");
+        logger.log("Creating listing file \"" + listFile + "\"");
         try {
             FileWriter listingWriter = new FileWriter(listFile);
-            String[] byteCode = listingOP();
-            String[] label = listingIRLabel();
-            String[] mne = listingIRMne();
-            String[] operands = listingIROps();
-            String[] comments = listingIRComments();
+            String[] byteCode = listingOP(iR, opCodeTable);
+            String[] label = listingIRLabel(iR);
+            String[] mne = listingIRMne(iR);
+            String[] operands = listingIROps(iR);
+            String[] comments = listingIRComments(iR);
 
             for (int i = 0; i < iR.size(); i++) {
                 listingWriter.write(byteCode[i]);
@@ -90,7 +101,6 @@ public class CodeGen implements ICodeGen {
                 listingWriter.write(operands[i]);
                 listingWriter.write(comments[i]);
             }
-
 
             listingWriter.close();
         } catch (IOException e) {
@@ -104,7 +114,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public String[] listingOP() {
+    public String[] listingOP(ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable) {
         String[] arr = new String[iR.size()];
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
@@ -143,7 +153,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public String[] listingIRLabel() {
+    public String[] listingIRLabel(ArrayList<ILineStatement> iR) {
         String[] arr = new String[iR.size()];
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
@@ -171,7 +181,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public String[] listingIRMne() {
+    public String[] listingIRMne(ArrayList<ILineStatement> iR) {
         String[] arr = new String[iR.size()];
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
@@ -202,7 +212,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public String[] listingIROps() {
+    public String[] listingIROps(ArrayList<ILineStatement> iR) {
         String[] arr = new String[iR.size()];
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
@@ -233,7 +243,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public String[] listingIRComments() {
+    public String[] listingIRComments(ArrayList<ILineStatement> iR) {
         String[] arr = new String[iR.size()];
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
@@ -256,119 +266,5 @@ public class CodeGen implements ICodeGen {
         }
 
         return arr;
-    }
-
-    @Override
-    public ArrayList<IOpCodeTableElement> generateOpCodeTable() {
-        int line = 1;
-        int address = 0;
-        logger.log("Generating OpCodeTable");
-        logger.log("Starting First Pass now...");
-        // FIRST PASS
-        for (ILineStatement lS : iR) {
-            IOpCodeTableElement oTE = new OpCodeTableElement();
-
-            // Set Line and Address
-            oTE.setLine(line);
-            oTE.setAddress(String.format("%04X", address));
-
-            // Add Label - Address to symbol table
-            if (lS.getLabel().getTokenType() != TokenType.ERROR || lS.getLabel() != null) {
-                symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
-            }
-
-            // Account for Instruction or Directive
-            if (lS.getInstruction().getInstructionType() != null) {
-                // Determine opcode of mnemonic if there is an instruction
-                if (lS.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
-                    oTE.setOpCode(calculateImmediateOpCode(lS.getInstruction()));
-                } else {
-                    oTE.setOpCode(symbolTable.getValue(lS.getInstruction().getMnemonic().getTokenString()));
-                }
-
-                // Inc address for the opcode
-                address++;
-
-                // Determine Hex for operand (label or integer)
-                if (lS.getInstruction().getInstructionType() == InstructionType.RELATIVE) {
-                    oTE.setBitSpace(bitSpace(lS.getInstruction()) / 4); // Based on mnemonic
-                    try {
-                        // FIGURE OUT NEGATIVES
-                        int operand = Integer.parseInt(lS.getInstruction().getOperand().getTokenString());
-                        oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", operand));
-
-                    } catch (NumberFormatException e) {
-                        oTE.setLabel(lS.getInstruction().getOperand().getTokenString());
-                    }
-                    // Inc address for relative operand
-                    address += oTE.getBitSpace() / 2;
-                }
-
-            } else if (lS.getDirective().getDir().getTokenType() != TokenType.ERROR && lS.getDirective().getDir().getTokenString().equals(".cstring")) {
-                String cstring = lS.getDirective().getCString().getTokenString();
-
-                for (char c : cstring.toCharArray()) {
-                    if (c != '\"') {
-                        oTE.addOperand(String.format("%02X", (int) c));
-                        address++;
-                    }
-                }
-                oTE.addOperand("00");
-                address++;
-            }
-
-            opCodeTable.add(oTE);
-            line++;
-        }
-        logger.log("Completed First Pass");
-        logger.log("Starting Second Pass now...");
-        // SECOND PASS
-        for (IOpCodeTableElement oTE : opCodeTable) {
-            if (oTE.getLabel() != null) {
-                String labelAddress = symbolTable.getValue(oTE.getLabel());
-                if (labelAddress != null) {
-                    int offset = Integer.parseInt(labelAddress, 16) - Integer.parseInt(oTE.getAddress(), 16);
-                    if (offset < 0) {
-                        String offsetString = String.format("%X", offset);
-                        oTE.addOperand(offsetString.substring(offsetString.length() - oTE.getBitSpace()));
-                    } else {
-                        oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", offset));
-                    }
-                }
-            }
-        }
-        logger.log("Completed Second Pass...");
-        return opCodeTable;
-    }
-
-    private int bitSpace(IInstruction instr) {
-        String[] sNum = instr.getMnemonic().getTokenString().split(".((u)|(i))", 2);            //take string after the u or the i (this leaves only the number)
-        return Integer.parseInt(sNum[1]);
-    }
-
-    private String calculateImmediateOpCode(IInstruction instr) {
-        String mnemonic = instr.getMnemonic().getTokenString();
-        int offset = Integer.parseInt(instr.getOperand().getTokenString());
-        int hexNumber = 0;
-
-        //special case for enter.u5, offset do not increase normally
-        if (mnemonic.equals("enter.u5")) {
-            if (offset <= 15) {
-                hexNumber = Integer.parseInt("80", 16) + offset;
-            } else {
-                hexNumber = Integer.parseInt("60", 16) + offset;
-            }
-        } else {
-            //special case for negative numbers
-            if (offset < 0) {
-                int size = (int) Math.pow(2, bitSpace(instr));
-                offset = size + offset;
-            }
-            //the rest
-            hexNumber = Integer.parseInt(symbolTable.getValue(mnemonic), 16) + offset;
-        }
-
-
-        return String.format("%02X", hexNumber);
     }
 }

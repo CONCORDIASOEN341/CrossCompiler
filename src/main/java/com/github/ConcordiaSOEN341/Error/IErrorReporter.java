@@ -1,7 +1,5 @@
 package com.github.ConcordiaSOEN341.Error;
 
-import com.github.ConcordiaSOEN341.Error.IError;
-
 import java.util.ArrayList;
 
 public interface IErrorReporter {

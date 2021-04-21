@@ -5,22 +5,23 @@ import com.github.ConcordiaSOEN341.Parser.ILineStatement;
 import java.util.ArrayList;
 
 public interface ICodeGen {
+    void generateCode(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    void setIR(ArrayList<ILineStatement> ir);
+    void generateExe(String fileName, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    void generateListingFile(String fileName);
+    String generateByteCode(ArrayList<IOpCodeTableElement> opCodeTable);
 
-    String[] listingOP();
+    void generateListingFile(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    String[] listingIRLabel();
+    String[] listingOP(ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable);
 
-    String[] listingIRMne();
+    String[] listingIRLabel(ArrayList<ILineStatement> iR);
 
-    String[] listingIROps();
+    String[] listingIRMne(ArrayList<ILineStatement> iR);
 
-    String[] listingIRComments();
+    String[] listingIROps(ArrayList<ILineStatement> iR);
 
-    void generateExe(String fileName);
+    String[] listingIRComments(ArrayList<ILineStatement> iR);
 
-    ArrayList<IOpCodeTableElement> generateOpCodeTable();
+
 }

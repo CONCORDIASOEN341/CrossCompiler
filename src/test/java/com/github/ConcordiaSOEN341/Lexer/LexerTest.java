@@ -1,10 +1,10 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
-import com.github.ConcordiaSOEN341.Error.*;
-import com.github.ConcordiaSOEN341.Error.Error;
-import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
+import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
+import com.github.ConcordiaSOEN341.Error.Error;
+import com.github.ConcordiaSOEN341.Error.*;
+import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 import junit.framework.TestCase;
 import org.junit.Test;
