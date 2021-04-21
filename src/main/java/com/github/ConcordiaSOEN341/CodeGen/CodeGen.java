@@ -20,7 +20,6 @@ public class CodeGen implements ICodeGen {
 
     @Override
     public void generateCode(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable){
-
         logger.log("Checking with reporter for errors...");
         if (reporter.hasErrors()) {
             System.out.println(reporter.report(fileName));
@@ -48,17 +47,8 @@ public class CodeGen implements ICodeGen {
             DataOutputStream data = new DataOutputStream(fStream);
 
             logger.log("Generating byte code...");
-            for (IOpCodeTableElement oTE : opCodeTable) {
-                if (oTE.getOpCode().length() > 0) {
-                    data.writeBytes(oTE.getOpCode());
-                }
-                for (String oP : oTE.getOperands()) {
-                    data.writeBytes(oP.substring(0,2));
-                    if (oP.length() == 4) {
-                        data.writeBytes(oP.substring(2,4));
-                    }
-                }
-            }
+
+            data.writeBytes(generateByteCode(opCodeTable));
 
             logger.log("Byte code generated");
 
@@ -71,6 +61,25 @@ public class CodeGen implements ICodeGen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String generateByteCode(ArrayList<IOpCodeTableElement> opCodeTable) {
+        StringBuilder sb = new StringBuilder();
+
+        for (IOpCodeTableElement oTE : opCodeTable) {
+            if (oTE.getOpCode().length() > 0) {
+                sb.append(oTE.getOpCode());
+            }
+            for (String oP : oTE.getOperands()) {
+                sb.append(oP, 0, 2);
+                if (oP.length() == 4) {
+                    sb.append(oP, 2, 4);
+                }
+            }
+        }
+
+        return sb.toString();
     }
 
     @Override

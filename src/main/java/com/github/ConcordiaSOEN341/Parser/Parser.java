@@ -258,7 +258,7 @@ public class Parser implements IParser {
         return String.format("%02X", hexNumber);
     }
 
-    private void checkInstructionSpace(IInstruction in, IToken t) {
+      private void checkInstructionSpace(IInstruction in, IToken t) {
         char sign = in.getMnemonic().getTokenString().charAt(in.getMnemonic().getTokenString().indexOf('.') + 1);
         int bitSpace = getSymbolValue(in.getMnemonic());
         int operand;
