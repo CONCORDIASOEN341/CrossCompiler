@@ -30,7 +30,7 @@ public class ErrorReporter implements IErrorReporter {
         errors.sort(ascLines);
         StringBuilder output = new StringBuilder();
         for (IError e : errors) {
-            output.append(fileName).append(":").append(e).append("\n");
+            output.append(fileName).append(" -> ").append(e).append("\n");
         }
         return output.toString();
     }

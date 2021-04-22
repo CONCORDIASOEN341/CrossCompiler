@@ -25,8 +25,7 @@ public class ErrorReporterTest extends TestCase {
         init();
         IError error = new Error(ErrorType.getDefault(), new Position(1, 1, 1));
         String file = "abc";
-        String expectedReport = file + ":" + "Error:line " + "1" + ": " + "Invalid character.\n";
-
+        String expectedReport = file + " -> " + "Error at line " + "1" + ": " + "Invalid character.\n";
         //Act
         eTest.record(error);
         String report = eTest.report(file);
