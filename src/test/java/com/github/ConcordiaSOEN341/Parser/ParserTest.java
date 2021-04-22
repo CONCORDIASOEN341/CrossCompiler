@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class ParserTest {
 
     private ArrayList<IToken> tokenList;
-    ArrayList<ILineStatement> irTest;
+    private ArrayList<ILineStatement> irTest;
     private IParser pTest;
 
     private void initIR(ArrayList<IToken> input){
