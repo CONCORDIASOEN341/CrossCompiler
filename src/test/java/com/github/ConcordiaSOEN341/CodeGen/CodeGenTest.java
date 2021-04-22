@@ -168,14 +168,13 @@ public class CodeGenTest extends TestCase {
         irTest = new ArrayList<>();
         irTest.add(new LineStatement());
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
-        irTest.get(1).setComment(new Token(";This is not a test"));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement());
         init(irTest);
 
-        String[] content = codeGenTest.listingIRComments(irTest);
-        assertEquals(irTest.get(1).getComment().getTokenString(), content[2].trim());
-        assertEquals(irTest.get(2).getComment().getTokenString(), content[3].trim());
+        String[] content = codeGenTest.listingIROps(irTest);
+        assertEquals(irTest.get(1).getInstruction().getOperand().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getInstruction().getOperand().getTokenString(), content[3].trim());
     }
 
     @Test
@@ -192,14 +191,15 @@ public class CodeGenTest extends TestCase {
         irTest = new ArrayList<>();
         irTest.add(new LineStatement());
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.get(1).setComment(new Token(";This is not a test"));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement());
 
         init(irTest);
 
         String[] content = codeGenTest.listingIRComments(irTest);
-        assertEquals(irTest.get(1).getInstruction().getOperand().getTokenString(), content[2].trim());
-        assertEquals(irTest.get(2).getInstruction().getOperand().getTokenString(), content[3].trim());
+        assertEquals(irTest.get(1).getComment().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getComment().getTokenString(), content[3].trim());
     }
 
 
