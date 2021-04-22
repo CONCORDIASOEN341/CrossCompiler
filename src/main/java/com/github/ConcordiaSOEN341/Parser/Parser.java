@@ -33,10 +33,10 @@ public class Parser implements IParser {
         symbolTable = sT;
     }
 
-    public Parser(SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
+    public Parser(ParserFSM p, SymbolTable sT, LoggerFactory lf, IErrorReporter e) {
         logger = lf.getLogger(LoggerType.PARSER);
         logger.log("Initializing Parser");
-        parserFSM = null;
+        parserFSM = p;
         lexer = null;
         reporter = e;
         symbolTable = sT;
