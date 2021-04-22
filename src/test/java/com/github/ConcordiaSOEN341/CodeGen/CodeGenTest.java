@@ -91,20 +91,6 @@ public class CodeGenTest extends TestCase {
     }
 
     @Test
-    public void listingOP_whenIrIsEmptyAndOpCodeTableNotEmpty_expectEmptyOpTable() {
-        irTest = new ArrayList<>();
-        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
-        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
-        irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
-        init(irTest);
-
-        ArrayList<IOpCodeTableElement> opTable = new ArrayList<>();
-
-        String[] expectedOpTable = codeGenTest.listingOP(irTest, opTable);
-        assertEquals(0, expectedOpTable.length);
-    }
-
-    @Test
     public void listingOP_whenIrIsNotEmptyAndOpCodeTableIsEmpty_expectEmptyOpTable() {
         irTest = new ArrayList<>();
         init(irTest);
@@ -127,13 +113,14 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement());
         irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Token("Msg2"), new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement());
         init(irTest);
 
         String expected = "";
         expected = irTest.get(0).getLabel().getTokenString();
         String[] content = codeGenTest.listingIRLabel(irTest);
-        assertEquals(irTest.size(), codeGenTest.listingIRLabel(irTest).length);
-        //assertEquals("Label", codeGenTest.listingIRLabel(irTest).  );
+        assertEquals(irTest.size(), content);
+        //assertEquals("Label", codeGenTest.listingIRLabel(irTest);
         //assertEquals("1\t " + opTable.get(0).getAddress() + " " + opTable.get(0).getOpCode() + " " + opTable.get(0).getOperands().get(0), expectedOpTable[1].trim());
        // assertEquals("2\t " + opTable.get(1).getAddress() + " " + opTable.get(1).getOpCode() + " " + opTable.get(1).getOperands().get(0), expectedOpTable[2].trim());
 
