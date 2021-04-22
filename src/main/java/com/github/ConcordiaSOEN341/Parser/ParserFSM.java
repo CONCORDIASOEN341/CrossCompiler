@@ -39,6 +39,7 @@ public class ParserFSM {
         parserErrorTable.put(17, ErrorType.INVALID_UNSIGNED_5BIT_OPERAND);
         parserErrorTable.put(25, ErrorType.INVALID_SIGNED_8BIT_OPERAND);
         parserErrorTable.put(26, ErrorType.INVALID_UNSIGNED_8BIT_OPERAND);
+        parserErrorTable.put(66, ErrorType.INVALID_DIRECTIVE);
         parserErrorTable.put(69, ErrorType.LABEL_NOT_FOUND);
         parserErrorTable.put(420, ErrorType.LABEL_DEFINED);
         parserErrorTable.put(42069, ErrorType.INVALID_OPERAND_LABEL_NOT_USED);

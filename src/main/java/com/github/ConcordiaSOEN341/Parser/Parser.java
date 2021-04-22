@@ -115,6 +115,8 @@ public class Parser implements IParser {
                             break;
                         case DIRECTIVE:
                             lStatement.setDirective(new Directive(t));
+                            if(!t.getTokenString().equals(".cstring"))
+                                reporter.record(new Error(t.getTokenString(), parserFSM.getErrorType(66), t.getPosition()));
                             break;
                         case CSTRING:
                             lStatement.getDirective().setCString(t);

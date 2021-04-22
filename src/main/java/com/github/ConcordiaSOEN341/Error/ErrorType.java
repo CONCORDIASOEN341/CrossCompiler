@@ -19,6 +19,7 @@ public enum ErrorType {
     LABEL_NOT_FOUND("label not found (or defined)."),
     LABEL_DEFINED("label already defined."),
     INVALID_OPERAND_LABEL_NOT_USED("Operand must refer to a label."),
+    INVALID_DIRECTIVE("is an invalid directive. Only .cstring allowed."),
     CSTRING_NOT_FOUND("Directive used without cstring operand.");
 
 
