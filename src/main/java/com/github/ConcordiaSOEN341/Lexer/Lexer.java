@@ -136,6 +136,7 @@ public class Lexer implements ILexer {
 
     }
 
+    @Override
     public void closeReader(){
         reader.closeStream();
     }

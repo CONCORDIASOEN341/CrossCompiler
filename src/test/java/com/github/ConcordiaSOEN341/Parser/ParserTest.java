@@ -33,7 +33,8 @@ public class ParserTest {
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
         SymbolTable sTest = new SymbolTable();
         IErrorReporter eTest = new ErrorReporter(lFTest);
-        pTest = new Parser(sTest, lFTest, eTest);
+        ParserFSM pFSMTest = new ParserFSM(lFTest);
+        pTest = new Parser(pFSMTest, sTest, lFTest, eTest);
         pTest.setIR(ir);
     }
 
