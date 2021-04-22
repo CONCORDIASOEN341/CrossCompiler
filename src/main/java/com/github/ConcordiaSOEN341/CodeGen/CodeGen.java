@@ -19,7 +19,7 @@ public class CodeGen implements ICodeGen {
     }
 
     @Override
-    public void generateCode(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable){
+    public void generateCode(String fileName, ArrayList<ILineStatement> iR, ArrayList<IOpCodeTableElement> opCodeTable) {
         logger.log("Checking with reporter for errors...");
         if (reporter.hasErrors()) {
             System.out.println(reporter.report(fileName));
@@ -29,13 +29,12 @@ public class CodeGen implements ICodeGen {
             generateExe(fileName, opCodeTable);
             logger.log("Executable has been generated");
 
-            if(logger.getHandler().isListing()) {
+            if (logger.getHandler().isListing()) {
                 logger.log("Generating listing file...");
                 generateListingFile(fileName, iR, opCodeTable);
                 logger.log("Listing file has been generated");
             }
         }
-
     }
 
     @Override
@@ -119,34 +118,36 @@ public class CodeGen implements ICodeGen {
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
         // Init Header
-        sbLines[0] = new StringBuilder();
-        sbLines[0].append("Line Addr Code");
-        int realHeaderLength = sbLines[0].length() - 2;
-        int maxLineLength = realHeaderLength;
+        if (sbLines.length > 0 && opCodeTable.size() > 0) {
+            sbLines[0] = new StringBuilder();
+            sbLines[0].append("Line Addr Code");
+            int realHeaderLength = sbLines[0].length() - 2;
+            int maxLineLength = realHeaderLength;
 
-        for (int i = 0; i < iR.size() - 1; i++) {
-            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < iR.size() - 1; i++) {
+                StringBuilder sb = new StringBuilder();
 
-            sb.append(i + 1).append("\t ").append(opCodeTable.get(i).getAddress()).append(" ");
+                sb.append(i + 1).append("\t ").append(opCodeTable.get(i).getAddress()).append(" ");
 
-            if (opCodeTable.get(i).getOpCode().length() > 0) {
-                sb.append(opCodeTable.get(i).getOpCode()).append(" ");
+                if (opCodeTable.get(i).getOpCode().length() > 0) {
+                    sb.append(opCodeTable.get(i).getOpCode()).append(" ");
+                }
+
+                for (String op : opCodeTable.get(i).getOperands()) {
+                    sb.append(op).append(" ");
+                }
+
+                maxLineLength = Math.max(maxLineLength, sb.length());
+                sbLines[i + 1] = sb;
             }
 
-            for (String op : opCodeTable.get(i).getOperands()) {
-                sb.append(op).append(" ");
+            sbLines[0].append(" ".repeat(maxLineLength - realHeaderLength)).append("\t");
+            arr[0] = sbLines[0].toString();
+
+            for (int i = 1; i < iR.size(); i++) {
+                sbLines[i].append(" ".repeat(maxLineLength - sbLines[i].length())).append("\t");
+                arr[i] = sbLines[i].toString();
             }
-
-            maxLineLength = Math.max(maxLineLength, sb.length());
-            sbLines[i + 1] = sb;
-        }
-
-        sbLines[0].append(" ".repeat(maxLineLength - realHeaderLength)).append("\t");
-        arr[0] = sbLines[0].toString();
-
-        for (int i = 1; i < iR.size(); i++) {
-            sbLines[i].append(" ".repeat(maxLineLength - sbLines[i].length())).append("\t");
-            arr[i] = sbLines[i].toString();
         }
 
         return arr;
@@ -158,26 +159,26 @@ public class CodeGen implements ICodeGen {
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
         // Init Header
-        sbLines[0] = new StringBuilder();
-        sbLines[0].append("Label");
-        int maxLabelLength = sbLines[0].length();
+        if (sbLines.length > 0) {
+            sbLines[0] = new StringBuilder();
+            sbLines[0].append("Label");
+            int maxLabelLength = sbLines[0].length();
 
-        for (int i = 0; i < iR.size() - 1; i++) {
-            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < iR.size() - 1; i++) {
+                StringBuilder sb = new StringBuilder();
 
-            sb.append(iR.get(i).getLabel().getTokenString());
+                sb.append(iR.get(i).getLabel().getTokenString());
 
-            maxLabelLength = Math.max(maxLabelLength, sb.length());
-            sbLines[i + 1] = sb;
+                maxLabelLength = Math.max(maxLabelLength, sb.length());
+                sbLines[i + 1] = sb;
+            }
+
+            for (int i = 0; i < iR.size(); i++) {
+                sbLines[i].append(" ".repeat(maxLabelLength - sbLines[i].length())).append("\t\t");
+                arr[i] = sbLines[i].toString();
+            }
         }
-
-        for (int i = 0; i < iR.size(); i++) {
-            sbLines[i].append(" ".repeat(maxLabelLength - sbLines[i].length())).append("\t\t");
-            arr[i] = sbLines[i].toString();
-        }
-
         return arr;
-
     }
 
     @Override
@@ -186,28 +187,29 @@ public class CodeGen implements ICodeGen {
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
         // Init Header
-        sbLines[0] = new StringBuilder();
-        sbLines[0].append("Mne");
-        int maxCoreLength = sbLines[0].length();
+        if (sbLines.length > 0) {
+            sbLines[0] = new StringBuilder();
+            sbLines[0].append("Mne");
+            int maxCoreLength = sbLines[0].length();
 
-        for (int i = 0; i < iR.size() - 1; i++) {
-            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < iR.size() - 1; i++) {
+                StringBuilder sb = new StringBuilder();
 
-            if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
-                sb.append(iR.get(i).getDirective().getDir().getTokenString());
-            } else {
-                sb.append(iR.get(i).getInstruction().getMnemonic().getTokenString());
+                if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
+                    sb.append(iR.get(i).getDirective().getDir().getTokenString());
+                } else {
+                    sb.append(iR.get(i).getInstruction().getMnemonic().getTokenString());
+                }
+
+                maxCoreLength = Math.max(maxCoreLength, sb.length());
+                sbLines[i + 1] = sb;
             }
 
-            maxCoreLength = Math.max(maxCoreLength, sb.length());
-            sbLines[i + 1] = sb;
+            for (int i = 0; i < iR.size(); i++) {
+                sbLines[i].append(" ".repeat(maxCoreLength - sbLines[i].length())).append("  ");
+                arr[i] = sbLines[i].toString();
+            }
         }
-
-        for (int i = 0; i < iR.size(); i++) {
-            sbLines[i].append(" ".repeat(maxCoreLength - sbLines[i].length())).append("  ");
-            arr[i] = sbLines[i].toString();
-        }
-
         return arr;
     }
 
@@ -217,28 +219,29 @@ public class CodeGen implements ICodeGen {
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
         // Init Header
-        sbLines[0] = new StringBuilder();
-        sbLines[0].append("Operand");
-        int maxCoreLength = sbLines[0].length();
+        if (sbLines.length > 0) {
+            sbLines[0] = new StringBuilder();
+            sbLines[0].append("Operand");
+            int maxCoreLength = sbLines[0].length();
 
-        for (int i = 0; i < iR.size() - 1; i++) {
-            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < iR.size() - 1; i++) {
+                StringBuilder sb = new StringBuilder();
 
-            if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
-                sb.append(iR.get(i).getDirective().getCString().getTokenString());
-            } else {
-                sb.append(iR.get(i).getInstruction().getOperand().getTokenString());
+                if (iR.get(i).getInstruction().getMnemonic().getTokenString().equals("")) {
+                    sb.append(iR.get(i).getDirective().getCString().getTokenString());
+                } else {
+                    sb.append(iR.get(i).getInstruction().getOperand().getTokenString());
+                }
+
+                maxCoreLength = Math.max(maxCoreLength, sb.length());
+                sbLines[i + 1] = sb;
             }
 
-            maxCoreLength = Math.max(maxCoreLength, sb.length());
-            sbLines[i + 1] = sb;
+            for (int i = 0; i < iR.size(); i++) {
+                sbLines[i].append(" ".repeat(maxCoreLength - sbLines[i].length())).append("\t\t");
+                arr[i] = sbLines[i].toString();
+            }
         }
-
-        for (int i = 0; i < iR.size(); i++) {
-            sbLines[i].append(" ".repeat(maxCoreLength - sbLines[i].length())).append("\t\t");
-            arr[i] = sbLines[i].toString();
-        }
-
         return arr;
     }
 
@@ -248,23 +251,24 @@ public class CodeGen implements ICodeGen {
         StringBuilder[] sbLines = new StringBuilder[iR.size()];
 
         // Init Header
-        sbLines[0] = new StringBuilder();
-        sbLines[0].append("Comments");
-        int maxCommentLength = sbLines[0].length();
+        if (sbLines.length > 0) {
+            sbLines[0] = new StringBuilder();
+            sbLines[0].append("Comments");
+            int maxCommentLength = sbLines[0].length();
 
-        for (int i = 0; i < iR.size() - 1; i++) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(iR.get(i).getComment().getTokenString());
+            for (int i = 0; i < iR.size() - 1; i++) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(iR.get(i).getComment().getTokenString());
 
-            maxCommentLength = Math.max(maxCommentLength, sb.length());
-            sbLines[i + 1] = sb;
+                maxCommentLength = Math.max(maxCommentLength, sb.length());
+                sbLines[i + 1] = sb;
+            }
+
+            for (int i = 0; i < iR.size(); i++) {
+                sbLines[i].append(" ".repeat(maxCommentLength - sbLines[i].length())).append("\t\n");
+                arr[i] = sbLines[i].toString();
+            }
         }
-
-        for (int i = 0; i < iR.size(); i++) {
-            sbLines[i].append(" ".repeat(maxCommentLength - sbLines[i].length())).append("\t\n");
-            arr[i] = sbLines[i].toString();
-        }
-
         return arr;
     }
 }
