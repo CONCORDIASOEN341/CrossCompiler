@@ -6,9 +6,11 @@ public class Position implements IPosition {
     private int endColumn;
 
     public Position() {
-        this.line = 0;
-        this.startColumn = 0;
-        this.endColumn = 0;
+        this(0, 0,0);
+    }
+
+    public Position(int line) {
+        this(line, 0,0);
     }
 
     public Position(int line, int startColumn, int endColumn) {

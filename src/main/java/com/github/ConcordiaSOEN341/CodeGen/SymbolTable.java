@@ -67,11 +67,11 @@ public class SymbolTable {
         symbolTable.put(k, v);
     }
 
-    public String getValue(String mnemonic) {
-        return symbolTable.get(mnemonic);
+    public String getValue(String symbol) {
+        return symbolTable.get(symbol);
     }
 
-    public boolean keyExists(String mnemonic) {
-        return symbolTable.containsKey(mnemonic);
+    public boolean keyExists(String symbol) {
+        return symbolTable.containsKey(symbol);
     }
 }

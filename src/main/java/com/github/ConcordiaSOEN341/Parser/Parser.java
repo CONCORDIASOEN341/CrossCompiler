@@ -7,6 +7,7 @@ import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.ILexer;
 import com.github.ConcordiaSOEN341.Lexer.IToken;
+import com.github.ConcordiaSOEN341.Lexer.Position;
 import com.github.ConcordiaSOEN341.Lexer.TokenType;
 import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
@@ -77,7 +78,7 @@ public class Parser implements IParser {
         int stateID;
 
         do {
-            stateID = 1;
+            stateID = parserFSM.getInitialStateID();
             lStatement = new LineStatement();
 
             do {
@@ -134,7 +135,7 @@ public class Parser implements IParser {
                 }
 
 
-            } while (stateID != 7);
+            } while (stateID != parserFSM.getFinalStateID());
 
             intermediateRep.add(lStatement);
 
@@ -160,7 +161,10 @@ public class Parser implements IParser {
 
             // Add Label - Address to symbol table
             if (lS.getLabel().getTokenType() != TokenType.ERROR || lS.getLabel() != null) {
-                symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
+                if(symbolTable.keyExists(lS.getLabel().getTokenString()))
+                    reporter.record(new Error(lS.getLabel().getTokenString(), parserFSM.getErrorType(420), new Position(oTE.getLine())));
+                else if (!lS.getLabel().getTokenString().equals(""))
+                    symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
             }
 
             // Account for Instruction or Directive
@@ -190,6 +194,11 @@ public class Parser implements IParser {
                     address += oTE.getBitSpace() / 2;
                 }
 
+                // check if operand should be a label
+                if(isLabelOperand(lS.getInstruction().getMnemonic().getTokenString()) && oTE.getLabel() == null){
+                    reporter.record(new Error(parserFSM.getErrorType(42069), new Position(oTE.getLine())));
+                }
+
             } else if (lS.getDirective().getDir().getTokenType() != TokenType.ERROR && lS.getDirective().getDir().getTokenString().equals(".cstring")) {
                 String cstring = lS.getDirective().getCString().getTokenString();
 
@@ -210,7 +219,8 @@ public class Parser implements IParser {
         logger.log("Starting Second Pass now...");
         // SECOND PASS
         for (IOpCodeTableElement oTE : opCodeTable) {
-            if (oTE.getLabel() != null) {
+            // only check for recorded labels that are not empty strings
+            if (oTE.getLabel() != null && !oTE.getLabel().equals("")) {
                 String labelAddress = symbolTable.getValue(oTE.getLabel());
                 if (labelAddress != null) {
                     int offset = Integer.parseInt(labelAddress, 16) - Integer.parseInt(oTE.getAddress(), 16);
@@ -220,11 +230,17 @@ public class Parser implements IParser {
                     } else {
                         oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", offset));
                     }
+                } else {
+                    reporter.record(new Error(oTE.getLabel(), parserFSM.getErrorType(69), new Position(oTE.getLine(), 0,0)));
                 }
             }
         }
         logger.log("Completed Second Pass...");
         return opCodeTable;
+    }
+
+    private boolean isLabelOperand(String mne){
+        return mne.contains("br") || mne.contains("lda");
     }
 
     private int bitSpace(IInstruction instr) {
@@ -258,7 +274,7 @@ public class Parser implements IParser {
         return String.format("%02X", hexNumber);
     }
 
-      private void checkInstructionSpace(IInstruction in, IToken t) {
+    private void checkInstructionSpace(IInstruction in, IToken t) {
         char sign = in.getMnemonic().getTokenString().charAt(in.getMnemonic().getTokenString().indexOf('.') + 1);
         int bitSpace = getSymbolValue(in.getMnemonic());
         int operand;
