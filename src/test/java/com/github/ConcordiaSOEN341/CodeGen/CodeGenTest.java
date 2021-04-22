@@ -116,14 +116,9 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement());
         init(irTest);
 
-        String expected = "";
-        expected = irTest.get(0).getLabel().getTokenString();
         String[] content = codeGenTest.listingIRLabel(irTest);
-        assertEquals(irTest.size(), content);
-        //assertEquals("Label", codeGenTest.listingIRLabel(irTest);
-        //assertEquals("1\t " + opTable.get(0).getAddress() + " " + opTable.get(0).getOpCode() + " " + opTable.get(0).getOperands().get(0), expectedOpTable[1].trim());
-       // assertEquals("2\t " + opTable.get(1).getAddress() + " " + opTable.get(1).getOpCode() + " " + opTable.get(1).getOperands().get(0), expectedOpTable[2].trim());
-
+        assertEquals(irTest.get(1).getLabel().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getLabel().getTokenString(), content[3].trim());
     }
 
     @Test
@@ -145,17 +140,18 @@ public class CodeGenTest extends TestCase {
     }
 
     @Test
-    public void listingIRMNE() {
+    public void listingIRMNE_whenIRisNotEmpty_ExpectsSameContentInListingFile() {
         irTest = new ArrayList<>();
+        irTest.add(new LineStatement());
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement());
+
         init(irTest);
 
-        String expected = "";
-       // expected = irTest.get(0).getInstruction().getTokenString();
-        String[] blabla = codeGenTest.listingIRLabel(irTest);
-        assertEquals(irTest.size(), codeGenTest.listingIRLabel(irTest).length);
-        //assertNull(expected);
+        String[] content = codeGenTest.listingIRMne(irTest);
+        assertEquals(irTest.get(1).getInstruction().getMnemonic().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getInstruction().getMnemonic().getTokenString(), content[3].trim());
     }
 
     @Test
@@ -168,6 +164,21 @@ public class CodeGenTest extends TestCase {
     }
 
     @Test
+    public void listingIROps_whenIRisNotEmpty_ExpectsSameContentInListingFile() {
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement());
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement());
+
+        init(irTest);
+
+        String[] content = codeGenTest.listingIROps(irTest);
+        assertEquals(irTest.get(1).getInstruction().getOperand().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getInstruction().getOperand().getTokenString(), content[3].trim());
+    }
+
+    @Test
     public void listingIRComments_whenIrIsEmpty_expectEmptyArray() {
         irTest = new ArrayList<>();
         init(irTest);
@@ -175,6 +186,23 @@ public class CodeGenTest extends TestCase {
         String[] irComments = codeGenTest.listingIRComments(irTest);
         assertEquals(0, irComments.length);
     }
+
+    @Test
+    public void listingIRComments_whenIRisNotEmpty_ExpectsSameContentInListingFile() {
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement());
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement());
+
+        init(irTest);
+
+        String[] content = codeGenTest.listingIRComments(irTest);
+        assertEquals(irTest.get(1).getInstruction().getOperand().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getInstruction().getOperand().getTokenString(), content[3].trim());
+    }
+
+
 //    @Test
 //    public void generateOpCodeTable_SecondPassLabels(){
     // Arrange
