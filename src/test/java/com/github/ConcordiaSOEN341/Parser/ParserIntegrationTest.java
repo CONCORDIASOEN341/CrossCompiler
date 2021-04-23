@@ -21,18 +21,18 @@ public class ParserIntegrationTest {
     private ArrayList<ILineStatement> irTest;
     private IParser pTest;
 
-    private void initIR(ArrayList<Character> input){
+    private void initIR(ArrayList<Character> input) {
+        IReader rTest = new ReaderMoq(input);
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
         SymbolTable sTest = new SymbolTable();
         IErrorReporter eTest = new ErrorReporter(lFTest);
         ParserFSM pFSMTest = new ParserFSM(lFTest);
-        IReader rTest = new ReaderMoq(input);
         LexerFSM fsmTest = new LexerFSM(rTest, lFTest);
         ILexer lTest = new Lexer(sTest, fsmTest, rTest, lFTest, eTest);
         pTest = new Parser(pFSMTest, lTest, sTest, lFTest, eTest);
     }
 
-    private void initOpCodeTable(ArrayList<ILineStatement> ir){
+    private void initOpCodeTable(ArrayList<ILineStatement> ir) {
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
         SymbolTable sTest = new SymbolTable();
         IErrorReporter eTest = new ErrorReporter(lFTest);
@@ -42,7 +42,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveEmptyFile_expectEmpty(){
+    public void parse_giveEmptyFile_expectEmpty() {
         // Arrange
         file = new ArrayList<>();
         file.add('~');
@@ -56,7 +56,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveEmptyLine_expectEmpty(){
+    public void parse_giveEmptyLine_expectEmpty() {
         // Arrange
         //tokenList = new ArrayList<>();
         //tokenList.add(new Token("", new Position(1, 1, 1), TokenType.EOL));
@@ -70,7 +70,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveInherentInstructionType_expectInherentInstructionType(){
+    public void parse_giveInherentInstructionType_expectInherentInstructionType() {
         //tokenList = new ArrayList<>();
         //tokenList.add(new Token("pop", new Position(1, 0, 4), TokenType.MNEMONIC));
         //tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
@@ -84,7 +84,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveImmediateInstructionType_expectImmediateInstructionType(){
+    public void parse_giveImmediateInstructionType_expectImmediateInstructionType() {
         //tokenList = new ArrayList<>();
         //tokenList.add(new Token("addv.u3", new Position(1, 0, 4), TokenType.MNEMONIC));
         //tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
@@ -99,7 +99,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveRelativeInstructionType_expectRelativeInstructionType(){
+    public void parse_giveRelativeInstructionType_expectRelativeInstructionType() {
         /*
         tokenList = new ArrayList<>();
         tokenList.add(new Token("enter.u8", new Position(1, 0, 4), TokenType.MNEMONIC));
@@ -117,7 +117,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveListWithLabel_expectSameLabel(){
+    public void parse_giveListWithLabel_expectSameLabel() {
         /*
         tokenList = new ArrayList<>();
         tokenList.add(new Token("Msg1", new Position(1, 0, 4), TokenType.LABEL));
@@ -134,45 +134,36 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void parse_giveListWithDirective_expectSameDirective(){
-        /*
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token(".cstring", new Position(1, 0, 4), TokenType.DIRECTIVE));
-        tokenList.add(new Token("ABCD1", new Position(1, 4, 8), TokenType.CSTRING));
-        tokenList.add(new Token("", new Position(1, 9, 9), TokenType.EOL));
-        tokenList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
+    public void parse_giveListWithDirective_expectSameDirective() {
+        file = new ArrayList<>();
+        String s = ".cstring \"Dmitri\"~";
+        for (char c : s.toCharArray()) {
+            file.add(c);
+        }
 
-        initIR(tokenList);
-        */
+        initIR(file);
 
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
-        assertEquals("ABCD1", lineStatements.get(0).getDirective().getCString().getTokenString());
-
+        assertEquals("\"Dmitri\"", lineStatements.get(0).getDirective().getCString().getTokenString());
     }
 
     @Test
-    public void parse_giveListWithComment_expectSameComment(){
+    public void parse_giveListWithComment_expectSameComment() {
         file = new ArrayList<>();
-        file.add('A');
-        file.add(' ');
-        file.add('c');
-        file.add('o');
-        file.add('m');
-        file.add('m');
-        file.add('e');
-        file.add('n');
-        file.add('t');
-        file.add('~');
+        String s = "; A comment~";
+        for (char c : s.toCharArray()) {
+            file.add(c);
+        }
 
         initIR(file);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
-        assertEquals("A comment", lineStatements.get(0).getComment().getTokenString());
+        assertEquals("; A comment", lineStatements.get(0).getComment().getTokenString());
     }
 
     @Test
-    public void generateOpCodeTable_SecondPassLabels(){
+    public void generateOpCodeTable_SecondPassLabels() {
         // Arrange
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
@@ -195,7 +186,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void generateOpCodeTable_FwdAndBwdBranching(){
+    public void generateOpCodeTable_FwdAndBwdBranching() {
         // Arrange
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Token("Main"), new Instruction(new Token("br.i8"), new Token("Main"), InstructionType.RELATIVE)));
@@ -221,7 +212,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void generateOpCodeTable_Relative(){
+    public void generateOpCodeTable_Relative() {
         // Arrange
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
@@ -241,7 +232,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void generateOpCodeTable_Immediate(){
+    public void generateOpCodeTable_Immediate() {
         // Arrange
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("enter.u5"), new Token("16"), InstructionType.IMMEDIATE)));
@@ -277,17 +268,19 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void generateOpCodeTable_NoInstruction(){
+    public void generateOpCodeTable_NoInstruction() {
         // Arrange
         irTest = new ArrayList<>();
         LineStatement l = new LineStatement();
-        l.setDirective(new Directive(new Token(".cstring"),new Token("A1")));
+        l.setDirective(new Directive(new Token(".cstring"), new Token("A1")));
         irTest.add(l);
         initOpCodeTable(irTest);
 
         ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
         expectedOpTable.add(new OpCodeTableElement(1, "0000", "", 0, null));
-        expectedOpTable.get(0).addOperand("41"); expectedOpTable.get(0).addOperand("31"); expectedOpTable.get(0).addOperand("00");
+        expectedOpTable.get(0).addOperand("41");
+        expectedOpTable.get(0).addOperand("31");
+        expectedOpTable.get(0).addOperand("00");
 
 
         // Act
@@ -298,7 +291,7 @@ public class ParserIntegrationTest {
     }
 
     @Test
-    public void generateOpCodeTable_OperandList(){
+    public void generateOpCodeTable_OperandList() {
         // Arrange
         LineStatement l = new LineStatement();
         l.setComment(new Token(";Hello"));
