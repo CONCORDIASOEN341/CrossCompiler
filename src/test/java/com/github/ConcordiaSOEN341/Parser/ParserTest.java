@@ -1,8 +1,8 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
-import com.github.ConcordiaSOEN341.Error.ErrorReporter;
-import com.github.ConcordiaSOEN341.Error.IErrorReporter;
+import com.github.ConcordiaSOEN341.Error.*;
+import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Lexer.*;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import org.junit.Test;
@@ -235,6 +235,28 @@ public class ParserTest {
 
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
+    @Test
+    public void generateOpCodeTable_Immediate_WithLabel(){
+        //Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("br.i5"), new Token("Dmitri"), InstructionType.IMMEDIATE)));
+        irTest.add(new LineStatement(new Token("Dmitri"), new Instruction(new Token("enter.u5"), new Token("4"), InstructionType.IMMEDIATE)));
+
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "31", 0, "Dmitri"));
+        expectedOpTable.add(new OpCodeTableElement(2, "0001", "84", 0, null));
+
+        //Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        //Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+
+
     }
 
     @Test

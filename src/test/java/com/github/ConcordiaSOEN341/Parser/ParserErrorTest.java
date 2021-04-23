@@ -57,7 +57,7 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
 
     }
 
@@ -80,7 +80,7 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
 
     }
 
@@ -104,7 +104,7 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
 
     }
 
@@ -128,7 +128,7 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
     }
 
     @Test
@@ -147,16 +147,16 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void generateOpCodeTable_whenLabelNotFound_expectError(){
+    public void generateOpCodeTable_whenLabelNotFound_With_Relative_Instruction_expectError(){
         //Arrange
-        LineStatement l = new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE));
         irTest = new ArrayList<>();
-        irTest.add(l);
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+
         initOpCodeTable(irTest);
 
         ArrayList<IError> errors = new ArrayList<>();
-        IError error = new Error("Msg1",ErrorType.LABEL_NOT_FOUND, new Position(1, 0, 0));
-        errors.add(error);
+        errors.add(new Error("Msg1",ErrorType.LABEL_NOT_FOUND, new Position(1, 0, 0)));
+
 
         //Act
         ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
@@ -164,21 +164,36 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
+    }
+
+    @Test
+    public void generateOpCodeTable_whenInvalidOperandLabelNotUsed_With_Immediate_Instruction_expectError(){
+        //Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("br.i5"), new Token("1"), InstructionType.IMMEDIATE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IError> errors = new ArrayList<>();
+        errors.add(new Error(ErrorType.INVALID_OPERAND_LABEL_NOT_USED, new Position(1, 0, 0)));
+
+        //Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        //Assert
+        assertEquals(errors.toString(), eTest.getErrors().toString());
+
+
     }
 
     @Test
     public void generateOpCodeTable_whenLabelDefinedError_expectError(){
         //Arrange
-        LineStatement l1 = new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE));
-        LineStatement l2 = new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE));
-        LineStatement l3 = new LineStatement(new Instruction(new Token("ldc.i3"), new Token("3"), InstructionType.IMMEDIATE));
-        l2.setLabel(new Token("Msg1"));
-        l3.setLabel(new Token("Msg1"));
         irTest = new ArrayList<>();
-        irTest.add(l1);
-        irTest.add(l2);
-        irTest.add(l3);
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE)));
+        irTest.add(new LineStatement(new Token("Msg1"), new Instruction(new Token("ldc.i3"), new Token("3"), InstructionType.IMMEDIATE)));
+
         initOpCodeTable(irTest);
 
         ArrayList<IError> errors = new ArrayList<>();
@@ -191,20 +206,19 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
     }
 
     @Test
-    public void generateOpCodeTable_whenInvalidOperandLabelNotUsed_expectError(){
+    public void generateOpCodeTable_whenInvalidOperandLabelNotUsed_With_Relative_Instruction_expectError(){
         //Arrange
-        LineStatement l = new LineStatement(new Instruction(new Token("lda.i16"), new Token("1"), InstructionType.RELATIVE));
         irTest = new ArrayList<>();
-        irTest.add(l);
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("1"), InstructionType.RELATIVE)));
+
         initOpCodeTable(irTest);
 
         ArrayList<IError> errors = new ArrayList<>();
-        IError error = new Error(ErrorType.INVALID_OPERAND_LABEL_NOT_USED, new Position(1, 0, 0));
-        errors.add(error);
+        errors.add(new Error(ErrorType.INVALID_OPERAND_LABEL_NOT_USED, new Position(1, 0, 0)));
 
         //Act
         ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
@@ -212,7 +226,7 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
     }
 
     @Test
@@ -226,8 +240,7 @@ public class ParserErrorTest  {
         init(tokenList);
 
         ArrayList<IError> errors = new ArrayList<>();
-        IError error = new Error(".c", ErrorType.INVALID_DIRECTIVE, new Position(1, 0, 2));
-        errors.add(error);
+        errors.add(new Error(".c", ErrorType.INVALID_DIRECTIVE, new Position(1, 0, 2)));
 
         //Act
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
@@ -235,7 +248,7 @@ public class ParserErrorTest  {
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
 
-        eTest.clearErrors();
+
 
     }
 
@@ -249,16 +262,13 @@ public class ParserErrorTest  {
         init(tokenList);
 
         ArrayList<IError> errors = new ArrayList<>();
-        IError error = new Error(ErrorType.CSTRING_NOT_FOUND, new Position(1, 7, 7));
-        errors.add(error);
+        errors.add(new Error(ErrorType.CSTRING_NOT_FOUND, new Position(1, 7, 7)));
 
         //Act
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         //Assert
         assertEquals(errors.toString(), eTest.getErrors().toString());
-
-        eTest.clearErrors();
 
     }
 }
