@@ -1,4 +1,4 @@
-package com.github.ConcordiaSOEN341.CodeGen;
+package com.github.ConcordiaSOEN341.Parser;
 
 import java.util.HashMap;
 

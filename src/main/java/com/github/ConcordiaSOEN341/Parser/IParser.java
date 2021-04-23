@@ -1,7 +1,5 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.CodeGen.IOpCodeTableElement;
-
 import java.util.ArrayList;
 
 public interface IParser {

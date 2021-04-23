@@ -1,8 +1,6 @@
 package com.github.ConcordiaSOEN341.Parser;
 
 
-import com.github.ConcordiaSOEN341.CodeGen.IOpCodeTableElement;
-import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.*;
@@ -40,7 +38,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void extraOperandWhenInherentInstruction(){
+    public void generateIR_whenExtraOperandInherentInstruction_expectError(){
         //Arrange
         tokenList = new ArrayList<>();
         tokenList.add(new Token("pop", new Position(1,1,1), TokenType.MNEMONIC));
@@ -64,7 +62,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void noOperandWhenImmediateOrRelativeInstruction(){
+    public void generateIR_whenNoOperandAndImmediateOrRelativeInstruction_expectError(){
         //Arrange
         tokenList = new ArrayList<>();
         tokenList.add(new Token("enter.u5", new Position(1,1,1), TokenType.MNEMONIC));
@@ -87,7 +85,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void unsignedBitSpaceNotInInterval(){
+    public void generateIR_whenInvalidUnsignedBitSpace_expectError(){
         //Arrange
         tokenList = new ArrayList<>();
         tokenList.add(new Token("enter.u16", new Position(1,1,1), TokenType.MNEMONIC));
@@ -111,7 +109,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void signedBitSpaceNotInInterval(){
+    public void generateIR_whenInvalidSignedBitSpace_expectError(){
         //Arrange
         tokenList = new ArrayList<>();
         tokenList.add(new Token("ldc.i3", new Position(1,1,1), TokenType.MNEMONIC));
@@ -134,7 +132,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void parse_giveValid_expectNoError(){
+    public void generateIR_giveValid_expectNoError(){
         tokenList = new ArrayList<>();
         tokenList.add(new Token("add.i3", new Position(1, 0, 4), TokenType.MNEMONIC));
         tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
@@ -149,7 +147,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void labelNotFoundError(){
+    public void generateOpCodeTable_whenLabelNotFound_expectError(){
         //Arrange
         LineStatement l = new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE));
         irTest = new ArrayList<>();
@@ -170,7 +168,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void labelDefinedError(){
+    public void generateOpCodeTable_whenLabelDefinedError_expectError(){
         //Arrange
         LineStatement l1 = new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE));
         LineStatement l2 = new LineStatement(new Instruction(new Token("ldc.i3"), new Token("2"), InstructionType.IMMEDIATE));
@@ -197,7 +195,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void Invalid_Operand_Label_Not_UsedError(){
+    public void generateOpCodeTable_whenInvalidOperandLabelNotUsed_expectError(){
         //Arrange
         LineStatement l = new LineStatement(new Instruction(new Token("lda.i16"), new Token("1"), InstructionType.RELATIVE));
         irTest = new ArrayList<>();
@@ -218,7 +216,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void Invalid_CString_Error(){
+    public void generateIR_whenInvalidDirective_expectError(){
         //Arrange
         tokenList = new ArrayList<>();
         tokenList.add(new Token(".c", new Position(1,0,2), TokenType.DIRECTIVE));
@@ -242,7 +240,7 @@ public class ParserErrorTest  {
     }
 
     @Test
-    public void CString_Not_Found_Error(){
+    public void generateIR_whenCstringNotFound_expectError(){
         //Arrange
         tokenList = new ArrayList<>();
         tokenList.add(new Token(".cstring", new Position(1,0,6), TokenType.DIRECTIVE));
