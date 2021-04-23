@@ -22,7 +22,7 @@ public class CommandHandler {
 
     private void parseArgs() {
         if (args.length == 0) {
-            System.out.println("Intended usage: cma [-h] [-l] [-v] <file>.asm");
+            System.out.println("Intended usage: cma [-h] [-l] [-v] [-b] <file>.asm");
             exit(0);
         }
         for (String arg : args) {
@@ -41,10 +41,11 @@ public class CommandHandler {
                 System.out.println("SRC: https://github.com/CONCORDIASOEN341" + "\u001B[0m");
             }
             if (arg.equals("-h") || arg.equals("-help")) {
-                System.out.println("Usage: cma [-h] [-l] [-v] <file>.asm");
-                System.out.println("-h / --help : writes theses helpful tips");
-                System.out.println("-v / --verbose : allows verbose logging useful information for debugging and inspecting");
-                System.out.println("-l / --listing : generates a listing file");
+                System.out.println("Usage: cma [-h] [-l] [-v] [-b] <file>.asm");
+                System.out.println("-h / -help : writes theses helpful tips");
+                System.out.println("-v / -verbose : allows verbose logging useful information for debugging and inspecting");
+                System.out.println("-l / -listing : generates a listing file");
+                System.out.println("-b / -banner : print out a banner representing the developers");
                 System.out.println("file.asm is the required path to the file where the binary executable will be generated");
                 exit(0);
             }
