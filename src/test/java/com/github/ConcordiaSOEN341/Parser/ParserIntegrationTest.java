@@ -147,20 +147,16 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveListWithDirective_expectSameDirective(){
-        /*
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token(".cstring", new Position(1, 0, 4), TokenType.DIRECTIVE));
-        tokenList.add(new Token("ABCD1", new Position(1, 4, 8), TokenType.CSTRING));
-        tokenList.add(new Token("", new Position(1, 9, 9), TokenType.EOL));
-        tokenList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
-
-        initIR(tokenList);
-        */
+        file = new ArrayList<>();
+        String s = ".cstring \"Dmitri\"~";
+        for (char c : s.toCharArray()) {
+            file.add(c);
+        }
+        initIR(file);
 
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
-        assertEquals("g", lineStatements.get(0).getDirective().getCString().getTokenString());
-
+        assertEquals("\"Dmitri\"", lineStatements.get(0).getDirective().getCString().getTokenString());
     }
 
     @Test
