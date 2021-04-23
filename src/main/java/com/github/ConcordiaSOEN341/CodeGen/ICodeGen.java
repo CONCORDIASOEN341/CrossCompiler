@@ -1,6 +1,7 @@
 package com.github.ConcordiaSOEN341.CodeGen;
 
 import com.github.ConcordiaSOEN341.Parser.ILineStatement;
+import com.github.ConcordiaSOEN341.Parser.IOpCodeTableElement;
 
 import java.util.ArrayList;
 

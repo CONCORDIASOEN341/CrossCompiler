@@ -1,8 +1,5 @@
 package com.github.ConcordiaSOEN341.Parser;
 
-import com.github.ConcordiaSOEN341.CodeGen.IOpCodeTableElement;
-import com.github.ConcordiaSOEN341.CodeGen.OpCodeTableElement;
-import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;

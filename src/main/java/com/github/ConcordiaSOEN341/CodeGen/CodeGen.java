@@ -5,6 +5,7 @@ import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
 import com.github.ConcordiaSOEN341.Parser.ILineStatement;
+import com.github.ConcordiaSOEN341.Parser.IOpCodeTableElement;
 
 import java.io.*;
 import java.util.ArrayList;
