@@ -27,7 +27,7 @@ Usage: cma [-h] [-l] [-v] [-b] <file>.asm
   
 ### Optional commands
   
--h / -help : writes theses helpful tips
+-h / -help : writes these helpful tips
 
 -v / -verbose : allows verbose logging useful information for debugging and inspecting
 
