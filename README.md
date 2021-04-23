@@ -2,11 +2,6 @@
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/KrisTheCanadian/CrossCompiler/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/KrisTheCanadian/CrossCompiler/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://github.com/KrisTheCanadian/CrossCompiler/releases/)
-[![GitHub tag](https://img.shields.io/github/tag/Naereen/StrapDown.js.svg)](https://github.com/KrisTheCanadian/CrossCompiler/tags/)
-[![GitHub commits](https://img.shields.io/github/commits-since/Naereen/StrapDown.js/v1.0.0.svg)](https://github.com/KrisTheCanadian/CrossCompiler/commit/)
-[![GitHub forks](https://img.shields.io/github/forks/Naereen/StrapDown.js.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/KrisTheCanadian/CrossCompiler/network/)
-[![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://github.com/KrisTheCanadian/CrossCompiler/stargazers/)
 
 ## The Design and Implementation of a Cross-Assembler for a Virtual Machine
 > Final Submission - Team 7
