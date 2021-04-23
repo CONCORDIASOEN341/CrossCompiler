@@ -1,6 +1,6 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.CodeGen.SymbolTable;
+import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.*;
@@ -41,13 +41,13 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_EOF() {
+    public void generateTokenList_giveEOF_expectEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("", new Position(1, 0, 0), TokenType.EOF));
 
         //Act
@@ -59,14 +59,14 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_SpaceEOF() {
+    public void generateTokenList_giveSpaceEOF_expectEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add(' ');
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
 
         //Act
@@ -78,7 +78,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_MnemonicEOF() {
+    public void generateTokenList_giveMnemonicEOF_expectMnemonicEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add('h');
@@ -88,7 +88,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
         expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOF));
 
@@ -101,7 +101,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_IdentifierEOF() {
+    public void generateTokenList_giveIdentifierEOF_expectIdentifierEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add('a');
@@ -110,7 +110,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("abc", new Position(1, 0, 3), TokenType.LABEL));
         expectedTList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
@@ -123,7 +123,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_MnemonicSpaceEOF() {
+    public void generateTokenList_giveMnemonicSpaceEOF_expectMnemonicEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add('h');
@@ -134,7 +134,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
         expectedTList.add(new Token("", new Position(1, 5, 5), TokenType.EOF));
 
@@ -147,7 +147,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_SpaceMnemonicEOF() {
+    public void generateTokenList_giveSpaceMnemonicEOF_expectMnemonicEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add(' ');
@@ -158,7 +158,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 1, 5), TokenType.MNEMONIC));
         expectedTList.add(new Token("", new Position(1, 5, 5), TokenType.EOF));
 
@@ -171,7 +171,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_MnemonicEOLEOF() {
+    public void generateTokenList_giveMnemonicEOLEOF_expectMnemonicEOLEOFTokens() {
         //Arrange
         file = new ArrayList<>();
         file.add('h');
@@ -182,7 +182,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
         expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         expectedTList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
@@ -196,7 +196,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_MnemonicEOLMnemonicEOF() {
+    public void generateTokenList_giveMnemonicEOLMnemonicEOF_expectMnemonicEOLMnemonicEOF() {
         //Arrange
         file = new ArrayList<>();
         file.add('h');
@@ -210,7 +210,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("halt", new Position(1, 0, 4), TokenType.MNEMONIC));
         expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
         expectedTList.add(new Token("pop", new Position(2, 0, 3), TokenType.MNEMONIC));
@@ -224,7 +224,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_Offset() {
+    public void generateTokenList_giveOffset_expectOffsetToken() {
         //Arrange
         file = new ArrayList<>();
         file.add('5');
@@ -234,7 +234,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("5555", new Position(1, 0, 4), TokenType.OFFSET));
         expectedTList.add(new Token("", new Position(1, 4, 4), TokenType.EOF));
 
@@ -246,7 +246,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_negativeNumberTest() {
+    public void generateTokenList_giveNegativeOffset_expectOffsetToken() {
         //Arrange
         file = new ArrayList<>();
         String s = "-5~";
@@ -255,7 +255,7 @@ public class LexerTest extends TestCase {
         }
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("-5", new Position(1, 0, 2), TokenType.OFFSET));
         expectedTList.add(new Token("", new Position(1, 2, 2), TokenType.EOF));
 
@@ -267,7 +267,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_CString() {
+    public void generateTokenList_giveCString_expectCStringToken() {
         //Arrange
         file = new ArrayList<>();
         String s = "\"Dmitri\"~";
@@ -276,7 +276,7 @@ public class LexerTest extends TestCase {
         }
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("\"Dmitri\"", new Position(1, 0, 8), TokenType.CSTRING));
         expectedTList.add(new Token("", new Position(1, 8, 8), TokenType.EOF));
 
@@ -288,7 +288,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_Directive() {
+    public void generateTokenList_giveDirective_expectDirectiveToken() {
         //Arrange
         file = new ArrayList<>();
         String s = ".Dmitri~";
@@ -297,7 +297,7 @@ public class LexerTest extends TestCase {
         }
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(".Dmitri", new Position(1, 0, 7), TokenType.DIRECTIVE));
         expectedTList.add(new Token("", new Position(1, 7, 7), TokenType.EOF));
 
@@ -309,7 +309,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_LineTest() {
+    public void generateTokenList_giveLine_expectIRTokens() {
         //Arrange
         file = new ArrayList<>();
         String s = "\t enter.u5 0\t ; OK, number <u5> [0..31].\r\n~";
@@ -318,7 +318,7 @@ public class LexerTest extends TestCase {
         }
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("enter.u5", new Position(1, 9, 17), TokenType.MNEMONIC));
         expectedTList.add(new Token("0", new Position(1, 18, 19), TokenType.OFFSET));
         expectedTList.add(new Token("; OK, number <u5> [0..31].", new Position(1, 28, 54), TokenType.COMMENT));
@@ -335,14 +335,14 @@ public class LexerTest extends TestCase {
     // COMMENTS BELOW
 
     @Test
-    public void lexer_CommentNoWordsEOF() {
+    public void generateTokenList_giveCommentNoWordsEOF_expectCommentEOF() {
         //Arrange
         file = new ArrayList<>();
         file.add(';');
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";", new Position(1, 0, 1), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 1, 1), TokenType.EOF));
 
@@ -355,7 +355,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_CommentEOF() {
+    public void generateTokenList_giveCommentEOF_expectCommentEOFToken() {
         //Arrange
         file = new ArrayList<>();
         file.add(';');
@@ -367,7 +367,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";hello", new Position(1, 0, 6), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 6, 6), TokenType.EOF));
 
@@ -379,7 +379,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_CommentBackTrack() {
+    public void generateTokenList_giveCommentBackTrack_expectLabelCommentEOFTokens() {
         //Arrange
         file = new ArrayList<>();
         file.add('h');
@@ -391,7 +391,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token("hello", new Position(1, 0, 5), TokenType.LABEL));
         expectedTList.add(new Token(";", new Position(1, 5, 6), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 6, 6), TokenType.EOF));
@@ -405,7 +405,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_CommentWithSpaceEOF() {
+    public void generateTokenList_giveCommentWithSpaceEOF_expectCommentEOF() {
         //Arrange
         file = new ArrayList<>();
         file.add(';');
@@ -421,7 +421,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";hello abc", new Position(1, 0, 10), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 10, 10), TokenType.EOF));
 
@@ -434,7 +434,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_CommentNewLine() {
+    public void generateTokenList_giveCommentNewLine_expectCommentEOLLabelEOF() {
         //Arrange
         file = new ArrayList<>();
         file.add(';');
@@ -450,7 +450,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";hello", new Position(1, 0, 6), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 6, 6), TokenType.EOL));
         expectedTList.add(new Token("abc", new Position(2, 0, 3), TokenType.LABEL));
@@ -465,7 +465,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_CommentWithInvalidCharacter() {
+    public void generateTokenList_giveCommentWithInvalidCharacter_expectErrorGiveCommentWithInvalidCharacter() {
         //Arrange
         file = new ArrayList<>();
         file.add(';');
@@ -473,7 +473,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         expectedTList.add(new Token(";$", new Position(1, 0, 2), TokenType.COMMENT));
         expectedTList.add(new Token("", new Position(1, 2, 2), TokenType.EOF));
 
@@ -488,14 +488,14 @@ public class LexerTest extends TestCase {
     // ERRORS BELOW
 
     @Test
-    public void lexer_InvalidCharacter() {
+    public void generateTokenList_giveInvalidCharacter_expectErrorInvalidCharacter() {
         //Arrange
         file = new ArrayList<>();
         file.add('$');
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         ArrayList<IError> expectedErrorsList = new ArrayList<>();
 
         expectedTList.add(new Token("$", new Position(1, 0, 1), TokenType.EOF));
@@ -512,7 +512,7 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_EOLInString() {
+    public void generateTokenList_giveEOLInString_expectErrorEOLInString() {
         //Arrange
         file = new ArrayList<>();
         file.add('\"');
@@ -520,7 +520,7 @@ public class LexerTest extends TestCase {
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         ArrayList<IError> expectedErrorsList = new ArrayList<>();
 
         expectedTList.add(new Token("\"", new Position(1, 0, 1), TokenType.ERROR));
@@ -539,14 +539,14 @@ public class LexerTest extends TestCase {
     }
 
     @Test
-    public void lexer_EOFInString() {
+    public void generateTokenList_giveEOFInString_expectErrorEOFinString() {
         //Arrange
         file = new ArrayList<>();
         file.add('\"');
         file.add('~');
         init(file);
 
-        ArrayList<Token> expectedTList = new ArrayList<>();
+        ArrayList<IToken> expectedTList = new ArrayList<>();
         ArrayList<IError> expectedErrorsList = new ArrayList<>();
 
         expectedTList.add(new Token("\"", new Position(1, 0, 1), TokenType.ERROR));
