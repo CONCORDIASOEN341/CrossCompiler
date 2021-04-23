@@ -171,33 +171,48 @@ public class Parser implements IParser {
 
             // Account for Instruction or Directive
             if (lS.getInstruction().getInstructionType() != null) {
+
+                IInstruction instr = lS.getInstruction();
+
                 // Determine opcode of mnemonic if there is an instruction
-                if (lS.getInstruction().getInstructionType() == InstructionType.IMMEDIATE) {
-                    oTE.setOpCode(calculateImmediateOpCode(lS.getInstruction()));
+                if (instr.getInstructionType() == InstructionType.IMMEDIATE) {
+                    // try to calculate immediate opcode else just save label for Second Pass
+                    try{
+                        int operand = Integer.parseInt(instr.getOperand().getTokenString());
+                        oTE.setOpCode(calculateImmediateOpCode(instr.getMnemonic().getTokenString(), operand, bitSpace(instr)));
+                    } catch(NumberFormatException e){
+                        oTE.setOpCode(symbolTable.getValue(instr.getMnemonic().getTokenString()));
+                        oTE.setLabel(instr.getOperand().getTokenString());
+                    }
+
                 } else {
-                    oTE.setOpCode(symbolTable.getValue(lS.getInstruction().getMnemonic().getTokenString()));
+                    oTE.setOpCode(symbolTable.getValue(instr.getMnemonic().getTokenString()));
                 }
 
                 // Inc address for the opcode
                 address++;
 
                 // Determine Hex for operand (label or integer)
-                if (lS.getInstruction().getInstructionType() == InstructionType.RELATIVE) {
-                    oTE.setBitSpace(bitSpace(lS.getInstruction()) / 4); // Based on mnemonic
+                if (instr.getInstructionType() == InstructionType.RELATIVE) {
+                    oTE.setBitSpace(bitSpace(instr) / 4); // Based on mnemonic
                     try {
-                        // FIGURE OUT NEGATIVES
-                        int operand = Integer.parseInt(lS.getInstruction().getOperand().getTokenString());
-                        oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", operand));
+                        int operand = Integer.parseInt(instr.getOperand().getTokenString());
+                        if (operand < 0) {
+                            String operandString = String.format("%X", operand);
+                            oTE.addOperand(operandString.substring(operandString.length() - oTE.getBitSpace()));
+                        } else {
+                            oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", operand));
+                        }
 
                     } catch (NumberFormatException e) {
-                        oTE.setLabel(lS.getInstruction().getOperand().getTokenString());
+                        oTE.setLabel(instr.getOperand().getTokenString());
                     }
                     // Inc address for relative operand
                     address += oTE.getBitSpace() / 2;
                 }
 
                 // check if operand should be a label
-                if(isLabelOperand(lS.getInstruction().getMnemonic().getTokenString()) && oTE.getLabel() == null){
+                if(isOperandLabel(instr.getMnemonic().getTokenString()) && oTE.getLabel() == null){
                     reporter.record(new Error(parserFSM.getErrorType(42069), new Position(oTE.getLine())));
                 }
 
@@ -226,11 +241,18 @@ public class Parser implements IParser {
                 String labelAddress = symbolTable.getValue(oTE.getLabel());
                 if (labelAddress != null) {
                     int offset = Integer.parseInt(labelAddress, 16) - Integer.parseInt(oTE.getAddress(), 16);
-                    if (offset < 0) {
-                        String offsetString = String.format("%X", offset);
-                        oTE.addOperand(offsetString.substring(offsetString.length() - oTE.getBitSpace()));
+                    IInstruction instr = intermediateRep.get(opCodeTable.indexOf(oTE)).getInstruction();
+                    if(instr.getInstructionType() == InstructionType.IMMEDIATE){
+                        // Calculate remaining immediate opcode for label offset
+                        oTE.setOpCode(calculateImmediateOpCode(instr.getMnemonic().getTokenString(), offset, bitSpace(instr)));
                     } else {
-                        oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", offset));
+                        // Set relative operand for label offset
+                        if (offset < 0) {
+                            String offsetString = String.format("%X", offset);
+                            oTE.addOperand(offsetString.substring(offsetString.length() - oTE.getBitSpace()));
+                        } else {
+                            oTE.addOperand(String.format("%0" + oTE.getBitSpace() + "X", offset));
+                        }
                     }
                 } else {
                     reporter.record(new Error(oTE.getLabel(), parserFSM.getErrorType(69), new Position(oTE.getLine(), 0,0)));
@@ -241,19 +263,18 @@ public class Parser implements IParser {
         return opCodeTable;
     }
 
-    private boolean isLabelOperand(String mne){
+    private boolean isOperandLabel(String mne){
         return mne.contains("br") || mne.contains("lda");
     }
 
     private int bitSpace(IInstruction instr) {
-        String[] sNum = instr.getMnemonic().getTokenString().split(".((u)|(i))", 2);            //take string after the u or the i (this leaves only the number)
+        //take string after the u or the i (this leaves only the number)
+        String[] sNum = instr.getMnemonic().getTokenString().split(".((u)|(i))", 2);
         return Integer.parseInt(sNum[1]);
     }
 
-    private String calculateImmediateOpCode(IInstruction instr) {
-        String mnemonic = instr.getMnemonic().getTokenString();
-        int offset = Integer.parseInt(instr.getOperand().getTokenString());
-        int hexNumber = 0;
+    private String calculateImmediateOpCode(String mnemonic, int offset, int bits) {
+        int hexNumber;
 
         //special case for enter.u5, offset do not increase normally
         if (mnemonic.equals("enter.u5")) {
@@ -265,7 +286,7 @@ public class Parser implements IParser {
         } else {
             //special case for negative numbers
             if (offset < 0) {
-                int size = (int) Math.pow(2, bitSpace(instr));
+                int size = (int) Math.pow(2, bits);
                 offset = size + offset;
             }
             //the rest
