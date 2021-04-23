@@ -39,7 +39,6 @@ public class CommandHandler {
                 );
                 System.out.println("Cm Cross-Assembler - Developed by Team 7.");
                 System.out.println("SRC: https://github.com/CONCORDIASOEN341" + "\u001B[0m");
-                exit(0);
             }
             if (arg.equals("-h") || arg.equals("-help")) {
                 System.out.println("Usage: cma [-h] [-l] [-v] <file>.asm");
