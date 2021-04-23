@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-//@RunWith(MockitoJUnitRunner.class)
 public class ParserErrorTest  {
 
     private ArrayList<IToken> tokenList;
