@@ -58,11 +58,11 @@ public class ParserIntegrationTest {
     @Test
     public void parse_giveEmptyLine_expectEmpty(){
         // Arrange
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("", new Position(1, 1, 1), TokenType.EOL));
-        tokenList.add(new Token("", new Position(2, 1, 1), TokenType.EOF));
+        //tokenList = new ArrayList<>();
+        //tokenList.add(new Token("", new Position(1, 1, 1), TokenType.EOL));
+        //tokenList.add(new Token("", new Position(2, 1, 1), TokenType.EOF));
         // Act
-        initIR(tokenList);
+        //initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
         // Assert
         assertEquals("", lineStatements.get(0).getInstruction().getMnemonic().getTokenString());
@@ -71,12 +71,12 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveInherentInstructionType_expectInherentInstructionType(){
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("pop", new Position(1, 0, 4), TokenType.MNEMONIC));
-        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
-        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+        //tokenList = new ArrayList<>();
+        //tokenList.add(new Token("pop", new Position(1, 0, 4), TokenType.MNEMONIC));
+        //tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+        //tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
-        initIR(tokenList);
+        //initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.INHERENT);
@@ -85,13 +85,13 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveImmediateInstructionType_expectImmediateInstructionType(){
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("addv.u3", new Position(1, 0, 4), TokenType.MNEMONIC));
-        tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
-        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
-        tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
+        //tokenList = new ArrayList<>();
+        //tokenList.add(new Token("addv.u3", new Position(1, 0, 4), TokenType.MNEMONIC));
+        //tokenList.add(new Token("2", new Position(1, 0, 4), TokenType.OFFSET));
+        //tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
+        //tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
-        initIR(tokenList);
+        //initIR(tokenList);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.IMMEDIATE);
@@ -100,6 +100,7 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveRelativeInstructionType_expectRelativeInstructionType(){
+        /*
         tokenList = new ArrayList<>();
         tokenList.add(new Token("enter.u8", new Position(1, 0, 4), TokenType.MNEMONIC));
         tokenList.add(new Token("25", new Position(1, 0, 4), TokenType.OFFSET));
@@ -107,6 +108,8 @@ public class ParserIntegrationTest {
         tokenList.add(new Token("", new Position(1, 3, 3), TokenType.EOF));
 
         initIR(tokenList);
+        */
+
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals(lineStatements.get(0).getInstruction().getInstructionType(), InstructionType.RELATIVE);
@@ -115,12 +118,15 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveListWithLabel_expectSameLabel(){
+        /*
         tokenList = new ArrayList<>();
         tokenList.add(new Token("Msg1", new Position(1, 0, 4), TokenType.LABEL));
         tokenList.add(new Token("", new Position(1, 9, 9), TokenType.EOL));
         tokenList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
         initIR(tokenList);
+        */
+
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals("Msg1", lineStatements.get(0).getLabel().getTokenString());
@@ -129,6 +135,7 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveListWithDirective_expectSameDirective(){
+        /*
         tokenList = new ArrayList<>();
         tokenList.add(new Token(".cstring", new Position(1, 0, 4), TokenType.DIRECTIVE));
         tokenList.add(new Token("ABCD1", new Position(1, 4, 8), TokenType.CSTRING));
@@ -136,6 +143,8 @@ public class ParserIntegrationTest {
         tokenList.add(new Token("", new Position(2, 0, 0), TokenType.EOF));
 
         initIR(tokenList);
+        */
+
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals("ABCD1", lineStatements.get(0).getDirective().getCString().getTokenString());
@@ -144,16 +153,22 @@ public class ParserIntegrationTest {
 
     @Test
     public void parse_giveListWithComment_expectSameComment(){
-        tokenList = new ArrayList<>();
-        tokenList.add(new Token("A comment", new Position(1, 0, 4), TokenType.COMMENT));
-        tokenList.add(new Token("", new Position(1, 4, 4), TokenType.EOL));
-        tokenList.add(new Token("", new Position(2, 3, 3), TokenType.EOF));
+        file = new ArrayList<>();
+        file.add('A');
+        file.add(' ');
+        file.add('c');
+        file.add('o');
+        file.add('m');
+        file.add('m');
+        file.add('e');
+        file.add('n');
+        file.add('t');
+        file.add('~');
 
-        initIR(tokenList);
+        initIR(file);
         ArrayList<ILineStatement> lineStatements = pTest.generateIR();
 
         assertEquals("A comment", lineStatements.get(0).getComment().getTokenString());
-
     }
 
     @Test
