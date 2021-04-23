@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class ErrorReporterTest extends TestCase {
     private IErrorReporter eTest;
 
-    private void init(){
+    private void init() {
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
         eTest = new ErrorReporter(lFTest);
     }

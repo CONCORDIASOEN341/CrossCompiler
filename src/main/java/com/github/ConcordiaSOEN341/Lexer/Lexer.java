@@ -1,11 +1,11 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Logger.ILogger;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Logger.LoggerType;
+import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class Lexer implements ILexer {
     }
 
     @Override
-    public void closeReader(){
+    public void closeReader() {
         reader.closeStream();
     }
 

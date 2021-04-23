@@ -14,7 +14,7 @@ public class LexerMoqForParser implements ILexer {
     }
 
     @Override
-    public IToken getNextToken(){
+    public IToken getNextToken() {
         return tokenList.next();
     }
 

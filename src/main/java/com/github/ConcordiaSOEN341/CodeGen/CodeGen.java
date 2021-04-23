@@ -104,8 +104,6 @@ public class CodeGen implements ICodeGen {
 
             listingWriter.close();
         } catch (IOException e) {
-            //TODO: USE ERROR REPORTER HERE
-            // THEN LOG ERROR IN ERROR REPORTER
             System.out.println("An error occurred");
             System.out.println("The program will terminate.");
             e.printStackTrace();

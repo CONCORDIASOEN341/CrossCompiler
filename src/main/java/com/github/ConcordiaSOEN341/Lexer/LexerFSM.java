@@ -99,9 +99,6 @@ public class LexerFSM {
         logger.log("Initializing State - Zero");
         // STATE 8: ZERO
         transitions.put(states.get(8).getStateID(), new HashMap<>());
-//        for (int nonZero : nonZero){
-//            transitions.get(8).put(nonZero,10);
-//        }
         for (int letter : letters) {
             transitions.get(8).put(letter, 10);
         }
@@ -194,7 +191,6 @@ public class LexerFSM {
         space = ' ';
         endOfFile = reader.getEof();
 
-//        whiteSpace.add(newline);
         whiteSpace.add(tab);
         whiteSpace.add(cr);
         whiteSpace.add(space);

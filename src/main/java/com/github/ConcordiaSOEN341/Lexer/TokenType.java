@@ -11,6 +11,5 @@ public enum TokenType {
     CSTRING,
     COMMENT,
     EOF,
-    EOL,
-    EMPTY
+    EOL
 }

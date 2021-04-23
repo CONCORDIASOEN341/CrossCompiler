@@ -1,10 +1,10 @@
 package com.github.ConcordiaSOEN341.Lexer;
 
-import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 import com.github.ConcordiaSOEN341.Error.Error;
 import com.github.ConcordiaSOEN341.Error.*;
 import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
+import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class LexerTest extends TestCase {
     private ILexer lTest;
     private IErrorReporter eTest;
 
-    private void init(ArrayList<Character> f){
+    private void init(ArrayList<Character> f) {
         IReader rTest = new ReaderMoq(f);
         SymbolTable sTest = new SymbolTable();
         LoggerFactory lFTest = new LoggerFactory(new CommandHandler());
@@ -29,13 +29,13 @@ public class LexerTest extends TestCase {
         lTest = new Lexer(sTest, lexerFSMTest, rTest, lFTest, eTest);
     }
 
-    private ArrayList<IToken> generateTokenList(){
+    private ArrayList<IToken> generateTokenList() {
         IToken t;
         ArrayList<IToken> tokenList = new ArrayList<>();
         do {
             t = lTest.getNextToken();
             tokenList.add(t);
-        } while(t.getTokenType() != TokenType.EOF);
+        } while (t.getTokenType() != TokenType.EOF);
 
         return tokenList;
     }

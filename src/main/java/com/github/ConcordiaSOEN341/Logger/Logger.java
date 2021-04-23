@@ -15,7 +15,7 @@ public class Logger implements ILogger {
         }
     }
 
-    public CommandHandler getHandler(){
+    public CommandHandler getHandler() {
         return handler;
     }
 }

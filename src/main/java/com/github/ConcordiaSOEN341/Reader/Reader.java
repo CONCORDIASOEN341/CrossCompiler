@@ -32,11 +32,11 @@ public class Reader implements IReader {
         return EOF;
     }
 
-    public void closeStream(){
-        try{
+    public void closeStream() {
+        try {
             inputStream.close();
             logger.log("Closed file \"" + fileName + "\"");
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Error closing file stream.");
             System.exit(0);
         }

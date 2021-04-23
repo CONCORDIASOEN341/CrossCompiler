@@ -27,6 +27,6 @@ public class Error implements IError {
 
     @Override
     public String toString() {
-        return "Error at line " + position.getLine() + ": " + ((data.length() == 0)? "" : data + " ") +  errorType;
+        return "Error at line " + position.getLine() + ": " + ((data.length() == 0) ? "" : data + " ") + errorType;
     }
 }

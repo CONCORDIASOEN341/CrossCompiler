@@ -6,11 +6,11 @@ public class Position implements IPosition {
     private int endColumn;
 
     public Position() {
-        this(0, 0,0);
+        this(0, 0, 0);
     }
 
     public Position(int line) {
-        this(line, 0,0);
+        this(line, 0, 0);
     }
 
     public Position(int line, int startColumn, int endColumn) {
