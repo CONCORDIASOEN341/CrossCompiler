@@ -10,16 +10,16 @@
 
 
 ## Contributors
-- Kristopher Beauchemin - 40109581
-- Vincent Bruzzese - 40130026 
-- Peter Delis - 40130063
-- Jacob Alfaro Enriquez - 40095550
-- Andrei Grosuliac - 40133614
-- Constantine Karellas - 40109253
-- Dimitrios Kirbizakis - 40124471
-- Christopher Pereira - 40157442
-- Mimi Ta - 40124462
-- Anthony Tkalec - 40053361
+- Kristopher Beauchemin
+- Vincent Bruzzese 
+- Peter Delis
+- Jacob Alfaro Enriquez
+- Andrei Grosuliac
+- Constantine Karellas
+- Dimitrios Kirbizakis
+- Christopher Pereira
+- Mimi Ta
+- Anthony Tkalec
 
 
 ## Usage
