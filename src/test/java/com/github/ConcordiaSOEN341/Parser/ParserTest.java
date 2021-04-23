@@ -298,4 +298,24 @@ public class ParserTest {
         // Assert
         assertEquals(expectedOpTable.toString(), actualOpTable.toString());
     }
+
+    @Test
+    public void generateOpCodeTable_NegativeRelative(){
+        // Arrange
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement(new Instruction(new Token("idc.i16"), new Token("-6"), InstructionType.RELATIVE)));
+        initOpCodeTable(irTest);
+
+        ArrayList<IOpCodeTableElement> expectedOpTable = new ArrayList<>();
+        expectedOpTable.add(new OpCodeTableElement(1, "0000", "DA", 4, null));
+
+        expectedOpTable.get(0).addOperand("FFFA");
+
+        // Act
+        ArrayList<IOpCodeTableElement> actualOpTable = pTest.generateOpCodeTable();
+
+        // Assert
+        assertEquals(expectedOpTable.toString(), actualOpTable.toString());
+    }
+
 }

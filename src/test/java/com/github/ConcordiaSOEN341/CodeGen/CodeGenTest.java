@@ -121,6 +121,7 @@ public class CodeGenTest extends TestCase {
         assertEquals(irTest.get(2).getLabel().getTokenString(), content[3].trim());
     }
 
+
     @Test
     public void listingIRLabel_whenIrIsEmpty_expectEmptyArray() {
         irTest = new ArrayList<>();
@@ -169,6 +170,20 @@ public class CodeGenTest extends TestCase {
         irTest.add(new LineStatement());
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement());
+        init(irTest);
+
+        String[] content = codeGenTest.listingIROps(irTest);
+        assertEquals(irTest.get(1).getInstruction().getOperand().getTokenString(), content[2].trim());
+        assertEquals(irTest.get(2).getInstruction().getOperand().getTokenString(), content[3].trim());
+    }
+
+    @Test
+    public void listingIROps_whenIRhasNegativeRelative_ExpectsSameContentInListingFile() {
+        irTest = new ArrayList<>();
+        irTest.add(new LineStatement());
+        irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
+        irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("-11"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement());
         init(irTest);
 
