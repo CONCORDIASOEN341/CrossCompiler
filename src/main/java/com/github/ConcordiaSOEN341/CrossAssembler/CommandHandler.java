@@ -42,9 +42,9 @@ public class CommandHandler {
             }
             if (arg.equals("-h") || arg.equals("-help")) {
                 System.out.println("Usage: cma [-h] [-l] [-v] <file>.asm");
-                System.out.println("-h writes theses helpful tips");
-                System.out.println("-v allows verbose logging useful information for debugging and inspecting");
-                System.out.println("-l generates a listing file");
+                System.out.println("-h / --help : writes theses helpful tips");
+                System.out.println("-v / --verbose : allows verbose logging useful information for debugging and inspecting");
+                System.out.println("-l / --listing : generates a listing file");
                 System.out.println("file.asm is the required path to the file where the binary executable will be generated");
                 exit(0);
             }
