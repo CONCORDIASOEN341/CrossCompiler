@@ -44,9 +44,6 @@ public class ParserFSM {
         parserErrorTable.put(69, ErrorType.LABEL_NOT_FOUND);
         parserErrorTable.put(420, ErrorType.LABEL_DEFINED);
         parserErrorTable.put(42069, ErrorType.INVALID_OPERAND_LABEL_NOT_USED);
-        // Missing Errors
-//        parserErrorTable.put(49, ErrorType.INVALID_SIGNED_16BIT_OPERAND);
-//        parserErrorTable.put(97, ErrorType.INVALID_SIGNED_32BIT_OPERAND);
         logger.log("Parser Finite State Machine error table initialized");
     }
 

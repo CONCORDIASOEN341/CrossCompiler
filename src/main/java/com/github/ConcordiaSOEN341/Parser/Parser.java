@@ -40,17 +40,17 @@ public class Parser implements IParser {
     }
 
     @Override
-    public ArrayList<ILineStatement> getIR(){
+    public ArrayList<ILineStatement> getIR() {
         return intermediateRep;
     }
 
     @Override
-    public void setIR(ArrayList<ILineStatement> ir){
+    public void setIR(ArrayList<ILineStatement> ir) {
         intermediateRep = ir;
     }
 
     @Override
-    public ArrayList<IOpCodeTableElement> getOpCodeTable(){
+    public ArrayList<IOpCodeTableElement> getOpCodeTable() {
         return opCodeTable;
     }
 
@@ -112,7 +112,7 @@ public class Parser implements IParser {
                             break;
                         case DIRECTIVE:
                             lStatement.setDirective(new Directive(t));
-                            if(!t.getTokenString().equals(".cstring"))
+                            if (!t.getTokenString().equals(".cstring"))
                                 reporter.record(new Error(t.getTokenString(), parserFSM.getErrorType(66), t.getPosition()));
                             break;
                         case CSTRING:
@@ -160,7 +160,7 @@ public class Parser implements IParser {
 
             // Add Label - Address to symbol table
             if (lS.getLabel().getTokenType() != TokenType.ERROR || lS.getLabel() != null) {
-                if(symbolTable.keyExists(lS.getLabel().getTokenString()))
+                if (symbolTable.keyExists(lS.getLabel().getTokenString()))
                     reporter.record(new Error(lS.getLabel().getTokenString(), parserFSM.getErrorType(420), new Position(oTE.getLine())));
                 else if (!lS.getLabel().getTokenString().equals(""))
                     symbolTable.addEntry(lS.getLabel().getTokenString(), String.format("%04X", address));
@@ -174,10 +174,10 @@ public class Parser implements IParser {
                 // Determine opcode of mnemonic if there is an instruction
                 if (instr.getInstructionType() == InstructionType.IMMEDIATE) {
                     // try to calculate immediate opcode else just save label for Second Pass
-                    try{
+                    try {
                         int operand = Integer.parseInt(instr.getOperand().getTokenString());
                         oTE.setOpCode(calculateImmediateOpCode(instr.getMnemonic().getTokenString(), operand, bitSpace(instr)));
-                    } catch(NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         oTE.setOpCode(symbolTable.getValue(instr.getMnemonic().getTokenString()));
                         oTE.setLabel(instr.getOperand().getTokenString());
                     }
@@ -209,7 +209,7 @@ public class Parser implements IParser {
                 }
 
                 // check if operand should be a label
-                if(isOperandLabel(instr.getMnemonic().getTokenString()) && oTE.getLabel() == null){
+                if (isOperandLabel(instr.getMnemonic().getTokenString()) && oTE.getLabel() == null) {
                     reporter.record(new Error(parserFSM.getErrorType(42069), new Position(oTE.getLine())));
                 }
 
@@ -239,7 +239,7 @@ public class Parser implements IParser {
                 if (labelAddress != null) {
                     int offset = Integer.parseInt(labelAddress, 16) - Integer.parseInt(oTE.getAddress(), 16);
                     IInstruction instr = intermediateRep.get(opCodeTable.indexOf(oTE)).getInstruction();
-                    if(instr.getInstructionType() == InstructionType.IMMEDIATE){
+                    if (instr.getInstructionType() == InstructionType.IMMEDIATE) {
                         // Calculate remaining immediate opcode for label offset
                         oTE.setOpCode(calculateImmediateOpCode(instr.getMnemonic().getTokenString(), offset, bitSpace(instr)));
                     } else {
@@ -252,7 +252,7 @@ public class Parser implements IParser {
                         }
                     }
                 } else {
-                    reporter.record(new Error(oTE.getLabel(), parserFSM.getErrorType(69), new Position(oTE.getLine(), 0,0)));
+                    reporter.record(new Error(oTE.getLabel(), parserFSM.getErrorType(69), new Position(oTE.getLine(), 0, 0)));
                 }
             }
         }
@@ -260,7 +260,7 @@ public class Parser implements IParser {
         return opCodeTable;
     }
 
-    private boolean isOperandLabel(String mne){
+    private boolean isOperandLabel(String mne) {
         return mne.contains("br") || mne.contains("lda");
     }
 
@@ -273,7 +273,7 @@ public class Parser implements IParser {
     private String calculateImmediateOpCode(String mnemonic, int offset, int bits) {
         int hexNumber;
 
-        //special case for enter.u5, offset do not increase normally
+        // special case for enter.u5, offset do not increase normally
         if (mnemonic.equals("enter.u5")) {
             if (offset <= 15) {
                 hexNumber = Integer.parseInt("80", 16) + offset;
@@ -281,12 +281,12 @@ public class Parser implements IParser {
                 hexNumber = Integer.parseInt("60", 16) + offset;
             }
         } else {
-            //special case for negative numbers
+            // special case for negative numbers
             if (offset < 0) {
                 int size = (int) Math.pow(2, bits);
                 offset = size + offset;
             }
-            //the rest
+            // remaining cases
             hexNumber = Integer.parseInt(symbolTable.getValue(mnemonic), 16) + offset;
         }
 
@@ -320,7 +320,7 @@ public class Parser implements IParser {
 
     private InstructionType getAddressingMode(IToken token) {
         logger.log("Getting addressing mode");
-        if (!(token.getTokenString().contains("."))) {                      //no dot it's definitely inherent
+        if (!(token.getTokenString().contains("."))) {
             return InstructionType.INHERENT;
         }
         //take string after the u or the i (this leaves only the number)

@@ -5,7 +5,6 @@ import com.github.ConcordiaSOEN341.CrossAssembler.CommandHandler;
 public class ParserLogger extends Logger {
     String prefix = LoggerColor.ANSI_GREEN + "[PARSER] " + LoggerColor.ANSI_RESET;
 
-
     public ParserLogger(CommandHandler cmdH) {
         super(cmdH);
     }

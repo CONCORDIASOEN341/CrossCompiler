@@ -2,7 +2,6 @@ package com.github.ConcordiaSOEN341.CrossAssembler;
 
 import com.github.ConcordiaSOEN341.CodeGen.CodeGen;
 import com.github.ConcordiaSOEN341.CodeGen.ICodeGen;
-import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.Error.ErrorReporter;
 import com.github.ConcordiaSOEN341.Error.IErrorReporter;
 import com.github.ConcordiaSOEN341.Lexer.ILexer;
@@ -12,6 +11,7 @@ import com.github.ConcordiaSOEN341.Logger.LoggerFactory;
 import com.github.ConcordiaSOEN341.Parser.IParser;
 import com.github.ConcordiaSOEN341.Parser.Parser;
 import com.github.ConcordiaSOEN341.Parser.ParserFSM;
+import com.github.ConcordiaSOEN341.Parser.SymbolTable;
 import com.github.ConcordiaSOEN341.Reader.IReader;
 import com.github.ConcordiaSOEN341.Reader.Reader;
 

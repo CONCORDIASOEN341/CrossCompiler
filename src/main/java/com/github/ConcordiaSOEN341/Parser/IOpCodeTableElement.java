@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public interface IOpCodeTableElement {
     int getBitSpace();
 
-
     void setBitSpace(int bitSpace);
 
     int getLine();

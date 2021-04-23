@@ -3,7 +3,6 @@ package com.github.ConcordiaSOEN341.Lexer;
 import com.github.ConcordiaSOEN341.Error.ErrorType;
 
 public class State implements IState {
-
     private int stateID;
     private TokenType type;
     private ErrorType errorType;
@@ -55,6 +54,4 @@ public class State implements IState {
     public void setBacktrack(boolean backtrack) {
         this.backtrack = backtrack;
     }
-
-
 }

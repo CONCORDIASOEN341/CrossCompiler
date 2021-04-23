@@ -7,7 +7,7 @@ import org.junit.Test;
 public class CommandHandlerTest {
 
     @Test
-    public void parseArgs_WhenArgumentsIncludeListing_expectValuesSet(){
+    public void parseArgs_WhenArgumentsIncludeListing_expectValuesSet() {
         String[] args = {"Test", "123", "-l"};
         CommandHandler commandHandler = new CommandHandler(args);
         Assert.assertTrue(commandHandler.isListing());
@@ -16,7 +16,7 @@ public class CommandHandlerTest {
     }
 
     @Test
-    public void parseArgs_WhenArgumentsIncludeVerbose_expectValuesSet(){
+    public void parseArgs_WhenArgumentsIncludeVerbose_expectValuesSet() {
         String[] args = {"", "", "-v"};
         CommandHandler commandHandler = new CommandHandler(args);
         Assert.assertFalse(commandHandler.isListing());
@@ -25,7 +25,7 @@ public class CommandHandlerTest {
     }
 
     @Test
-    public void parseArgs_WhenArgumentsIncludeFile_expectFile(){
+    public void parseArgs_WhenArgumentsIncludeFile_expectFile() {
         String[] args = {"", "", "-v", "-l", "program.asm"};
         CommandHandler commandHandler = new CommandHandler(args);
         Assert.assertTrue(commandHandler.isListing());

@@ -22,15 +22,10 @@ public enum ErrorType {
     INVALID_DIRECTIVE("is an invalid directive. Only .cstring allowed."),
     CSTRING_NOT_FOUND("Directive used without cstring operand.");
 
-
     private final String description;
 
     ErrorType(String description) {
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static ErrorType getDefault() {

@@ -65,7 +65,7 @@ public class CodeGenTest extends TestCase {
     }
 
     @Test
-    public void listingOP_whenIrAndOpCodeTableNotEmpty_expectPartOfListingFile(){
+    public void listingOP_whenIrAndOpCodeTableNotEmpty_expectPartOfListingFile() {
         irTest = new ArrayList<>();
         irTest.add(new LineStatement(new Instruction(new Token("lda.i16"), new Token("Msg1"), InstructionType.RELATIVE)));
         irTest.add(new LineStatement(new Instruction(new Token("ldc.i8"), new Token("12"), InstructionType.RELATIVE)));
